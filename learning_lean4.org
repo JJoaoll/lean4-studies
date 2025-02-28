@@ -1,0 +1,193 @@
+* Getting to know
+** Text resume 
+lean4 does have a repl integrated with the LSP enviroment.
+** Evaluating
+U should use the `#eval` to evaluate, such as this example show us:
+#+begin_src lean4
+  #eval 1 + 2
+#+end_src
+
+Also the function application works just like in Haskell.
+(🔍) ~ So, i've just figured out that lean4 is a strict language, not a strict one. What a shame!
+** Types
+When necessary, u can use type coercions with ":"
+#+begin_src lean4
+    #eval (1 + 2 : Nat)
+    -- So look this:
+    #eval  1 - 2        -->  0 : Nat
+    #eval (1 - 2 : Int) --> -1 : Int
+#+end_src
+
+As u can check the values with  `#eval`
+u also can check the types with `#check`
+#+begin_src lean4
+    #check (1 - 2 : Int)  --> 1 - 2 : Int (without performing the operation.)
+#+end_src
+
+** Functions and Definitions
+to definitions, use `def`, like:
+#+begin_src lean4
+    def hello := "Hello"
+#+end_src
+
+Note how great the `:=` fits for assignments instead of `=`.
+If u wanna pick the type too, u can do it like this:
+#+begin_src lean4
+    def lean : String := "Lean"
+#+end_src
+
+When it comes to define a function, there are a variaty of ways to do that.
+The simpliest one (they say it):
+#+begin_src lean4
+    def succ (n : Nat) : Nat := n + 1
+    -- or:
+    def pred (n : Nat) : Nat :=
+        n - 1
+#+end_src
+
+
+Look this another one with more arguments:
+#+begin_src lean4
+    def maximum (n : Nat) (k : Nat) : Nat :=
+      if n < k then
+        k
+      else n
+#+end_src
+
+Lean4 does use currying as default.
+(my exercises are in somewhere but it's not my intent to share them :P)
+
+*** Defining Types:
+U use the same `def` keyword just like with the values (including functions)
+#+begin_src lean4
+    def Str  : Type := String
+    def aStr : Str  := "Look at me, i'm a real String!"
+#+end_src
+
+some explanation about "aStr" definition:
+"The reason this works is that types follow the same rules as the rest of Lean. Types are expressions,
+and in an expression, a defined name can be replaced with its definition. Because Str has been defined
+to mean String, the definition of aStr makes sense."
+
+Something very very weird about Lean4 is that, because they want to overload number literals,
+this code generates an error:
+#+begin_src lean4
+    def NaturalNumber : Type := Nat
+    def thirtyEight : NaturalNumber := 38
+
+    -- failed to synthesize instance
+    -- OfNat NaturalNumber 38
+#+end_src
+
+But it works this way:
+#+begin_src lean4
+    def thirtyEight : NaturalNumber := (38 : Nat)
+#+end_src
+
+why?
+"One way to work around this limitation is by providing the type Nat on the right-hand side of the definition, causing Nat's overloading rules to be used for 38:
+
+The definition is still type-correct because NaturalNumber is the same type as Nat—by definition!"
+
+But don't worry about it, we can see the light here:
+"Another solution is to define an overloading for NaturalNumber that works equivalently to the one for Nat. This requires more advanced features of Lean, however."
+
+Finally we have some "abbrev" like here:
+#+begin_src lean4
+    abbrev N : Type := Nat
+    def thirtyNine : N := 39
+    -- works well
+#+end_src
+
+*** Question:
+whats a "foldable | unfoldable | folded | unfolded" definitions?
+
+** Structures
+So they're basically product types..
+#+begin_src lean4
+    structure Point where
+      x : Float
+      y : Float
+    deriving Repr
+
+    def origin : Point := { x := 0.0, y := 0.0 }
+#+end_src
+
+Note that the deriving works as the `Show` in haskell.
+When u call the "#eval", it call's the "repr". Look's like
+we're gonna discover TypeClasses again..
+
+About extracting things out of products we have:
+#+begin_src lean4
+    #eval origin.x
+    #eval origin.y
+
+    def addPoints (p1 : Point) (p2 : Point) : Point :=
+        { x := p1.x + p2.x, y := p1.y + p2.y }
+
+
+    structure Point3D where
+        x : Float
+        y : Float
+        z : Float
+    deriving Repr
+
+    def origin3D : Point3D :=
+        { x := 0.0, y := 0.0, z := 0.0 }
+#+end_src
+
+"To make programs more concise, Lean also allows the structure type annotation inside the curly braces."
+#+begin_src lean4
+    #check { x := 0.0, y := 0.0 : Point}
+#+end_src
+
+Another convenient syntax is:
+#+begin_src lean4
+    -- default
+    def zeroX (p : Point) : Point :=
+        { x := 0, y := p.y }
+    -- with syntax
+    def zeroX (p : Point) : Point :=
+        { p with x := 0 }
+#+end_src
+
+With this syntax, some issues about refactoring code, e.g., adding new
+new columns to a struct would not implie that u're refactoring every
+single function that does things like above.
+
+*** Structure constructor
+So.. In Lean4, ure forced to use the "mk" thing that
+u could avoid in Haskell after get some maturity..
+#+begin_src lean4
+    #check Point.mk 1.5 2.8
+      --> { x := 1.5, y := 2.8 } : Point
+#+end_src
+It's just exacly how a constructor should be in a product type,
+but forcing u to use de `(_.mk)` syntax, and what's ok.
+
+- Fine, i was wrong. And the default.. Nice one, lean, nice one.
+look at that:
+#+begin_src lean4
+    structure Point where
+        point ::
+        x : Float
+        y : Float
+    deriving Repr
+#+end_src
+
+Some notes about 'behind-the-scenes':
+"In fact, just as the curly-braced structure construction syntax is converted to a call to the structure's constructor behind the scenes, the syntax p1.x in the prior definition of addPoints is converted into a call to the Point.x accessor. That is, #eval origin.x and #eval Point.x origin both yield"
+
+LOOK AT THIS!!:
+    Accessor dot notation is usable with more than just structure fields. It can also be used for functions that take any number of arguments. More generally, accessor notation has the form TARGET.f ARG1 ARG2 .... If TARGET has type T, the function named T.f is called. TARGET becomes its leftmost argument of type T, which is often but not always the first one, and ARG1 ARG2 ... are provided in order as the remaining arguments. For instance, String.append can be invoked from a string with accessor notation, even though String is not a structure with an append field.
+
+#+begin_src lean4
+    #eval "one string".append " and another"
+#+end_src
+
+
+
+** Datatypes, Patterns and Recursion
+** Polymorphism
+** Additional Conveniences
+** "Summary"
