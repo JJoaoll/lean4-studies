@@ -1,11 +1,23 @@
+#+TITLE: README
+#+AUTHOR: JJoaoll
+#+DESCRIPTION: Bellow
+#+STARTUP: showall
+
 * What's this repository for?
 It's just a way to keep an eye in my track and try out some org things, i don't know.
 
 Another main purpose is to practice my english writing skills because i can read a lot already but when it comes to writing... Just doesn't flow..
 In another words, i wanna use this to get some practices with my english skills.
+
 * Why it's this public?
 In true i can say that i have a lot of questions and they are all above the text which are just my self notes.
 
 In some moment i wanna discover how to extract them in such a lazy way to show them here, in the README.org!
 
-My main goal with this is get help in this questions by someone just looking around, without bothering anyone with a book of questions (maybe some of them'll be clearify themselfs, so i don't wanna rush them in the lean_zulip either.)
+My main goal with this is get help in this questions by someone just looking around, without bothering anyone with a book of questions 
+(maybe some of them'll be clearify themselfs, so i don't wanna rush them in the lean_zulip either.)
+
+Also, as i said before, this is about english learning too, so, if u have something to correct me, please say it.
+
+
+ 
