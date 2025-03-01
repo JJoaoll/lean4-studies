@@ -9,7 +9,7 @@ It's just a way to keep an eye in my track and try out some org things, i don't 
 Another main purpose is to practice my english writing skills because i can read a lot already but when it comes to writing... Just doesn't flow..
 In another words, i wanna use this to get some practices with my english skills.
 
-* Why it's this public?
+* Why i's this public?
 In true i can say that i have a lot of questions and they are all above the text which are just my self notes.
 
 In some moment i wanna discover how to extract them in such a lazy way to show them here, in the README.org!
