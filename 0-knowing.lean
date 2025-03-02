@@ -6,6 +6,16 @@
 #eval String.append "great " (String.append "oak " "tree")
 #eval String.append "it is " (if 1 > 2 then "yes" else "no")
 
+
+
+def v := 4
+
+
+#check v
+#eval Nat.succ 4
+#eval v + 1 - 1
+
+
 -- "exercises"
 #eval 42 + 19
 #eval String.append "A" (String.append "B" "C")
@@ -118,3 +128,129 @@ def lenght (s : Segment) : Float :=
     if s.x₁ > s.x₂
       then s.x₁ - s.x₂
       else s.x₂ - s.x₁
+
+
+#check repr
+
+
+
+inductive MyNat where
+  | zero           : MyNat
+  | succ (n : MyNat) : MyNat
+deriving Repr
+
+#eval MyNat.zero
+#eval MyNat.succ MyNat.zero
+#eval MyNat.zero.succ.succ.succ |> MyNat.succ
+
+
+def isZero (n : Nat) : Bool :=
+   match n with
+   | Nat.zero   => true
+   | Nat.succ _ => false
+
+structure Point3D where
+  x : Float
+  y : Float
+  z : Float
+deriving Repr
+
+
+def depth (p : Point3D) : Float :=
+    match p with
+    | Point3D.mk _ _ d => d
+
+-- def depth (p : Point3D) : Float :=
+--    match p with
+--    | { x:= _, y := _, z := d } => d
+
+--  no termination:
+-- def evenLoops (n : Nat) : Bool :=
+--   match n with
+--   | Nat.zero => true
+--   | Nat.succ k => not (evenLoops n)
+
+
+#check Type
+#check Type 1
+#check Type 32
+structure PPoint (α : Type) where
+   x : α
+   y : α
+deriving Repr
+
+def natOrigin : PPoint Nat :=
+    PPoint.mk Nat.zero Nat.zero
+--   { x := Nat.zero, y := Nat.zero }
+
+#eval natOrigin
+def replaceX (α : Type) (point : PPoint α) (newX : α) : PPoint α :=
+    { point with x := newX }
+
+#check (replaceX)
+#check replaceX Nat
+#check replaceX Nat natOrigin
+#check replaceX Nat natOrigin 5
+
+#eval replaceX Nat natOrigin 5
+
+
+inductive Sign where
+  | pos
+  | neg
+
+def posOrNegThree (s : Sign) : match s with | Sign.pos => Nat | Sign.neg => Int :=
+  match s with
+  | Sign.pos => (3 : Nat)
+  | Sign.neg => (-3 : Int)
+
+ def length? {α : Type} (xs : List α) : Nat :=
+      match xs with
+      | [] => 0
+      | _ :: ys => Nat.succ (length? ys)
+
+#eval length? [1, 2, 3]
+#eval [1, 2, 3].length
+
+#check length?
+#check length? (α := Int)
+
+def List.headd? {α : Type} (xs : List α) : Option α :=
+  match xs with
+  | [] => none
+  | y :: _ => some y
+
+#eval [1,2,3,4].head?
+-- error
+-- #eval [].head?
+#eval [].head? (α := Nat)
+#eval ([] : List Int).head?
+
+#eval ()
+#check (() : Unit)
+
+inductive Emptyy where
+#check Emptyy
+--Write a function to find the last entry in a list. It should return an Option.
+def last (l : List α) : Option α :=
+    match l with
+      | []     => none
+      | [x]    => some x
+      | _ :: xs => last xs
+
+#eval last [1, 2, 3, 4]
+#eval last [1]
+#eval (last [] : Option Int)
+#eval last ([] : List Int)
+
+
+
+-- Write a function that finds the first entry in a list that satisfies a given predicate. Start the definition with def List.findFirst? {α : Type} (xs : List α) (predicate : α → Bool) : Option α :=
+-- Write a function Prod.swap that swaps the two fields in a pair. Start the definition with def Prod.swap {α β : Type} (pair : α × β) : β × α :=
+-- Rewrite the PetName example to use a custom datatype and compare it to the version that uses Sum.
+-- Write a function zip that combines two lists into a list of pairs. The resulting list should be as long as the shortest input list. Start the definition with def zip {α β : Type} (xs : List α) (ys : List β) : List (α × β) :=.
+-- Write a polymorphic function take that returns the first n
+-- entries in a list, where n
+-- is a Nat. If the list contains fewer than n entries, then the resulting list should be the input list. #eval take 3 ["bolete", "oyster"] should yield ["bolete", "oyster"], and #eval take 1 ["bolete", "oyster"] should yield ["bolete"].
+-- Using the analogy between types and arithmetic, write a function that distributes products over sums. In other words, it should have type α × (β ⊕ γ) → (α × β) ⊕ (α × γ).
+-- Using the analogy between types and arithmetic, write a function that turns multiplication by two into a sum. In other words, it should have type Bool × α → α ⊕ α.

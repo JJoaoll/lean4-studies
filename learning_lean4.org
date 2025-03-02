@@ -1,7 +1,12 @@
-* Getting to know
-** Text resume 
-lean4 does have a repl integrated with the LSP enviroment.
-** Evaluating
+* Functional Programming in Lean
+** Getting to know
+*** Text resume
+Lean4 does have a repl integrated with the LSP enviroment.
+
+**** POO
+This text talks so much about POO that hurt's me. I can't get so much POO anymore.
+
+*** Evaluating
 U should use the `#eval` to evaluate, such as this example show us:
 #+begin_src lean4
   #eval 1 + 2
@@ -9,7 +14,7 @@ U should use the `#eval` to evaluate, such as this example show us:
 
 Also the function application works just like in Haskell.
 (🔍) ~ So, i've just figured out that lean4 is a strict language, not a strict one. What a shame!
-** Types
+*** Types
 When necessary, u can use type coercions with ":"
 #+begin_src lean4
     #eval (1 + 2 : Nat)
@@ -24,7 +29,7 @@ u also can check the types with `#check`
     #check (1 - 2 : Int)  --> 1 - 2 : Int (without performing the operation.)
 #+end_src
 
-** Functions and Definitions
+*** Functions and Definitions
 to definitions, use `def`, like:
 #+begin_src lean4
     def hello := "Hello"
@@ -57,7 +62,7 @@ Look this another one with more arguments:
 Lean4 does use currying as default.
 (my exercises are in somewhere but it's not my intent to share them :P)
 
-*** Defining Types:
+**** Defining Types:
 U use the same `def` keyword just like with the values (including functions)
 #+begin_src lean4
     def Str  : Type := String
@@ -99,10 +104,10 @@ Finally we have some "abbrev" like here:
     -- works well
 #+end_src
 
-*** Question:
+**** Question:
 whats a "foldable | unfoldable | folded | unfolded" definitions?
 
-** Structures
+*** Structures
 So they're basically product types..
 #+begin_src lean4
     structure Point where
@@ -155,7 +160,7 @@ With this syntax, some issues about refactoring code, e.g., adding new
 new columns to a struct would not implie that u're refactoring every
 single function that does things like above.
 
-*** Structure constructor
+**** Structure constructor
 So.. In Lean4, ure forced to use the "mk" thing that
 u could avoid in Haskell after get some maturity..
 #+begin_src lean4
@@ -185,9 +190,336 @@ LOOK AT THIS!!:
     #eval "one string".append " and another"
 #+end_src
 
+(question?) - how the parenthesis works with `#eval` and `#check`?
+
+*** Datatypes, Patterns and Recursion
+It's module starts presenting what's a sum and a product of types in a
+very simple and didactic way.
+
+Also, the concept "inductive data types" were explained in this short-text:
+"Datatypes that allow choices are called sum types and datatypes that can include instances of themselves are called recursive datatypes. Recursive sum types are called inductive datatypes, because mathematical induction may be used to prove statements about them. When programming, inductive datatypes are consumed through pattern matching and recursive functions."
+
+But also look this definition:
+#+begin_src lean4
+    inductive Bool where
+      | false : Bool
+      | true  : Bool
+#+end_src
+
+About classical ones, we have:
+#+begin_src lean4
+    inductive Nat where
+      | zero : Nat
+      | succ (n : Nat) : Nat
+#+end_src
+
+**** Pattern Matching
+Examples:
+#+begin_src lean4
+    def isZero (n : Nat) : Bool :=
+        match n with
+        | Nat.zero   => true
+        | Nat.succ k => false
+
+    def pred (n : Nat) : Nat :=
+        match n with
+        | Nat.zero   => Nat.zero
+        | Nat.succ k => k
+#+end_src
+
+U can match with products just like sums (...)
+#+begin_src lean4
+    def depth (p : Point3D) : Float :=
+        match p with
+        | { x:= h, y := w, z := d } => d
+
+    -- Better:
+    def depth (p : Point3D) : Float :=
+        match p with
+        | Point3D.mk _ _ d => d
+#+end_src
+
+**** Recursive Functions
+Examples:
+#+begin_src lean4
+    def even (n : Nat) : Bool :=
+        match n with
+        | Nat.zero   => true
+        | Nat.succ k => not (even k)
+#+end_src
+
+"Lean ensures by default that every recursive function will eventually reach a base case"
+#+begin_src lean4
+    -- error:
+    def evenLoops (n : Nat) : Bool :=
+        match n with
+        | Nat.zero   => true
+        | Nat.succ k => not (evenLoops n)
+#+end_src
+
+Mensagem do erro:
+"fail to show termination for
+  evenLoops
+with errors
+structural recursion cannot be used
+
+well-founded recursion cannot be used, 'evenLoops' does not take any (non-fixed) arguments
+"
+
+Another classical's:
+#+begin_src lean4
+    def plus (n : Nat) (k : Nat) : Nat :=
+        match k with
+        | Nat.zero    => n
+        | Nat.succ k' => Nat.succ (plus n k')
+
+    def times (n : Nat) (k : Nat) : Nat :=
+        match k with
+        | Nat.zero    => Nat.zero
+        | Nat.succ k' => plus n (times n k')
+
+    def monus* (n : Nat) (k : Nat) : Nat :=
+        match k with
+        | Nat.zero    => n
+        | Nat.succ k' => pred (minus n k')
+#+end_src
+
+Algumas coisas sobre a terminação da quot foram tratadas,
+mas só serão `terminadas` no último capítulo, portanto, nada
+a mencionar por aqui.
+
+*** Polymorphism
+Look this amazing generalized point:
+#+begin_src lean4
+    structure PPoint (α : Type) where
+        x : α
+        y : α
+    deriving Repr
+#+end_src
+
+Usage example:
+#+begin_src lean4
+    def natOrigin : PPoint Nat :=
+        { x := Nat.zero, y := Nat.zero }
+
+    -- My own version
+    def natOrigin : PPoint Nat :=
+        PPoint.mk Nat.zero Nat.zero
+#+end_src
+
+Receiving a Type as argument:
+#+begin_src lean4
+    def replaceX (α : Type) (point : PPoint α) (newX : α) : PPoint α :=
+        { point with x := newX }
+#+end_src
+
+Look how cool is match inside the types <3:
+#+begin_src lean4
+    inductive Sign where
+        | pos
+        | neg
+
+    def posOrNegThree (s : Sign) : match s with | Sign.pos => Nat | Sign.neg => Int :=
+      match s with
+        | Sign.pos => (3 : Nat)
+        | Sign.neg => (-3 : Int)
+#+end_src
+
+[question?] --> How do i should even deal with this type of return? Because
+It's not even "Either".
+
+**** Linked Lists
+" Lists are written in square brackets. For instance, a list that contains the prime numbers less than 10 can be written:"
+#+begin_src lean4
+    def primesUnder10 : List Nat := [2, 3, 5, 7]
+#+end_src
+
+Behind the scenes, List is an inductive datatype, defined like this:
+#+begin_src lean4
+    inductive List (α : Type) where
+      | nil  : List α
+      | cons : α → List α → List α
+#+end_src
+
+Ok, this looks ugly:
+#+begin_src lean4
+    def explicitPrimesUnder10 : List Nat :=
+      List.cons 2 (List.cons 3 (List.cons 5 (List.cons 7 List.nil)))
+#+end_src
+
+Soo.. look at this lenght:
+#+begin_src lean4
+    def length (α : Type) (xs' : List α) : Nat :=
+      match xs' with
+      | List.nil       => Nat.zero
+      | List.cons x xs => Nat.succ (length α ys)
+#+end_src
+
+"To make it easier to read functions on lists, the bracket notation [] can be used to pattern-match against nil, and an infix :: can be used in place of cons:"
+#+begin_src lean4
+    def length (α : Type) (xs : List α) : Nat :=
+      match xs with
+      | [] => 0
+      | y :: ys => Nat.succ (length α ys)
+#+end_src
+
+**** Implicit Arguments
+Using "{}" instead of "()" should make the argument implicit somehow.
+Look at this:
+#+begin_src lean4
+    def length {α : Type} (xs : List α) : Nat :=
+      match xs with
+      | [] => 0
+      | y :: ys => Nat.succ (length ys)
+#+end_src
+
+And now we can do
+#+begin_src lean4
+   #eval length [1, 2, 3]
+#+end_src
+
+,instead of
+#+begin_src lean4
+    #eval length Nat [1, 2, 3]
+#+end_src
+
+We can also do this way, btw
+(by using the std lib):
+#+begin_src lean4
+   #eval [1, 2, 3].length
+#+end_src
+
+**** More Built-In Datatypes
+"In addition to lists, Lean's standard library contains a number of other structures and inductive datatypes that can be used in a variety of contexts."
+
+***** Option
+It's basically the "Maybe" type from Haskell.
+#+begin_src lean4
+    inductive Option (α : Type) : Type where
+      | none           : Option α
+      | some (val : α) : Option α
+#+end_src
+
+This text talk about having layers of optionality:
+"The Option type is very similar to nullable types in languages like C# and Kotlin, but it is not identical. In these languages, if a type (say, Boolean) always refers to actual values of the type (true and false), the type Boolean? or Nullable<Boolean> additionally admits the null value. Tracking this in the type system is very useful: the type checker and other tooling can help programmers remember to check for null, and APIs that explicitly describe nullability through type signatures are more informative than ones that don't. However, these nullable types differ from Lean's Option in one very important way, which is that they don't allow multiple layers of optionality. Option (Option Int) can be constructed with none, some none, or some (some 360). C#, on the other hand, forbids multiple layers of nullability by only allowing ? to be added to non-nullable types, while Kotlin treats T?? as being equivalent to T?. This subtle difference is rarely relevant in practice, but it can matter from time to time."
+
+U can use '?' in a function name, look at this:
+#+begin_src lean4
+    def List.head? {α : Type} (xs : List α) : Option α :=
+      match xs with
+        | []     => none
+        | y :: _ => some y
+#+end_src
+
+"Using underscores instead of names is a way to clearly communicate to readers that part of the input is ignored." For more detail's:
+****** Informative:
+"The question mark is part of the name, and is not related to the use of question marks to indicate nullable types in C# or Kotlin. In the definition of List.head?, an underscore is used to represent the tail of the list. In patterns, underscores match anything at all, but do not introduce variables to refer to the matched data. Using underscores instead of names is a way to clearly communicate to readers that part of the input is ignored."
+
+***** Prod
+It's basically the "Pair", because we're inside the type cat.
+#+begin_src lean4
+    structure Prod (α : Type) (β : Type) : Type where
+      fst : α
+      snd : β
+#+end_src
+
+About confort syntax:
+#+begin_src lean4
+    -- Better
+    def fives : String × Int := { fst := "five", snd := 5 }
+    -- A way better:
+    def fives : String × Int := ("five", 5)
+#+end_src
+
+****** About syntax associativity:
+"Both notations are right-associative. This means that the following definitions are equivalent:"
+
+#+begin_src lean4
+  -- The
+    def sevens : String × Int × Nat := ("VII", 7, 4 + 3)
+  -- Is acctualy
+    def sevens : String × (Int × Nat) := ("VII", (7, 4 + 3))
+#+end_src
+
+"In other words, all products of more than two types, and their corresponding constructors, are actually nested products and nested pairs behind the scenes."
+****** A good advice:
+"Many applications are best served by defining their own structures, even for simple cases like Point, because using domain terminology can make it easier to read the code. Additionally, defining structure types helps catch more errors by assigning different types to different domain concepts, preventing them from being mixed up."
+
+***** Sum
+"Values of type Sum α β are either the constructor inl applied to a value of type α or the constructor inr applied to a value of type β:"
+#+begin_src lean4
+    inductive Sum (α : Type) (β : Type) : Type where
+      | inl : α → Sum α β
+      | inr : β → Sum α β
+#+end_src
+
+Another notation (wrost than the simplier "+")
+#+begin_src lean4
+    def PetName : Type := String ⊕ String
+#+end_src
+
+Example:
+#+begin_src lean4
+    def howManyDogs (pets : List PetName) : Nat :=
+      match pets with
+      | []                    => 0
+      | Sum.inl _ :: morePets => howManyDogs morePets + 1
+      | Sum.inr _ :: morePets => howManyDogs morePets
+#+end_src
+
+***** Unit
+Just like it should be:
+#+begin_src lean4
+    inductive Unit : Type where
+      | unit : Unit
+#+end_src
+
+To the unique member of the "Unit" type, u can also call it by
+the classical "()".
+
+***** Empty
+This should be fine:
+#+begin_src lean4
+    inductive Empty where
+    #check Empty
+#+end_src
+
+"The Empty datatype has no constructors whatsoever. Thus, it indicates unreachable code, because no series of calls can ever terminate with a value at type Empty.
+
+Empty is not used nearly as often as Unit. However, it is useful in some specialized contexts. Many polymorphic datatypes do not use all of their type arguments in all of their constructors. For instance, Sum.inl and Sum.inr each use only one of Sum's type arguments. Using Empty as one of the type arguments to Sum can rule out one of the constructors at a particular point in a program. This can allow generic code to be used in contexts that have additional restrictions."
+*** Additional Conveniences
+**** Automatic Implicit Arguments
+"When writing polymorphic functions in Lean, it is typically not necessary to list all the implicit arguments."
+
+So, that definition:
+#+begin_src lean4
+    def length {α : Type} (xs : List α) : Nat :=
+      match xs with
+      | [] => 0
+      | y :: ys => Nat.succ (length ys)
+#+end_src
+
+Can be written this way:
+#+begin_src lean4
+    def length (xs : List α) : Nat :=
+      match xs with
+      | [] => 0
+      | y :: ys => Nat.succ (length ys)
+#+end_src
+
+**** Pattern-Matching Definitions
 
 
-** Datatypes, Patterns and Recursion
-** Polymorphism
-** Additional Conveniences
-** "Summary"
+**** Local Definitions
+**** Type Inference
+**** Simultaneous Matching
+**** Natural Number Patterns
+**** Anonymous Functions
+**** Namespaces
+**** if let
+**** Positional Structure Arguments
+**** String Interpolation
+
+
+
+*** "Summary"
