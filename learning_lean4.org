@@ -130,7 +130,6 @@ About extracting things out of products we have:
     def addPoints (p1 : Point) (p2 : Point) : Point :=
         { x := p1.x + p2.x, y := p1.y + p2.y }
 
-
     structure Point3D where
         x : Float
         y : Float
@@ -495,7 +494,7 @@ So, that definition:
 #+begin_src lean4
     def length {α : Type} (xs : List α) : Nat :=
       match xs with
-      | [] => 0
+      | []      => 0
       | y :: ys => Nat.succ (length ys)
 #+end_src
 
@@ -503,15 +502,81 @@ Can be written this way:
 #+begin_src lean4
     def length (xs : List α) : Nat :=
       match xs with
-      | [] => 0
+      | []      => 0
       | y :: ys => Nat.succ (length ys)
 #+end_src
 
 **** Pattern-Matching Definitions
+"When defining functions with def, it is quite common to name an argument and then immediately
+use it with pattern matching. For instance, in length, the argument xs is used only in match.
+In these situations, the cases of the match expression can be written directly, without naming the argument at all."
 
+Example:
+#+begin_src lean4
+    def length : List α → Nat
+      | []      => 0
+      | y :: ys => Nat.succ (length ys)
+#+end_src
+
+"This syntax can also be used to define functions that take more than one argument. In this case,
+their patterns are separated by commas."
+
+Example:
+#+begin_src lean4
+    def drop : Nat → List α → List α
+      | Nat.zero  , xs      => xs
+      | _         , []      => []
+      | Nat.succ n, x :: xs => drop n xs
+#+end_src
+
+"Named arguments and patterns can also be used in the same definition."
+#+begin_src lean4
+    def fromOption (default : α) : Option α → α
+      | none   => default
+      | some x => x
+#+end_src
+
+"This function is called Option.getD in the standard library,
+  and can be called with dot notation", btw.
+
+#+begin_src lean4
+    #eval (some "salmonberry").getD "" --> "salmonberry"
+    #eval none.getD ""                 --> ""
+#+end_src
 
 **** Local Definitions
+"In Lean, the result of the recursive call can be named, and thus saved, using let. Local definitions with let resemble top-level definitions with def: it takes a name to be locally defined, arguments if desired, a type signature, and then a body following :=. After the local definition, the expression in which the local definition is available (called the body of the let-expression) must be on a new line, starting at a column in the file that is less than or equal to that of the let keyword. For instance, let can be used in unzip like this:"
+#+begin_src lean4
+    def unzip : List (α × β) → List α × List β
+      | []            => ([], [])
+      | (x, y) :: xys =>
+        let unzipped : List α × List β := unzip xys
+        (x :: unzipped.fst, y :: unzipped.snd)
+#+end_src
+
+"To use let on a single line, separate the local definition from the body with a semicolon."
+
+"Local definitions with let may also use pattern matching when one pattern is enough to match all cases of a datatype. In the case of unzip, the result of the recursive call is a pair. Because pairs have only a single constructor, the name unzipped can be replaced with a pair pattern:"
+#+begin_src lean4
+    def unzip : List (α × β) → List α × List β
+      | [] => ([], [])
+      | (x, y) :: xys =>
+        let (xs, ys) : List α × List β := unzip xys
+        (x :: xs, y :: ys)
+#+end_src
+
+NEW FEATURE:
+"The biggest difference between let and def is that recursive let definitions must be explicitly indicated by writing let rec. For instance, one way to reverse a list involves a recursive helper function, as in this definition:"
+#+begin_src lean4
+    def reverse (xs : List α) : List α :=
+      let rec helper : List α → List α → List α
+        | [], soFar => soFar
+        | y :: ys, soFar => helper ys (y :: soFar)
+      helper xs []
+#+end_src
+
 **** Type Inference
+
 **** Simultaneous Matching
 **** Natural Number Patterns
 **** Anonymous Functions

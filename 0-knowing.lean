@@ -232,25 +232,120 @@ def List.headd? {α : Type} (xs : List α) : Option α :=
 inductive Emptyy where
 #check Emptyy
 --Write a function to find the last entry in a list. It should return an Option.
-def last (l : List α) : Option α :=
+def last? (l : List α) : Option α :=
     match l with
       | []     => none
       | [x]    => some x
-      | _ :: xs => last xs
+      | _ :: xs => last? xs
 
-#eval last [1, 2, 3, 4]
-#eval last [1]
-#eval (last [] : Option Int)
-#eval last ([] : List Int)
+#eval last? [1, 2, 3, 4]
+#eval last? [1]
+#eval (last? [] : Option Int)
+#eval last? ([] : List Int)
+
+-- Write a function that finds the first entry in a list that satisfies a given predicate.
+-- Start the definition with
+def List.findFirst? {α : Type} (p : α → Bool) : List α → Option α
+    | []      => none
+    | x :: xs =>
+        if   p x
+        then some x
+        else List.findFirst? p xs
 
 
+#eval List.findFirst? (λx => x > 3) [1, 2, 3]
+#eval List.findFirst? (λx => x > 3) [1, 2, 3, 4, 5, 6, 7]
 
--- Write a function that finds the first entry in a list that satisfies a given predicate. Start the definition with def List.findFirst? {α : Type} (xs : List α) (predicate : α → Bool) : Option α :=
--- Write a function Prod.swap that swaps the two fields in a pair. Start the definition with def Prod.swap {α β : Type} (pair : α × β) : β × α :=
--- Rewrite the PetName example to use a custom datatype and compare it to the version that uses Sum.
--- Write a function zip that combines two lists into a list of pairs. The resulting list should be as long as the shortest input list. Start the definition with def zip {α β : Type} (xs : List α) (ys : List β) : List (α × β) :=.
+-- Write a function Prod.swap that swaps the two fields in a pair.
+-- Start the definition with
+-- def Prod.swap {α β : Type} (pair : α × β) : match pair with | (a, b) => β × α :=
+def Prod.swap {α β : Type} (pair : α × β) : β × α :=
+    match pair with
+      | (a, b) => (b, a)
+
+-- Rewrite the PetName example to use a custom datatype
+-- and compare it to the version that uses Sum.
+
+-- BAD:
+-- def PetName : Type := String ⊕ String
+-- def animals : List PetName :=
+--   [Sum.inl "Spot", Sum.inr "Tiger", Sum.inl "Fifi", Sum.inl "Rex",
+--   Sum.inr "Floof"]
+-- def howManyDogs (pets : List PetName) : Nat :=
+--   match pets with
+--   | [] => 0
+--   | Sum.inl _ :: morePets => howManyDogs morePets + 1
+--   | Sum.inr _ :: morePets => howManyDogs morePets
+
+-- Better:
+inductive PetName where
+  | Dog (name : String) : PetName
+  | Cat (name : String) : PetName
+deriving Repr
+
+def animals : List PetName :=
+    [PetName.Dog "Spot", PetName.Cat "Tiger", PetName.Dog "Fifi",
+     PetName.Dog "Rex" , PetName.Cat "Floof"]
+
+#eval animals
+
+def howManyDogs : List PetName → Nat
+    | []                        => 0
+    | PetName.Dog _ :: morePets => howManyDogs morePets + 1
+    | PetName.Cat _ :: morePets => howManyDogs morePets
+
+#eval howManyDogs animals
+-- More verbous is fabulous somethimes <3
+
+-- Write a function zip that combines two lists into a list of pairs.
+-- The resulting list should be as long as the shortest input list.
+-- Start the definition with
+-- def zip {α β : Type} (xs : List α) (ys : List β) : List (α × β) :=
+def zip : List α → List β → List (α × β)
+    | x :: xs, y :: ys => (x, y) :: zip xs ys
+    | _      , _       => []
+
+#eval  zip [1, 2, 3] animals
+#check zip
+#check zip [1, 2, 3] -- interesting. The metavar thing, i mean.
+#check zip [1, 2, 3] animals
+
 -- Write a polymorphic function take that returns the first n
--- entries in a list, where n
--- is a Nat. If the list contains fewer than n entries, then the resulting list should be the input list. #eval take 3 ["bolete", "oyster"] should yield ["bolete", "oyster"], and #eval take 1 ["bolete", "oyster"] should yield ["bolete"].
--- Using the analogy between types and arithmetic, write a function that distributes products over sums. In other words, it should have type α × (β ⊕ γ) → (α × β) ⊕ (α × γ).
--- Using the analogy between types and arithmetic, write a function that turns multiplication by two into a sum. In other words, it should have type Bool × α → α ⊕ α.
+-- entries in a list, where n is a Nat. If the list contains fewer
+-- than n entries, then the resulting list should be the input list.
+
+def take : Nat → List α → List α
+    | Nat.succ n, x :: xs  => x :: take n xs
+    | _, _                 => []
+
+-- should yield ["bolete", "oyster"]
+#eval take 3 ["bolete", "oyster"]
+-- should yield ["bolete"].
+#eval take 1 ["bolete", "oyster"]
+
+-- Using the analogy between types and arithmetic,
+-- write a function that distributes products over sums.
+-- In other words, it should have type α × (β ⊕ γ) → (α × β) ⊕ (α × γ).
+def distribute : α × (β ⊕ γ) → (α × β) ⊕ (α × γ)
+    | (a, Sum.inl b) => Sum.inl (a, b)
+    | (a, Sum.inr c) => Sum.inr (a, c)
+
+-- Using the analogy between types and arithmetic,
+-- write a function that turns multiplication by two into a sum.
+-- In other words, it should have type Bool × α → α ⊕ α.
+def times2 : Bool × α → α ⊕ α
+    | (Bool.true , a) => Sum.inl a
+    | (Bool.false, a) => Sum.inr a
+
+#eval times2 (Bool.true, 3)
+
+def var     := "var"
+def funtest := λ(_ : Nat) => 3
+
+
+def unzip : List (α × β) → List α × List β
+  | []            => ([], [])
+  | (x, y) :: xys =>
+    let unzipped : List α × List β := unzip xys; (x :: unzipped.fst, y :: unzipped.snd)
+
+#eval unzip [(1, 2), (3, 4)]
