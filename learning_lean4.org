@@ -576,15 +576,227 @@ NEW FEATURE:
 #+end_src
 
 **** Type Inference
+"In many situations, Lean can automatically determine an expression's type. In these cases, explicit types may be omitted from both top-level definitions (with def) and local definitions (with let). For instance, the recursive call to unzip does not need an annotation:"
+#+begin_src lean4
+    def unzip : List (α × β) → List α × List β
+      | []            => ([], [])
+      | (x, y) :: xys =>
+        let unzipped := unzip xys
+        (x :: unzipped.fst, y :: unzipped.snd)
+#+end_src
+
+In deed, it could even be like this:
+#+begin_src lean4
+    def unnzip : List (α × β) → List α × List β
+      | []            => ([], [])
+      | (x, y) :: xys =>
+        let (xs, ys) := unzip xys
+        (x :: xs, y :: ys)
+#+end_src
+
+"Omitting the return type for unzip is possible when using an explicit match expression:"
+#+begin_src lean4
+    def unzip (pairs : List (α × β)) :=
+      match pairs with
+      | [] => ([], [])
+      | (x, y) :: xys =>
+        let unzipped := unzip xys
+        (x :: unzipped.fst, y :: unzipped.snd)
+#+end_src
+
+"Missing type annotations can give confusing error messages. Omitting all types from the definition of unzip:"
+#+begin_src lean4
+    def unzip pairs :=
+      match pairs with
+      | [] => ([], [])
+      | (x, y) :: xys =>
+        let unzipped := unzip xys
+        (x :: unzipped.fst, y :: unzipped.snd)
+#+end_src
+
+It generate this error message:
+#+begin_src error
+    invalid match-expression, pattern contains metavariables
+      []
+#+end_src
+
+"This is because match needs to know the type of the value being inspected, but that type was not available."
+
+"Even some very simple programs require type annotations. For instance, the identity function just returns whatever argument it is passed. With argument and type annotations, it looks like this:"
+#+begin_src lean4
+    def id (x : α) : α := x
+#+end_src
+
+"Lean is capable of determining the return type on its own:"
+#+begin_src lean4
+    def id (x : α) := x
+#+end_src
+
+"Omitting the argument type, however, causes an error:"
+#+begin_src lean4
+    def id x := x --> (!) failed to infer binder type
+#+end_src
 
 **** Simultaneous Matching
+"Pattern-matching expressions, just like pattern-matching definitions, can match on multiple values at once. "
+
+Look at this:
+#+begin_src lean4
+    def drop (n : Nat) (xs : List α) : List α :=
+      match n, xs with
+      | Nat.zero   , ys      => ys
+      | _          , []      => []
+      | Nat.succ n , y :: ys => drop n ys
+#+end_src
+
 **** Natural Number Patterns
+"Just as there is special syntax to make list patterns more readable
+than using List.cons and List.nil directly, natural numbers can be
+matched using literal numbers and +. For instance, even can also be
+defined like this:"
+#+begin_src lean4
+    def even : Nat → Bool
+      | 0     => true
+      | n + 1 => not (even n)
+#+end_src
+
+The explicit patterns in halve, which divides a Nat by two and drops the remainder:
+#+begin_src lean4
+    def halve : Nat → Nat
+      | Nat.zero => 0
+      | Nat.succ Nat.zero => 0
+      | Nat.succ (Nat.succ n) => halve n + 1
+#+end_src
+
+can be replaced by numeric literals and +:
+#+begin_src lean4
+    def halve : Nat → Nat
+      | 0     => 0
+      | 1     => 0
+      | n + 2 => halve n + 1
+#+end_src
+
+"When using this syntax, the second argument to + should always be a literal Nat. Even though addition is commutative."
+
 **** Anonymous Functions
+The both can be used:
+#+begin_src lean4
+    #check fun
+      | 0 => none
+      | n + 1 => some n
+    #check λ
+      | 0 => none
+      | n + 1 => some n
+#+end_src
+
+So, basicaly: fun = λ.
+It's a bit more usual to use "fun" instead of "λ", btw.
+
+Awelsome syntax gift:
+"When an anonymous function is very simple, like fun x => x + 1, the syntax for creating the function can be fairly verbose. In that particular example, six non-whitespace characters are used to introduce the function, and its body consists of only three non-whitespace characters. For these simple cases, Lean provides a shorthand. In an expression surrounded by parentheses, a centered dot character · can stand for an argument, and the expression inside the parentheses becomes the function's body. That particular function can also be written (· + 1)."
+
+"The centered dot always creates a function out of the closest surrounding set of parentheses. For instance, (· + 5, 3) is a function that returns a pair of numbers, while ((· + 5), 3) is a pair of a function and a number. If multiple dots are used, then they become arguments from left to right:"
+
+#+begin_src lean4
+    (· , ·) 1 2
+    ===>
+    (1, ·) 2
+    ===>
+    (1, 2)
+#+end_src
+
 **** Namespaces
+Each name in Lean occurs in a namespace, which is a collection of names. Names are placed in namespaces using ., so List.map is the name map in the List namespace.
+
+Names can be directly defined within a namespace. For instance, the name double can be defined in the Nat namespace:
+#+begin_src lean4
+    def Nat.double (x : Nat) : Nat := x + x
+#+end_src
+
+Because Nat is also the name of a type, dot notation is available to call Nat.double on expressions with type Nat:
+#+begin_src lean4
+    #eval (4 : Nat).double
+#+end_src
+
+In addition to defining names directly in a namespace, a sequence of declarations can be placed in a namespace using the namespace and end commands. For instance, this defines triple and quadruple in the namespace NewNamespace:
+#+begin_src lean4
+    namespace NewNamespace
+    def triple    (x : Nat) : Nat := 3 * x
+    def quadruple (x : Nat) : Nat := 2 * x + 2 * x
+    end NewNamespace
+#+end_src
+
+"Namespaces may be opened, which allows the names in them to be used without explicit qualification. Writing open MyNamespace in before an expression causes the contents of MyNamespace to be available in the expression. For example, timesTwelve uses both quadruple and triple after opening NewNamespace:"
+#+begin_src lean4
+   def timesTwelve (x : Nat) :=
+     open NewNamespace in
+     quadruple (triple x)
+#+end_src
+
+Namespaces can also be opened prior to a command. This allows all parts of the command to refer to the contents of the namespace, rather than just a single expression. To do this, place the open ... in prior to the command.
+#+begin_src lean4
+    open NewNamespace in
+    #check quadruple
+#+end_src
+
+Important:
+"Function signatures show the name's full namespace. Namespaces may additionally be opened for all following commands for the rest of the file. To do this, simply omit the in from a top-level usage of open."
+
 **** if let
+a function that recognizes string elements and extracts their contents can be written:
+#+begin_src lean4
+    def Inline.string? (inline : Inline) : Option String :=
+      match inline with
+      | Inline.string s => some s
+      | _               => none
+#+end_src
+
+An alternative way of writing this function's body uses if together with let:
+#+begin_src lean4
+    def Inline.string? (inline : Inline) : Option String :=
+      if let Inline.string s := inline then
+        some s
+      else none
+#+end_src
+
+It really look like some `instanceOf`'s.. Ugly, yeah!
+
 **** Positional Structure Arguments
+With some context, like definitions, because
+Structures are essencialy tupples, we can write
+it like this:
+#+begin_src lean4
+    #eval (⟨1, 2⟩ : Point)
+#+end_src
 **** String Interpolation
+"In Lean, prefixing a string with s! triggers interpolation, where expressions contained in curly braces inside the string are replaced with their values. This is similar to f-strings in Python and $-prefixed strings in C#. For instance,"
+#+begin_src lean4
+    #eval s!"three fives is {NewNamespace.triple 5}"
+    --> "three fives is 15"
+#+end_src
 
+*** TODO "Summary"
+** Hello, World!
+*** Compiling
+So u use `lean --rn file-name.lean` in order
+to compile things.
 
+*** The main
+The main should look similar to in Haskell as bellow:
+#+begin_src lean4
+    def main : IO Unit := IO.println "Hello, world!"
+#+end_src
 
-*** "Summary"
+*** The IO
+In a first look, the usage looks pretty similar to Haskells.
+#+begin_src lean4
+    def main : IO Unit := do
+      let stdin  ← IO.getStdin
+      let stdout ← IO.getStdout
+
+      stdout.putStrLn "How would you like to be addressed?"
+      let input ← stdin.getLine
+      let name := input.dropRightWhile Char.isWhitespace
+
+      stdout.putStrLn s!"Hello, {name}!"
+#+end_src

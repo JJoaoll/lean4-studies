@@ -253,7 +253,9 @@ def List.findFirst? {α : Type} (p : α → Bool) : List α → Option α
         else List.findFirst? p xs
 
 
+#eval List.findFirst? (· > 3) [1, 2, 3]
 #eval List.findFirst? (λx => x > 3) [1, 2, 3]
+#eval List.findFirst? (· > 3) [1, 2, 3, 4, 5, 6, 7]
 #eval List.findFirst? (λx => x > 3) [1, 2, 3, 4, 5, 6, 7]
 
 -- Write a function Prod.swap that swaps the two fields in a pair.
@@ -349,3 +351,73 @@ def unzip : List (α × β) → List α × List β
     let unzipped : List α × List β := unzip xys; (x :: unzipped.fst, y :: unzipped.snd)
 
 #eval unzip [(1, 2), (3, 4)]
+
+#check λ
+  | 0 => none
+  | n + 1 => some n
+def unnzip : List (α × β) → List α × List β
+  | []            => ([], [])
+  | (x, y) :: xys =>
+    let (xs, ys) := unzip xys
+    (x :: xs, y :: ys)
+
+
+#check (·, ·)
+#check (·, ·) 2
+#check (·, ·) 2  3
+#eval  (·, ·) 2  3
+
+
+--- IO Things:
+
+def twice (action : IO Unit) : IO Unit := do
+ action
+ action
+
+#eval twice (IO.println "shy")
+
+def test_eval_main : IO Unit := do
+  let stdin ← IO.getStdin
+  let stdout ← IO.getStdout
+  stdout.putStrLn "How would you like to be addressed?"
+  let input ← stdin.getLine
+  let name := input.dropRightWhile Char.isWhitespace
+  stdout.putStrLn s!"Hello, {name}!"
+
+#eval test_eval_main
+
+def nTimes (action : IO Unit) : Nat → IO Unit
+  | 0     => pure ()
+  | n + 1 => do
+    action
+    nTimes action n
+
+#eval nTimes (IO.println "shy") 1
+def countdown : Nat → List (IO Unit)
+  | 0 => [IO.println "Blast off!"]
+  | n + 1 => IO.println s!"{n + 1}" :: countdown n
+
+def hc :=
+  match countdown 0 with
+    | []     => pure ()
+    | a :: _ => a
+
+#eval hc
+
+-- the "sequenceAll.."
+def runActions : List (IO Unit) → IO Unit
+  | [] => pure ()
+  | act :: actions => do
+    act
+    runActions actions
+
+#eval runActions $ countdown 5
+
+def safeHead (l : List α) : match l with | [] => Unit | _ => α :=
+   match l with
+    | []      => ()
+    | x :: _  => x
+
+def five? (l : List α) (_ : match l with | [] => Unit | _ => α) : Nat :=
+  5
+#check safeHead
