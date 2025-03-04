@@ -800,3 +800,31 @@ In a first look, the usage looks pretty similar to Haskells.
 
       stdout.putStrLn s!"Hello, {name}!"
 #+end_src
+
+*** Build Tool's (Lake)
+**** Lake intro
+The standard Lean build tool is called Lake (short for "Lean Make").
+
+"Just as Lean contains a special-purpose language for writing programs with effects (the do language), Lake contains a special-purpose language for configuring builds."
+
+**** Creating a project
+Lake new create a new project in a new directory, to create a project in an already-existing directory,
+run lake init instead.
+
+**** Special "<< name >>"
+Placing guillemets around a name, as in «Greeting», allow it to contain spaces or other characters that are normally not allowed in Lean names, and it allows reserved keywords such as if or def to be used as ordinary names by writing «if» or «def». This prevents issues when the package name provided to lake new contains such characters.
+
+**** Running the project
+To build the package, run the command lake build. After a number of build commands scroll by, the
+resulting binary has been placed in build/bin. Running `./build/bin/greeting` results in Hello, world!.
+
+To me it appeared in a file inside `.lake/build/bin/`
+
+**** Lake documentation link
+https://github.com/leanprover/lean4/blob/master/src/lake/README.md
+
+
+
+**** Lean4 as the Lider
+"Additionally, Lakefiles may contain external libraries, which are libraries not written in Lean to be
+statically linked with the resulting executable."

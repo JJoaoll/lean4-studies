@@ -421,3 +421,6 @@ def safeHead (l : List α) : match l with | [] => Unit | _ => α :=
 def five? (l : List α) (_ : match l with | [] => Unit | _ => α) : Nat :=
   5
 #check safeHead
+
+def four : (n : Nat) → (n = 4 : Prop) → Nat :=
+    5
