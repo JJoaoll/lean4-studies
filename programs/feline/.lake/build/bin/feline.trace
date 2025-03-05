@@ -1,0 +1,5 @@
+{"log":
+ [{"message":
+   ".> /nix/store/n3i7rch3bqp78k4vhr6h6fpj4qvb5vj9-lean4-4.10.0/bin/leanc -o ././.lake/build/bin/feline ././.lake/build/ir/Main.c.o.export",
+   "level": "trace"}],
+ "depHash": "6237707430257797373"}

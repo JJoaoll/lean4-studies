@@ -1,0 +1,8 @@
+{"log":
+ [{"message":
+   ".> /nix/store/n3i7rch3bqp78k4vhr6h6fpj4qvb5vj9-lean4-4.10.0/bin/leanc -c -o ././.lake/build/ir/Main.c.o.export ././.lake/build/ir/Main.c -O3 -DNDEBUG -DLEAN_EXPORTING",
+   "level": "trace"},
+  {"message":
+   "stderr:\ngcc: warning: /nix/store/cpyk8ksm7c79l0nabd576s80wngdzix5-gmp-with-cxx-6.3.0/lib/libgmp.so: linker input file unused because linking not done\n",
+   "level": "info"}],
+ "depHash": "14288898226824886060"}

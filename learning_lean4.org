@@ -823,8 +823,14 @@ To me it appeared in a file inside `.lake/build/bin/`
 **** Lake documentation link
 https://github.com/leanprover/lean4/blob/master/src/lake/README.md
 
-
-
 **** Lean4 as the Lider
 "Additionally, Lakefiles may contain external libraries, which are libraries not written in Lean to be
 statically linked with the resulting executable."
+
+**** Module vs Namespaces
+"Import is used to make the contents of a source file available, while open makes names from a namespace available in the current context without prefixes."
+
+
+**** Selective Openning
+Similar to Haskell, (but with the segragation of module vs namespace), you can write
+`open Nat (toFloat)` to get only open `toFloat` to usage.
