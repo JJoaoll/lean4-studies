@@ -834,3 +834,12 @@ statically linked with the resulting executable."
 **** Selective Openning
 Similar to Haskell, (but with the segragation of module vs namespace), you can write
 `open Nat (toFloat)` to get only open `toFloat` to usage.
+
+**** Main Types
+ In Lean, main can have one of three types:
+
+- main : IO Unit corresponds to programs that cannot read their command-line arguments and always indicate success with an exit code of 0
+
+- main : IO UInt32 corresponds to int main(void) in C, for programs without arguments that return exit codes, and
+
+- main : List String → IO UInt32 corresponds to int main(int argc, char **argv) in C, for programs that take arguments and signal success or failure.
