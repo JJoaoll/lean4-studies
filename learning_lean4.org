@@ -843,3 +843,5 @@ Similar to Haskell, (but with the segragation of module vs namespace), you can w
 - main : IO UInt32 corresponds to int main(void) in C, for programs without arguments that return exit codes, and
 
 - main : List String → IO UInt32 corresponds to int main(int argc, char **argv) in C, for programs that take arguments and signal success or failure.
+*** TODO Conveniences
+*** TODO Summary
