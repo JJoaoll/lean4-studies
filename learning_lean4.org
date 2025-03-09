@@ -1,6 +1,6 @@
 * Functional Programming in Lean
 ** Getting to know
-*** Text resume
+*** TODO Text resume
 Lean4 does have a repl integrated with the LSP enviroment.
 
 **** POO
@@ -845,3 +845,48 @@ Similar to Haskell, (but with the segragation of module vs namespace), you can w
 - main : List String → IO UInt32 corresponds to int main(int argc, char **argv) in C, for programs that take arguments and signal success or failure.
 *** TODO Conveniences
 *** TODO Summary
+** Overloading and Type Classes
+*** Intro
+A type class consists of a name, some parameters, and a collection of methods.
+**** Parameters
+Describe the types for which overloadable operations are being defined
+**** Methods
+Are the names and type signatures of the overloadable operations.
+*** Short Example
+#+begin_src lean4
+    class Plus (α : Type) where
+      plus : α → α → α
+
+    instance : Plus Nat where
+      plus := Nat.add
+#+end_src
+*** HAdd and HMul
+HAdd is short for heterogeneous addition.
+For example, an HAdd instance can be written to allow a Nat to be added to a Float, resulting in a new Float. When a programmer writes x + y, it is interpreted as meaning HAdd.hAdd x y.
+
+**** Very very useful thing i've made
+Since the Lean libraries are set up so that an instance of Add will be found when searching for an instance of HAdd in which both arguments have the same type, i did:
+#+begin_src lean4
+    instance : Add Type where
+      add := Sum
+    -- and now it's possible to write:
+    #check Int + String --> Type
+#+end_src
+
+Just as "HAdd", there's a "HMul" and also there's a simplier "Mul"
+for the case when the two arguments have the same type.
+
+*** Literals ("OfNat" class)
+In Lean, natural number literals are interpreted using a type class called OfNat:
+#+begin_src lean4
+    class OfNat (α : Type) (_ : Nat) where
+      ofNat : α
+#+end_src
+
+
+
+
+** Monads
+** Functors, Applicative Functors, and Monads
+** Monad Transformers
+** Programming with Dependent Types

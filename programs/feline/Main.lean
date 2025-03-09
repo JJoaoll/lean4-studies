@@ -42,7 +42,8 @@ def writeDoc : IO Unit := do
 
 
 def process (exitCode : UInt32) (args : List String) : IO UInt32 := do
-  match args with
+
+match args with
   | []               => pure exitCode
   | "-" :: args      =>
     let stdin ← IO.getStdin
@@ -64,4 +65,4 @@ def process (exitCode : UInt32) (args : List String) : IO UInt32 := do
 def main (args : List String) : IO UInt32 :=
   match args with
   | [] => process 0 ["-"]
-  | _ =>  process 0 args
+  | _  =>  process 0 args

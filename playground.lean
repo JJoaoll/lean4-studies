@@ -261,9 +261,9 @@ def List.findFirst? {α : Type} (p : α → Bool) : List α → Option α
 -- Write a function Prod.swap that swaps the two fields in a pair.
 -- Start the definition with
 -- def Prod.swap {α β : Type} (pair : α × β) : match pair with | (a, b) => β × α :=
-def Prod.swap {α β : Type} (pair : α × β) : β × α :=
-    match pair with
-      | (a, b) => (b, a)
+-- def Prod.swap {α β : Type} (pair : α × β) : β × α :=
+--     match pair with
+--       | (a, b) => (b, a)
 
 -- Rewrite the PetName example to use a custom datatype
 -- and compare it to the version that uses Sum.
@@ -422,5 +422,122 @@ def five? (l : List α) (_ : match l with | [] => Unit | _ => α) : Nat :=
   5
 #check safeHead
 
-def four : (n : Nat) → (n = 4 : Prop) → Nat :=
-    5
+def four : (n : Nat) → (n = 4 : Prop) : Nat :=
+    4
+
+#eval animals
+#eval animals[4]?
+#eval animals[5]?
+
+theorem t1 : 2 + 3 = 5  := rfl
+theorem t2 : 15 - 8 = 7 := rfl
+theorem t3 : "Hello, ".append "world" = "Hello, world" := rfl
+-- theorem t4 : 5 < 18 := rfl
+
+theorem t5 : 2 + 3 = 5  := by simp
+theorem t6 : 15 - 8 = 7 := by simp
+-- theorem t7 : "Hello, ".append "world" = "Hello, world" := by simp
+theorem t8 : 5 < 18 := by simp
+
+def fun_that_look_fifth (l : List α) (ok : l.length > 4) : α := l[4]
+
+#check fun_that_look_fifth animals
+#eval fun_that_look_fifth [1, 2, 3, 4, 5] (by simp)
+def fromOneToFive := [1, 2, 3, 4, 5]
+#eval fun_that_look_fifth fromOneToFive (by rw [fromOneToFive]; simp)
+-- #eval fun_that_look_fifth (animals[0] :: animals) (by rw [animals];)
+-- def animals2 := animals[0] :: animals
+-- #eval fun_that_look_fifth animals2 (by rw [animals2]; simp; rw [animals.length])
+
+class Plus (α : Type) where
+  plus : α → α → α
+
+instance : Plus Nat where
+  plus := Nat.add
+
+#eval Plus.plus 5 3
+open Plus (plus)
+#eval plus 5 3
+
+inductive Pos : Type where
+  | one : Pos
+  | succ : Pos → Pos
+
+def Pos.plus : Pos → Pos → Pos
+  | Pos.one, k => Pos.succ k
+  | Pos.succ n, k => Pos.succ (n.plus k)
+
+def seven : Pos :=
+  Pos.succ (Pos.succ (Pos.succ (Pos.succ (Pos.succ (Pos.succ Pos.one)))))
+
+instance : Plus Pos where
+  plus := Pos.plus
+
+instance : Add Pos where
+  add := Pos.plus
+#check Int
+
+instance : Add Type where
+  add := Sum
+
+#check Int + String
+
+def fourteen : Pos := seven + seven
+
+#check 5
+#check "midoriya"
+#check String
+#check Type
+
+class Default (α : Type) where
+  default : α
+
+instance : Default Nat where
+  default := 0
+
+class Fool (α : Type) where
+  fool : α → Nat
+
+instance : Fool String where
+  fool := fun _ => 5
+
+instance : Fool Int where
+  fool := fun _ => 6
+
+open Fool
+#eval fool "ola mundo"
+#eval fool (5 : Int)
+
+#check (· × ·)
+#check Prod
+#check Prod Int Nat
+#check Int × Nat
+#check Int ⊕ Nat
+
+instance : Add String where
+ add := (· ++ ·)
+
+#eval "ola, " + "mundo!"
+
+def f (b : Bool) : Type :=
+  if b then String
+       else Bool
+
+def posToString (atTop : Bool) (p : Pos) : String :=
+  let paren s := if atTop then s else "(" ++ s ++ ")"
+  match p with
+  | Pos.one => "Pos.one"
+  | Pos.succ n => paren s!"Pos.succ {posToString false n}"
+
+class Foo (n : Nat) where
+  const : Nat
+open Foo
+
+instance : Foo 5 where
+  const := 42
+instance : Foo 4 where
+  const := 53
+
+#eval const 5
+#eval const 4
+-- #eval Foo.const 4
