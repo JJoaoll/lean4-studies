@@ -1,5 +1,0 @@
-{"log":
- [{"message":
-   ".> cc -o ././.lake/build/bin/feline ././.lake/build/ir/Main.c.o.export -L /nix/store/idg8z0yf3wybhajs5g4qqgw1rv09idwz-lean4-4.17.0/lib/lean -Wl,--start-group -lleancpp -lLean -Wl,--end-group -lStd -Wl,--start-group -lInit -lleanrt -Wl,--end-group -lstdc++ -lLake  /nix/store/yr1w7yzbqqj30a7qnn1yhzn2a2jb6h7h-gmp-with-cxx-6.3.0/lib/libgmp.so -L/nix/store/v9kgk6wrwl4fc57pxsp857jqjn3fd1pq-libuv-1.50.0/lib -luv -lm -ldl -pthread",
-   "level": "trace"}],
- "depHash": "7392143798475626385"}

@@ -1,5 +1,0 @@
-{"log":
- [{"message":
-   ".> cc -c -o ././.lake/build/ir/Main.c.o.export ././.lake/build/ir/Main.c -I /nix/store/idg8z0yf3wybhajs5g4qqgw1rv09idwz-lean4-4.17.0/include -fstack-clash-protection -fwrapv -fPIC -fvisibility=hidden -Wno-unused-command-line-argument -O3 -DNDEBUG -DLEAN_EXPORTING",
-   "level": "trace"}],
- "depHash": "4870514944296715415"}
