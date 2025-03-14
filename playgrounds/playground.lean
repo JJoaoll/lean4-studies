@@ -541,3 +541,49 @@ instance : Foo 4 where
 #eval const 5
 #eval const 4
 -- #eval Foo.const 4
+--
+#check 3
+#check (3, 3)
+
+
+instance : Add String where
+  add := (· ++ ·)
+
+instance : Add Type where
+  add := Sum
+
+#check String + Char
+#eval "banana " + "maca"
+
+class Funktor (f : Type → Type) where
+  fmap : (α → β) × f α → f β
+
+
+def listMap : (α → β) × List α → List β
+ | (f, as') =>
+   match as' with
+     | []      => []
+     | a :: as => f a :: listMap (f, as)
+
+def test := [1, 2, 3, 4]
+#eval listMap ((· + 1), test)
+#eval listMap ((· * 2), test)
+#eval listMap (fun _ => "oi", test)
+
+structure User where
+ id     : Int
+ name   : String
+ salary : Float
+deriving Repr
+
+def users := [User.mk 0 "Joao" 3000, User.mk 1 "Pedro" 1500]
+#eval users
+#eval listMap (User.salary, users)
+
+instance : Funktor List where
+  fmap := listMap
+
+-- def optionalMap : (α → β) → (Optional α → Optional β)
+open Functor
+#check Functor.map
+#eval (· + 1) <$> [1, 2, 3, 4]

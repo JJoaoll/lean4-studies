@@ -19,9 +19,8 @@ def fileStream (filename : System.FilePath) : IO (Option IO.FS.Stream) := do
     let handle ← IO.FS.Handle.mk filename IO.FS.Mode.read
     pure $ some $ IO.FS.Stream.ofHandle handle
 
-def writeDoc : IO Unit := do
-  let stdout ← IO.getStdout
-  stdout.putStrLn
+
+def docString :=
     "
 
     feline
@@ -39,6 +38,10 @@ def writeDoc : IO Unit := do
         echo 'example' | feline path/to/file1 - path/to/file2
 
     "
+
+def writeDoc : IO Unit := do
+  let stdout ← IO.getStdout
+  stdout.putStrLn docString
 
 
 def process (exitCode : UInt32) (args : List String) : IO UInt32 := do
