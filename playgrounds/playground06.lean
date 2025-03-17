@@ -129,3 +129,49 @@ instance : Coe (NonEmptyList α) (List α) where
 
 instance : CoeDep (List α) (x :: xs) (NonEmptyList α) where
   coe := {head := x, tail := xs}
+
+structure Monoid where
+  Carrier : Type
+  neutral : Carrier
+  op : Carrier → Carrier → Carrier
+
+def natMulMonoid : Monoid :=
+  { Carrier := Nat, neutral := 1, op := (· * ·) }
+
+def natAddMonoid : Monoid :=
+  { Carrier := Nat, neutral := 0, op := (· + ·) }
+
+def stringMonoid : Monoid :=
+  { Carrier := String, neutral := "", op := String.append }
+
+def listMonoid (α : Type) : Monoid :=
+  { Carrier := List α, neutral := [], op := List.append }
+
+#check natMulMonoid
+#check natAddMonoid
+
+def foldMap (M : Monoid) (f : α → M.Carrier) (xs : List α) : M.Carrier :=
+  let rec go (soFar : M.Carrier) : List α → M.Carrier
+    | [] => soFar
+    | y :: ys => go (M.op soFar (f y)) ys
+  go M.neutral xs
+
+#eval foldMap natAddMonoid List.length [[1, 2, 3], [1, 2]]
+#eval foldMap natMulMonoid (id : Nat → Nat) [1, 2, 3, 4]
+
+
+instance : CoeSort Monoid Type where
+  coe m := m.Carrier
+
+def ffoldMap (M : Monoid) (f : α → M) (xs : List α) : M :=
+  let rec go (soFar : M) : List α → M
+    | [] => soFar
+    | y :: ys => go (M.op soFar (f y)) ys
+  go M.neutral xs
+
+
+#eval ffoldMap natAddMonoid List.length [[1, 2, 3], [1, 2]]
+#check Monoid
+#check natAddMonoid
+
+-- #check (if · then · else ·) --> !Error & (fun x1 x2 x3 => ?m.9836 : Prop → ?m.9869 → ?m.9869 → ?m.9869)

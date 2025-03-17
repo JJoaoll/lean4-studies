@@ -1262,7 +1262,7 @@ instance : Funktor BinTree where
   map := binTreeMap
 #+end_src
 
-*** Coercions
+*** TODO Coercions
 **** Intro
 "In Lean, both purposes are served by a mechanism called coercions. When Lean encounters an expression of one type in a context that expects a different type, it will attempt to coerce the expression before reporting a type error. Unlike Java, C, and Kotlin, the coercions are extensible by defining instances of type classes."
 
@@ -1321,14 +1321,62 @@ instance : CoeDep (List α) (x :: xs) (NonEmptyList α) where
 
 "This is a chance to select only certain values, either by imposing further type class constraints on the value or by writing certain constructors directly."
 
-**** TODO Coercing to Types
+**** TODO Coercing to Types (The CoeSort typeclass)
+ Just as Coe is checked when a type mismatch occurs, CoeSort is used when something other than a sort is provided in a context where a sort would be expected.
+
+ Some examples of sort (Type or Prop)
+ #+begin_src lean4
+instance : CoeSort Monoid Type where
+  coe m := m.Carrier
+ #+end_src
+
+Another example:
+#+begin_src lean4
+instance : CoeSort Bool Prop where
+  coe b := b = true
+
+#check (if · then · else ·) --> !Error [...] &
+       -- (fun x1 x2 x3 => ?m.9836 : Prop → ?m.9869 → ?m.9869 → ?m.9869)
+#+end_src
+
+Rather than have two kinds of if expression, the Lean standard library defines a coercion from Bool to
+the proposition that the Bool in question is equal to true.
+
 **** TODO Coercing to Funcions
+That's is weird..
+Here's the implementation:
+#+begin_src lean4
+class CoeFun (α : Type) (makeFunctionType : outParam (α → Type)) where
+  coe : (x : α) → makeFunctionType x
+#+end_src
+
+And here's the weird example:
+#+begin_src lean4
+structure Adder where
+  howMuch : Nat
+
+def add5 : Adder := ⟨5⟩
+instance : CoeFun Adder (fun _ => Nat → Nat) where
+  coe a := (· + a.howMuch)
+
+#eval add5 3 --> 8
+#+end_src
+
 **** TODO The "With great power comes great responsibility" talk
 a
 
 *** TODO Additional Conveniences
 *** TODO My Own Summary
 ** TODO Monads
+*** TODO Intro
+*** Typeclass
+There's the implementation
+#+begin_src lean4
+class Monad (m : Type → Type) where
+  pure : α → m α
+  bind : m α → (α → m β) → m β
+#+end_src
+
 ** TODO Functors, Applicative Functors, and Monads
 ** TODO Monad Transformers
 ** TODO Programming with Dependent Types

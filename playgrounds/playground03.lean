@@ -60,6 +60,7 @@ instance : OfNat Pos (n + 1) where
     --   | k + 1 => succ $ k + 1
     -- natPlusOne n
 
+
 #eval (4 : Pos)
 #eval (5 : Pos)
 #eval (1 : Pos)

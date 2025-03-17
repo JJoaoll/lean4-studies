@@ -1,0 +1,2477 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2025-03-14 sex 21:06 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>&lrm;</title>
+<meta name="author" content="João Lucas de Moraes Pereira" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org134589e">1. Functional Programming in Lean</a>
+<ul>
+<li><a href="#org4b83db2">1.1. Getting to know</a>
+<ul>
+<li><a href="#orgd9b417d">1.1.1. <span class="todo TODO">TODO</span> Text resume</a></li>
+<li><a href="#org9be20b5">1.1.2. Evaluating</a></li>
+<li><a href="#orgb175c0e">1.1.3. Types</a></li>
+<li><a href="#org665822f">1.1.4. Functions and Definitions</a></li>
+<li><a href="#org08403ce">1.1.5. Structures</a></li>
+<li><a href="#org998ef0d">1.1.6. Datatypes, Patterns and Recursion</a></li>
+<li><a href="#org721d60e">1.1.7. Polymorphism</a></li>
+<li><a href="#org3410be3">1.1.8. Additional Conveniences</a></li>
+<li><a href="#org89cea3a">1.1.9. <span class="todo TODO">TODO</span> &ldquo;Summary&rdquo;</a></li>
+</ul>
+</li>
+<li><a href="#org7d1ccc3">1.2. Hello, World!</a>
+<ul>
+<li><a href="#orgf1eca79">1.2.1. Compiling</a></li>
+<li><a href="#org8d575f8">1.2.2. The main</a></li>
+<li><a href="#org404e581">1.2.3. The IO</a></li>
+<li><a href="#org273d977">1.2.4. Build Tool&rsquo;s (Lake)</a></li>
+<li><a href="#orgf4ad8ed">1.2.5. <span class="todo TODO">TODO</span> Conveniences</a></li>
+<li><a href="#org85f7daa">1.2.6. <span class="todo TODO">TODO</span> Summary</a></li>
+</ul>
+</li>
+<li><a href="#orgf012b7a">1.3. Overloading and Type Classes</a>
+<ul>
+<li><a href="#orga94def2">1.3.1. Intro</a></li>
+<li><a href="#orgfb8fedc">1.3.2. Polymorphism</a></li>
+<li><a href="#org5df5358">1.3.3. <span class="todo WAIT">WAIT</span> Instance Search</a></li>
+<li><a href="#org3a49991">1.3.4. Arrays</a></li>
+<li><a href="#org07dbb48">1.3.5. Non-Empty Lists</a></li>
+<li><a href="#org6c3f69a">1.3.6. Overloading Indexing</a></li>
+<li><a href="#orgd3c7db2">1.3.7. Standard Classes</a></li>
+<li><a href="#org6550b28">1.3.8. Coercions</a></li>
+<li><a href="#orgbfb7e66">1.3.9. <span class="todo TODO">TODO</span> Additional Conveniences</a></li>
+<li><a href="#org2bd3838">1.3.10. <span class="todo TODO">TODO</span> My Own Summary</a></li>
+</ul>
+</li>
+<li><a href="#org42c3ded">1.4. <span class="todo TODO">TODO</span> Monads</a></li>
+<li><a href="#orgd34c1b3">1.5. <span class="todo TODO">TODO</span> Functors, Applicative Functors, and Monads</a></li>
+<li><a href="#org7b2155e">1.6. <span class="todo TODO">TODO</span> Monad Transformers</a></li>
+<li><a href="#orgd736394">1.7. <span class="todo TODO">TODO</span> Programming with Dependent Types</a></li>
+<li><a href="#org0da0971">1.8. <span class="todo TODO">TODO</span> What exacly is an output parameter???</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org134589e" class="outline-2">
+<h2 id="org134589e"><span class="section-number-2">1.</span> Functional Programming in Lean</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-org4b83db2" class="outline-3">
+<h3 id="org4b83db2"><span class="section-number-3">1.1.</span> Getting to know</h3>
+<div class="outline-text-3" id="text-1-1">
+</div>
+<div id="outline-container-orgd9b417d" class="outline-4">
+<h4 id="orgd9b417d"><span class="section-number-4">1.1.1.</span> <span class="todo TODO">TODO</span> Text resume</h4>
+<div class="outline-text-4" id="text-1-1-1">
+<p>
+Lean4 does have a repl integrated with the LSP enviroment.
+</p>
+</div>
+<ol class="org-ol">
+<li><a id="orge089f1c"></a>POO<br />
+<div class="outline-text-5" id="text-1-1-1-1">
+<p>
+This text talks so much about POO that hurt&rsquo;s me. I can&rsquo;t get so much POO anymore.
+</p>
+</div>
+</li>
+</ol>
+</div>
+<div id="outline-container-org9be20b5" class="outline-4">
+<h4 id="org9be20b5"><span class="section-number-4">1.1.2.</span> Evaluating</h4>
+<div class="outline-text-4" id="text-1-1-2">
+<p>
+U should use the `#eval` to evaluate, such as this example show us:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">#eval</span> <span style="color: #7FC1CA; font-weight: bold;">1</span> <span style="color: #7FC1CA;">+</span> <span style="color: #7FC1CA; font-weight: bold;">2</span>
+</pre>
+</div>
+
+<p>
+Also the function application works just like in Haskell.
+(🔍) ~ So, i&rsquo;ve just figured out that lean4 is a strict language, not a strict one. What a shame!
+</p>
+</div>
+</div>
+<div id="outline-container-orgb175c0e" class="outline-4">
+<h4 id="orgb175c0e"><span class="section-number-4">1.1.3.</span> Types</h4>
+<div class="outline-text-4" id="text-1-1-3">
+<p>
+When necessary, u can use type coercions with &ldquo;:&rdquo;
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">#eval</span> (<span style="color: #7FC1CA; font-weight: bold;">1</span> <span style="color: #7FC1CA;">+</span> <span style="color: #7FC1CA; font-weight: bold;">2</span> : Nat)
+<span style="color: #899BA6;">-- </span><span style="color: #899BA6;">So look this:</span>
+<span style="color: #9A93E1;">#eval</span>  <span style="color: #7FC1CA; font-weight: bold;">1</span> <span style="color: #7FC1CA;">-</span> <span style="color: #7FC1CA; font-weight: bold;">2</span>        <span style="color: #899BA6;">--</span><span style="color: #899BA6;">&gt;  0 : Nat</span>
+<span style="color: #9A93E1;">#eval</span> (<span style="color: #7FC1CA; font-weight: bold;">1</span> <span style="color: #7FC1CA;">-</span> <span style="color: #7FC1CA; font-weight: bold;">2</span> : Int) <span style="color: #899BA6;">--</span><span style="color: #899BA6;">&gt; -1 : Int</span>
+</pre>
+</div>
+
+<p>
+As u can check the values with  `#eval`
+u also can check the types with `#check`
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">#check</span> (<span style="color: #7FC1CA; font-weight: bold;">1</span> <span style="color: #7FC1CA;">-</span> <span style="color: #7FC1CA; font-weight: bold;">2</span> : Int)  <span style="color: #899BA6;">--</span><span style="color: #899BA6;">&gt; 1 - 2 : Int (without performing the operation.)</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org665822f" class="outline-4">
+<h4 id="org665822f"><span class="section-number-4">1.1.4.</span> Functions and Definitions</h4>
+<div class="outline-text-4" id="text-1-1-4">
+<p>
+to definitions, use `def`, like:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">hello</span> <span style="color: #7FC1CA;">:=</span> <span style="color: #7FC1CA;">"Hello"</span>
+</pre>
+</div>
+
+<p>
+Note how great the `:=` fits for assignments instead of `=`.
+If u wanna pick the type too, u can do it like this:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">lean</span> : String <span style="color: #7FC1CA;">:=</span> <span style="color: #7FC1CA;">"Lean"</span>
+</pre>
+</div>
+
+<p>
+When it comes to define a function, there are a variaty of ways to do that.
+The simpliest one (they say it):
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">succ</span> (n : Nat) : Nat <span style="color: #7FC1CA;">:=</span> n <span style="color: #7FC1CA;">+</span> <span style="color: #7FC1CA; font-weight: bold;">1</span>
+<span style="color: #899BA6;">-- </span><span style="color: #899BA6;">or:</span>
+<span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">pred</span> (n : Nat) : Nat <span style="color: #7FC1CA;">:=</span>
+  n <span style="color: #7FC1CA;">-</span> <span style="color: #7FC1CA; font-weight: bold;">1</span>
+</pre>
+</div>
+
+
+<p>
+Look this another one with more arguments:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">maximum</span> (n : Nat) (k : Nat) : Nat <span style="color: #7FC1CA;">:=</span>
+  <span style="color: #9A93E1;">if</span> n <span style="color: #7FC1CA;">&lt;</span> k <span style="color: #9A93E1;">then</span>
+    k
+  <span style="color: #9A93E1;">else</span> n
+</pre>
+</div>
+
+<p>
+Lean4 does use currying as default.
+(my exercises are in somewhere but it&rsquo;s not my intent to share them :P)
+</p>
+</div>
+<ol class="org-ol">
+<li><a id="orgd123fc0"></a>Defining Types:<br />
+<div class="outline-text-5" id="text-1-1-4-1">
+<p>
+U use the same `def` keyword just like with the values (including functions)
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">Str</span>  : <span style="color: #A8CE93;">Type</span> <span style="color: #7FC1CA;">:=</span> String
+<span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">aStr</span> : Str  <span style="color: #7FC1CA;">:=</span> <span style="color: #7FC1CA;">"Look at me, i'm a real String!"</span>
+</pre>
+</div>
+
+<p>
+some explanation about &ldquo;aStr&rdquo; definition:
+&ldquo;The reason this works is that types follow the same rules as the rest of Lean. Types are expressions,
+and in an expression, a defined name can be replaced with its definition. Because Str has been defined
+to mean String, the definition of aStr makes sense.&rdquo;
+</p>
+
+<p>
+Something very very weird about Lean4 is that, because they want to overload number literals,
+this code generates an error:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">NaturalNumber</span> : <span style="color: #A8CE93;">Type</span> <span style="color: #7FC1CA;">:=</span> Nat
+<span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">thirtyEight</span> : NaturalNumber <span style="color: #7FC1CA;">:=</span> <span style="color: #7FC1CA; font-weight: bold;">38</span>
+ <span style="color: #899BA6;">-- </span><span style="color: #899BA6;">failed to synthesize instance</span>
+<span style="color: #899BA6;">-- </span><span style="color: #899BA6;">OfNat NaturalNumber 38</span>
+</pre>
+</div>
+
+<p>
+But it works this way:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">thirtyEight</span> : NaturalNumber <span style="color: #7FC1CA;">:=</span> (<span style="color: #7FC1CA; font-weight: bold;">38</span> : Nat)
+</pre>
+</div>
+
+<p>
+why?
+"One way to work around this limitation is by providing the type Nat on the right-hand side of the definition, causing Nat&rsquo;s overloading rules to be used for 38:
+</p>
+
+<p>
+The definition is still type-correct because NaturalNumber is the same type as Nat—by definition!"
+</p>
+
+<p>
+But don&rsquo;t worry about it, we can see the light here:
+&ldquo;Another solution is to define an overloading for NaturalNumber that works equivalently to the one for Nat. This requires more advanced features of Lean, however.&rdquo;
+</p>
+
+<p>
+Finally we have some &ldquo;abbrev&rdquo; like here:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">abbrev</span> N : <span style="color: #A8CE93;">Type</span> <span style="color: #7FC1CA;">:=</span> Nat
+<span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">thirtyNine</span> : N <span style="color: #7FC1CA;">:=</span> <span style="color: #7FC1CA; font-weight: bold;">39</span>
+<span style="color: #899BA6;">-- </span><span style="color: #899BA6;">works well</span>
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org162f61b"></a>Question:<br />
+<div class="outline-text-5" id="text-1-1-4-2">
+<p>
+whats a &ldquo;foldable | unfoldable | folded | unfolded&rdquo; definitions?
+</p>
+</div>
+</li>
+</ol>
+</div>
+<div id="outline-container-org08403ce" class="outline-4">
+<h4 id="org08403ce"><span class="section-number-4">1.1.5.</span> Structures</h4>
+<div class="outline-text-4" id="text-1-1-5">
+<p>
+So they&rsquo;re basically product types..
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">structure</span> <span style="color: #83AFE5;">Point</span> <span style="color: #9A93E1;">where</span>
+  x : Float
+  y : Float
+<span style="color: #9A93E1;">deriving</span> Repr
+
+<span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">origin</span> : Point <span style="color: #7FC1CA;">:=</span> { x <span style="color: #7FC1CA;">:=</span> <span style="color: #7FC1CA; font-weight: bold;">0.0</span>, y <span style="color: #7FC1CA;">:=</span> <span style="color: #7FC1CA; font-weight: bold;">0.0</span> }
+</pre>
+</div>
+
+<p>
+Note that the deriving works as the `Show` in haskell.
+When u call the &ldquo;#eval&rdquo;, it call&rsquo;s the &ldquo;repr&rdquo;. Look&rsquo;s like
+we&rsquo;re gonna discover TypeClasses again..
+</p>
+
+<p>
+About extracting things out of products we have:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">#eval</span> origin.x
+<span style="color: #9A93E1;">#eval</span> origin.y
+
+<span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">addPoints</span> (p1 : Point) (p2 : Point) : Point <span style="color: #7FC1CA;">:=</span>
+    { x <span style="color: #7FC1CA;">:=</span> p1.x <span style="color: #7FC1CA;">+</span> p2.x, y <span style="color: #7FC1CA;">:=</span> p1.y <span style="color: #7FC1CA;">+</span> p2.y }
+
+<span style="color: #9A93E1;">structure</span> <span style="color: #83AFE5;">Point3D</span> <span style="color: #9A93E1;">where</span>
+    x : Float
+    y : Float
+    z : Float
+<span style="color: #9A93E1;">deriving</span> Repr
+
+<span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">origin3D</span> : Point3D <span style="color: #7FC1CA;">:=</span>
+    { x <span style="color: #7FC1CA;">:=</span> <span style="color: #7FC1CA; font-weight: bold;">0.0</span>, y <span style="color: #7FC1CA;">:=</span> <span style="color: #7FC1CA; font-weight: bold;">0.0</span>, z <span style="color: #7FC1CA;">:=</span> <span style="color: #7FC1CA; font-weight: bold;">0.0</span> }
+</pre>
+</div>
+
+<p>
+&ldquo;To make programs more concise, Lean also allows the structure type annotation inside the curly braces.&rdquo;
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4">    <span style="color: #9A93E1;">#check</span> { x <span style="color: #7FC1CA;">:=</span> <span style="color: #7FC1CA; font-weight: bold;">0.0</span>, y <span style="color: #7FC1CA;">:=</span> <span style="color: #7FC1CA; font-weight: bold;">0.0</span> : Point}
+</pre>
+</div>
+
+<p>
+Another convenient syntax is:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #899BA6;">-- </span><span style="color: #899BA6;">default</span>
+<span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">zeroX</span> (p : Point) : Point <span style="color: #7FC1CA;">:=</span>
+    { x <span style="color: #7FC1CA;">:=</span> <span style="color: #7FC1CA; font-weight: bold;">0</span>, y <span style="color: #7FC1CA;">:=</span> p.y }
+<span style="color: #899BA6;">-- </span><span style="color: #899BA6;">with syntax</span>
+<span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">zeroX</span> (p : Point) : Point <span style="color: #7FC1CA;">:=</span>
+    { p <span style="color: #9A93E1;">with</span> x <span style="color: #7FC1CA;">:=</span> <span style="color: #7FC1CA; font-weight: bold;">0</span> }
+</pre>
+</div>
+
+<p>
+With this syntax, some issues about refactoring code, e.g., adding new
+new columns to a struct would not implie that u&rsquo;re refactoring every
+single function that does things like above.
+</p>
+</div>
+<ol class="org-ol">
+<li><a id="org34542ac"></a>Structure constructor<br />
+<div class="outline-text-5" id="text-1-1-5-1">
+<p>
+So.. In Lean4, ure forced to use the &ldquo;mk&rdquo; thing that
+u could avoid in Haskell after get some maturity..
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">#check</span> Point.mk <span style="color: #7FC1CA; font-weight: bold;">1.5</span> <span style="color: #7FC1CA; font-weight: bold;">2.8</span>
+ <span style="color: #899BA6;">--</span><span style="color: #899BA6;">&gt; { x := 1.5, y := 2.8 } : Point</span>
+</pre>
+</div>
+<p>
+It&rsquo;s just exacly how a constructor should be in a product type,
+but forcing u to use de `(<sub>.mk</sub>)` syntax, and what&rsquo;s ok.
+</p>
+
+<ul class="org-ul">
+<li>Fine, i was wrong. And the default.. Nice one, lean, nice one.</li>
+</ul>
+<p>
+look at that:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">structure</span> <span style="color: #83AFE5;">Point</span> <span style="color: #9A93E1;">where</span>
+  point ::
+  x : Float
+  y : Float
+<span style="color: #9A93E1;">deriving</span> Repr
+</pre>
+</div>
+
+<p>
+Some notes about &rsquo;behind-the-scenes&rsquo;:
+&ldquo;In fact, just as the curly-braced structure construction syntax is converted to a call to the structure&rsquo;s constructor behind the scenes, the syntax p1.x in the prior definition of addPoints is converted into a call to the Point.x accessor. That is, #eval origin.x and #eval Point.x origin both yield&rdquo;
+</p>
+
+<p>
+LOOK AT THIS!!:
+    Accessor dot notation is usable with more than just structure fields. It can also be used for functions that take any number of arguments. More generally, accessor notation has the form TARGET.f ARG1 ARG2 &#x2026;. If TARGET has type T, the function named T.f is called. TARGET becomes its leftmost argument of type T, which is often but not always the first one, and ARG1 ARG2 &#x2026; are provided in order as the remaining arguments. For instance, String.append can be invoked from a string with accessor notation, even though String is not a structure with an append field.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">#eval</span> <span style="color: #7FC1CA;">"one string"</span>.append <span style="color: #7FC1CA;">" and another"</span>
+</pre>
+</div>
+
+<p>
+(question?) - how the parenthesis works with `#eval` and `#check`?
+</p>
+</div>
+</li>
+</ol>
+</div>
+<div id="outline-container-org998ef0d" class="outline-4">
+<h4 id="org998ef0d"><span class="section-number-4">1.1.6.</span> Datatypes, Patterns and Recursion</h4>
+<div class="outline-text-4" id="text-1-1-6">
+<p>
+It&rsquo;s module starts presenting what&rsquo;s a sum and a product of types in a
+very simple and didactic way.
+</p>
+
+<p>
+Also, the concept &ldquo;inductive data types&rdquo; were explained in this short-text:
+&ldquo;Datatypes that allow choices are called sum types and datatypes that can include instances of themselves are called recursive datatypes. Recursive sum types are called inductive datatypes, because mathematical induction may be used to prove statements about them. When programming, inductive datatypes are consumed through pattern matching and recursive functions.&rdquo;
+</p>
+
+<p>
+But also look this definition:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">inductive</span> <span style="color: #83AFE5;">Bool</span> <span style="color: #9A93E1;">where</span>
+  | false : Bool
+  | true  : Bool
+</pre>
+</div>
+
+<p>
+About classical ones, we have:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">inductive</span> <span style="color: #83AFE5;">Nat</span> <span style="color: #9A93E1;">where</span>
+  | zero : Nat
+  | succ (n : Nat) : Nat
+</pre>
+</div>
+</div>
+<ol class="org-ol">
+<li><a id="org745f789"></a>Pattern Matching<br />
+<div class="outline-text-5" id="text-1-1-6-1">
+<p>
+Examples:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">isZero</span> (n : Nat) : Bool <span style="color: #7FC1CA;">:=</span>
+    <span style="color: #9A93E1;">match</span> n <span style="color: #9A93E1;">with</span>
+    | Nat.zero   <span style="color: #7FC1CA;">=&gt;</span> true
+    | Nat.succ k <span style="color: #7FC1CA;">=&gt;</span> false
+
+<span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">pred</span> (n : Nat) : Nat <span style="color: #7FC1CA;">:=</span>
+    <span style="color: #9A93E1;">match</span> n <span style="color: #9A93E1;">with</span>
+    | Nat.zero   <span style="color: #7FC1CA;">=&gt;</span> Nat.zero
+    | Nat.succ k <span style="color: #7FC1CA;">=&gt;</span> k
+</pre>
+</div>
+
+<p>
+U can match with products just like sums (&#x2026;)
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">depth</span> (p : Point3D) : Float <span style="color: #7FC1CA;">:=</span>
+    <span style="color: #9A93E1;">match</span> p <span style="color: #9A93E1;">with</span>
+    | { x<span style="color: #7FC1CA;">:=</span> h, y <span style="color: #7FC1CA;">:=</span> w, z <span style="color: #7FC1CA;">:=</span> d } <span style="color: #7FC1CA;">=&gt;</span> d
+
+<span style="color: #899BA6;">-- </span><span style="color: #899BA6;">Better:</span>
+<span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">depth</span> (p : Point3D) : Float <span style="color: #7FC1CA;">:=</span>
+    <span style="color: #9A93E1;">match</span> p <span style="color: #9A93E1;">with</span>
+    | Point3D.mk <span style="color: #A8CE93; font-weight: bold;">_</span> <span style="color: #A8CE93; font-weight: bold;">_</span> d <span style="color: #7FC1CA;">=&gt;</span> d
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org9adb54e"></a>Recursive Functions<br />
+<div class="outline-text-5" id="text-1-1-6-2">
+<p>
+Examples:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">even</span> (n : Nat) : Bool <span style="color: #7FC1CA;">:=</span>
+    <span style="color: #9A93E1;">match</span> n <span style="color: #9A93E1;">with</span>
+    | Nat.zero   <span style="color: #7FC1CA;">=&gt;</span> true
+    | Nat.succ k <span style="color: #7FC1CA;">=&gt;</span> not (even k)
+</pre>
+</div>
+
+<p>
+&ldquo;Lean ensures by default that every recursive function will eventually reach a base case&rdquo;
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #899BA6;">-- </span><span style="color: #899BA6;">error:</span>
+<span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">evenLoops</span> (n : Nat) : Bool <span style="color: #7FC1CA;">:=</span>
+    <span style="color: #9A93E1;">match</span> n <span style="color: #9A93E1;">with</span>
+    | Nat.zero   <span style="color: #7FC1CA;">=&gt;</span> true
+    | Nat.succ k <span style="color: #7FC1CA;">=&gt;</span> not (evenLoops n)
+</pre>
+</div>
+
+<p>
+Mensagem do erro:
+"fail to show termination for
+  evenLoops
+with errors
+structural recursion cannot be used
+</p>
+
+<p>
+well-founded recursion cannot be used, &rsquo;evenLoops&rsquo; does not take any (non-fixed) arguments
+"
+</p>
+
+<p>
+Another classical&rsquo;s:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">plus</span> (n : Nat) (k : Nat) : Nat <span style="color: #7FC1CA;">:=</span>
+    <span style="color: #9A93E1;">match</span> k <span style="color: #9A93E1;">with</span>
+    | Nat.zero    <span style="color: #7FC1CA;">=&gt;</span> n
+    | Nat.succ k' <span style="color: #7FC1CA;">=&gt;</span> Nat.succ (plus n k')
+
+<span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">times</span> (n : Nat) (k : Nat) : Nat <span style="color: #7FC1CA;">:=</span>
+    <span style="color: #9A93E1;">match</span> k <span style="color: #9A93E1;">with</span>
+    | Nat.zero    <span style="color: #7FC1CA;">=&gt;</span> Nat.zero
+    | Nat.succ k' <span style="color: #7FC1CA;">=&gt;</span> plus n (times n k')
+
+<span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">monus*</span> (n : Nat) (k : Nat) : Nat <span style="color: #7FC1CA;">:=</span>
+    <span style="color: #9A93E1;">match</span> k <span style="color: #9A93E1;">with</span>
+    | Nat.zero    <span style="color: #7FC1CA;">=&gt;</span> n
+    | Nat.succ k' <span style="color: #7FC1CA;">=&gt;</span> pred (minus n k')
+</pre>
+</div>
+
+<p>
+Algumas coisas sobre a terminação da quot foram tratadas,
+mas só serão `terminadas` no último capítulo, portanto, nada
+a mencionar por aqui.
+</p>
+</div>
+</li>
+</ol>
+</div>
+<div id="outline-container-org721d60e" class="outline-4">
+<h4 id="org721d60e"><span class="section-number-4">1.1.7.</span> Polymorphism</h4>
+<div class="outline-text-4" id="text-1-1-7">
+<p>
+Look this amazing generalized point:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">structure</span> <span style="color: #83AFE5;">PPoint</span> (&#945; : <span style="color: #A8CE93;">Type</span>) <span style="color: #9A93E1;">where</span>
+  x : &#945;
+  y : &#945;
+<span style="color: #9A93E1;">deriving</span> Repr
+</pre>
+</div>
+
+<p>
+Usage example:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">natOrigin</span> : PPoint Nat <span style="color: #7FC1CA;">:=</span>
+  { x <span style="color: #7FC1CA;">:=</span> Nat.zero, y <span style="color: #7FC1CA;">:=</span> Nat.zero }
+
+<span style="color: #899BA6;">-- </span><span style="color: #899BA6;">My own version</span>
+<span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">natOrigin</span> : PPoint Nat <span style="color: #7FC1CA;">:=</span>
+  PPoint.mk Nat.zero Nat.zero
+</pre>
+</div>
+
+<p>
+Receiving a Type as argument:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">replaceX</span> (&#945; : <span style="color: #A8CE93;">Type</span>) (point : PPoint &#945;) (newX : &#945;) : PPoint &#945; <span style="color: #7FC1CA;">:=</span>
+    { point <span style="color: #9A93E1;">with</span> x <span style="color: #7FC1CA;">:=</span> newX }
+</pre>
+</div>
+
+<p>
+Look how cool is match inside the types &lt;3:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">inductive</span> <span style="color: #83AFE5;">Sign</span> <span style="color: #9A93E1;">where</span>
+  | pos
+  | neg
+
+<span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">posOrNegThree</span> (s : Sign) : <span style="color: #9A93E1;">match</span> s <span style="color: #9A93E1;">with</span> | Sign.pos <span style="color: #7FC1CA;">=&gt;</span> Nat | Sign.neg <span style="color: #7FC1CA;">=&gt;</span> Int <span style="color: #7FC1CA;">:=</span>
+  <span style="color: #9A93E1;">match</span> s <span style="color: #9A93E1;">with</span>
+    | Sign.pos <span style="color: #7FC1CA;">=&gt;</span> (<span style="color: #7FC1CA; font-weight: bold;">3</span> : Nat)
+    | Sign.neg <span style="color: #7FC1CA;">=&gt;</span> (<span style="color: #7FC1CA;">-</span><span style="color: #7FC1CA; font-weight: bold;">3</span> : Int)
+</pre>
+</div>
+
+<p>
+[question?] &#x2013;&gt; How do i should even deal with this type of return? Because
+It&rsquo;s not even &ldquo;Either&rdquo;.
+</p>
+</div>
+<ol class="org-ol">
+<li><a id="org8400f6e"></a>Linked Lists<br />
+<div class="outline-text-5" id="text-1-1-7-1">
+<p>
+&ldquo; Lists are written in square brackets. For instance, a list that contains the prime numbers less than 10 can be written:&rdquo;
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">primesUnder10</span> : List Nat <span style="color: #7FC1CA;">:=</span> [<span style="color: #7FC1CA; font-weight: bold;">2</span>, <span style="color: #7FC1CA; font-weight: bold;">3</span>, <span style="color: #7FC1CA; font-weight: bold;">5</span>, <span style="color: #7FC1CA; font-weight: bold;">7</span>]
+</pre>
+</div>
+
+<p>
+Behind the scenes, List is an inductive datatype, defined like this:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">inductive</span> <span style="color: #83AFE5;">List</span> (&#945; : <span style="color: #A8CE93;">Type</span>) <span style="color: #9A93E1;">where</span>
+  | nil  : List &#945;
+  | cons : &#945; <span style="color: #7FC1CA;">&#8594;</span> List &#945; <span style="color: #7FC1CA;">&#8594;</span> List &#945;
+</pre>
+</div>
+
+<p>
+Ok, this looks ugly:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">explicitPrimesUnder10</span> : List Nat <span style="color: #7FC1CA;">:=</span>
+  List.cons <span style="color: #7FC1CA; font-weight: bold;">2</span> (List.cons <span style="color: #7FC1CA; font-weight: bold;">3</span> (List.cons <span style="color: #7FC1CA; font-weight: bold;">5</span> (List.cons <span style="color: #7FC1CA; font-weight: bold;">7</span> List.nil)))
+</pre>
+</div>
+
+<p>
+Soo.. look at this lenght:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">length</span> (&#945; : <span style="color: #A8CE93;">Type</span>) (xs' : List &#945;) : Nat <span style="color: #7FC1CA;">:=</span>
+  <span style="color: #9A93E1;">match</span> xs' <span style="color: #9A93E1;">with</span>
+  | List.nil       <span style="color: #7FC1CA;">=&gt;</span> Nat.zero
+  | List.cons x xs <span style="color: #7FC1CA;">=&gt;</span> Nat.succ (length &#945; ys)
+</pre>
+</div>
+
+<p>
+&ldquo;To make it easier to read functions on lists, the bracket notation [] can be used to pattern-match against nil, and an infix :: can be used in place of cons:&rdquo;
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">length</span> (&#945; : <span style="color: #A8CE93;">Type</span>) (xs : List &#945;) : Nat <span style="color: #7FC1CA;">:=</span>
+  <span style="color: #9A93E1;">match</span> xs <span style="color: #9A93E1;">with</span>
+  | [] <span style="color: #7FC1CA;">=&gt;</span> <span style="color: #7FC1CA; font-weight: bold;">0</span>
+  | y :: ys <span style="color: #7FC1CA;">=&gt;</span> Nat.succ (length &#945; ys)
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org77ce03f"></a>Implicit Arguments<br />
+<div class="outline-text-5" id="text-1-1-7-2">
+<p>
+Using &ldquo;{}&rdquo; instead of &ldquo;()&rdquo; should make the argument implicit somehow.
+Look at this:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">length</span> {&#945; : <span style="color: #A8CE93;">Type</span>} (xs : List &#945;) : Nat <span style="color: #7FC1CA;">:=</span>
+  <span style="color: #9A93E1;">match</span> xs <span style="color: #9A93E1;">with</span>
+  | [] <span style="color: #7FC1CA;">=&gt;</span> <span style="color: #7FC1CA; font-weight: bold;">0</span>
+  | y :: ys <span style="color: #7FC1CA;">=&gt;</span> Nat.succ (length ys)
+</pre>
+</div>
+
+<p>
+And now we can do
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">#eval</span> length [<span style="color: #7FC1CA; font-weight: bold;">1</span>, <span style="color: #7FC1CA; font-weight: bold;">2</span>, <span style="color: #7FC1CA; font-weight: bold;">3</span>]
+</pre>
+</div>
+
+<p>
+,instead of
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">#eval</span> length Nat [<span style="color: #7FC1CA; font-weight: bold;">1</span>, <span style="color: #7FC1CA; font-weight: bold;">2</span>, <span style="color: #7FC1CA; font-weight: bold;">3</span>]
+</pre>
+</div>
+
+<p>
+We can also do this way, btw
+(by using the std lib):
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">#eval</span> [<span style="color: #7FC1CA; font-weight: bold;">1</span>, <span style="color: #7FC1CA; font-weight: bold;">2</span>, <span style="color: #7FC1CA; font-weight: bold;">3</span>].length
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org3766bfc"></a>More Built-In Datatypes<br />
+<div class="outline-text-5" id="text-1-1-7-3">
+<p>
+&ldquo;In addition to lists, Lean&rsquo;s standard library contains a number of other structures and inductive datatypes that can be used in a variety of contexts.&rdquo;
+</p>
+</div>
+<ol class="org-ol">
+<li><a id="org5989ecf"></a>Option<br />
+<div class="outline-text-6" id="text-1-1-7-3-1">
+<p>
+It&rsquo;s basically the &ldquo;Maybe&rdquo; type from Haskell.
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">inductive</span> <span style="color: #83AFE5;">Option</span> (&#945; : <span style="color: #A8CE93;">Type</span>) : <span style="color: #A8CE93;">Type</span> <span style="color: #9A93E1;">where</span>
+  | none           : Option &#945;
+  | some (val : &#945;) : Option &#945;
+</pre>
+</div>
+
+<p>
+This text talk about having layers of optionality:
+&ldquo;The Option type is very similar to nullable types in languages like C# and Kotlin, but it is not identical. In these languages, if a type (say, Boolean) always refers to actual values of the type (true and false), the type Boolean? or Nullable&lt;Boolean&gt; additionally admits the null value. Tracking this in the type system is very useful: the type checker and other tooling can help programmers remember to check for null, and APIs that explicitly describe nullability through type signatures are more informative than ones that don&rsquo;t. However, these nullable types differ from Lean&rsquo;s Option in one very important way, which is that they don&rsquo;t allow multiple layers of optionality. Option (Option Int) can be constructed with none, some none, or some (some 360). C#, on the other hand, forbids multiple layers of nullability by only allowing ? to be added to non-nullable types, while Kotlin treats T?? as being equivalent to T?. This subtle difference is rarely relevant in practice, but it can matter from time to time.&rdquo;
+</p>
+
+<p>
+U can use &rsquo;?&rsquo; in a function name, look at this:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">List.head?</span> {&#945; : <span style="color: #A8CE93;">Type</span>} (xs : List &#945;) : Option &#945; <span style="color: #7FC1CA;">:=</span>
+  <span style="color: #9A93E1;">match</span> xs <span style="color: #9A93E1;">with</span>
+    | []     <span style="color: #7FC1CA;">=&gt;</span> none
+    | y :: <span style="color: #A8CE93; font-weight: bold;">_</span> <span style="color: #7FC1CA;">=&gt;</span> some y
+</pre>
+</div>
+
+<p>
+&ldquo;Using underscores instead of names is a way to clearly communicate to readers that part of the input is ignored.&rdquo; For more detail&rsquo;s:
+</p>
+</div>
+<ol class="org-ol">
+<li><a id="org471944e"></a>Informative:<br />
+<div class="outline-text-7" id="text-1-1-7-3-1-1">
+<p>
+&ldquo;The question mark is part of the name, and is not related to the use of question marks to indicate nullable types in C# or Kotlin. In the definition of List.head?, an underscore is used to represent the tail of the list. In patterns, underscores match anything at all, but do not introduce variables to refer to the matched data. Using underscores instead of names is a way to clearly communicate to readers that part of the input is ignored.&rdquo;
+</p>
+</div>
+</li>
+</ol>
+</li>
+<li><a id="orgbbd1145"></a>Prod<br />
+<div class="outline-text-6" id="text-1-1-7-3-2">
+<p>
+It&rsquo;s basically the &ldquo;Pair&rdquo;, because we&rsquo;re inside the type cat.
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">structure</span> <span style="color: #83AFE5;">Prod</span> (&#945; : <span style="color: #A8CE93;">Type</span>) (&#946; : <span style="color: #A8CE93;">Type</span>) : <span style="color: #A8CE93;">Type</span> <span style="color: #9A93E1;">where</span>
+  fst : &#945;
+  snd : &#946;
+</pre>
+</div>
+
+<p>
+About confort syntax:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #899BA6;">-- </span><span style="color: #899BA6;">Better</span>
+<span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">fives</span> : String <span style="color: #7FC1CA;">&#215;</span> Int <span style="color: #7FC1CA;">:=</span> { fst <span style="color: #7FC1CA;">:=</span> <span style="color: #7FC1CA;">"five"</span>, snd <span style="color: #7FC1CA;">:=</span> <span style="color: #7FC1CA; font-weight: bold;">5</span> }
+<span style="color: #899BA6;">-- </span><span style="color: #899BA6;">A way better:</span>
+<span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">fives</span> : String <span style="color: #7FC1CA;">&#215;</span> Int <span style="color: #7FC1CA;">:=</span> (<span style="color: #7FC1CA;">"five"</span>, <span style="color: #7FC1CA; font-weight: bold;">5</span>)
+</pre>
+</div>
+</div>
+<ol class="org-ol">
+<li><a id="orga6965f8"></a>About syntax associativity:<br />
+<div class="outline-text-7" id="text-1-1-7-3-2-1">
+<p>
+&ldquo;Both notations are right-associative. This means that the following definitions are equivalent:&rdquo;
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #899BA6;">-- </span><span style="color: #899BA6;">The</span>
+<span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">sevens</span> : String <span style="color: #7FC1CA;">&#215;</span> Int <span style="color: #7FC1CA;">&#215;</span> Nat <span style="color: #7FC1CA;">:=</span> (<span style="color: #7FC1CA;">"VII"</span>, <span style="color: #7FC1CA; font-weight: bold;">7</span>, <span style="color: #7FC1CA; font-weight: bold;">4</span> <span style="color: #7FC1CA;">+</span> <span style="color: #7FC1CA; font-weight: bold;">3</span>)
+<span style="color: #899BA6;">-- </span><span style="color: #899BA6;">Is acctualy</span>
+<span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">sevens</span> : String <span style="color: #7FC1CA;">&#215;</span> (Int <span style="color: #7FC1CA;">&#215;</span> Nat) <span style="color: #7FC1CA;">:=</span> (<span style="color: #7FC1CA;">"VII"</span>, (<span style="color: #7FC1CA; font-weight: bold;">7</span>, <span style="color: #7FC1CA; font-weight: bold;">4</span> <span style="color: #7FC1CA;">+</span> <span style="color: #7FC1CA; font-weight: bold;">3</span>))
+</pre>
+</div>
+
+<p>
+&ldquo;In other words, all products of more than two types, and their corresponding constructors, are actually nested products and nested pairs behind the scenes.&rdquo;
+</p>
+</div>
+</li>
+<li><a id="org967e1f7"></a>A good advice:<br />
+<div class="outline-text-7" id="text-1-1-7-3-2-2">
+<p>
+&ldquo;Many applications are best served by defining their own structures, even for simple cases like Point, because using domain terminology can make it easier to read the code. Additionally, defining structure types helps catch more errors by assigning different types to different domain concepts, preventing them from being mixed up.&rdquo;
+</p>
+</div>
+</li>
+</ol>
+</li>
+<li><a id="org05cbed5"></a>Sum<br />
+<div class="outline-text-6" id="text-1-1-7-3-3">
+<p>
+&ldquo;Values of type Sum α β are either the constructor inl applied to a value of type α or the constructor inr applied to a value of type β:&rdquo;
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">inductive</span> <span style="color: #83AFE5;">Sum</span> (&#945; : <span style="color: #A8CE93;">Type</span>) (&#946; : <span style="color: #A8CE93;">Type</span>) : <span style="color: #A8CE93;">Type</span> <span style="color: #9A93E1;">where</span>
+  | inl : &#945; <span style="color: #7FC1CA;">&#8594;</span> Sum &#945; &#946;
+  | inr : &#946; <span style="color: #7FC1CA;">&#8594;</span> Sum &#945; &#946;
+</pre>
+</div>
+
+<p>
+Another notation (wrost than the simplier &ldquo;+&rdquo;)
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">PetName</span> : <span style="color: #A8CE93;">Type</span> <span style="color: #7FC1CA;">:=</span> String &#8853; String
+</pre>
+</div>
+
+<p>
+Example:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">howManyDogs</span> (pets : List PetName) : Nat <span style="color: #7FC1CA;">:=</span>
+  <span style="color: #9A93E1;">match</span> pets <span style="color: #9A93E1;">with</span>
+  | []                    <span style="color: #7FC1CA;">=&gt;</span> <span style="color: #7FC1CA; font-weight: bold;">0</span>
+  | Sum.inl <span style="color: #A8CE93; font-weight: bold;">_</span> :: morePets <span style="color: #7FC1CA;">=&gt;</span> howManyDogs morePets <span style="color: #7FC1CA;">+</span> <span style="color: #7FC1CA; font-weight: bold;">1</span>
+  | Sum.inr <span style="color: #A8CE93; font-weight: bold;">_</span> :: morePets <span style="color: #7FC1CA;">=&gt;</span> howManyDogs morePets
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org4a066bc"></a>Unit<br />
+<div class="outline-text-6" id="text-1-1-7-3-4">
+<p>
+Just like it should be:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">inductive</span> <span style="color: #83AFE5;">Unit</span> : <span style="color: #A8CE93;">Type</span> <span style="color: #9A93E1;">where</span>
+  | unit : Unit
+</pre>
+</div>
+
+<p>
+To the unique member of the &ldquo;Unit&rdquo; type, u can also call it by
+the classical &ldquo;()&rdquo;.
+</p>
+</div>
+</li>
+<li><a id="org9e14596"></a>Empty<br />
+<div class="outline-text-6" id="text-1-1-7-3-5">
+<p>
+This should be fine:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">inductive</span> <span style="color: #83AFE5;">Empty</span> <span style="color: #9A93E1;">where</span>
+
+<span style="color: #9A93E1;">#check</span> Empty
+</pre>
+</div>
+
+<p>
+"The Empty datatype has no constructors whatsoever. Thus, it indicates unreachable code, because no series of calls can ever terminate with a value at type Empty.
+</p>
+
+<p>
+Empty is not used nearly as often as Unit. However, it is useful in some specialized contexts. Many polymorphic datatypes do not use all of their type arguments in all of their constructors. For instance, Sum.inl and Sum.inr each use only one of Sum&rsquo;s type arguments. Using Empty as one of the type arguments to Sum can rule out one of the constructors at a particular point in a program. This can allow generic code to be used in contexts that have additional restrictions."
+</p>
+</div>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+<div id="outline-container-org3410be3" class="outline-4">
+<h4 id="org3410be3"><span class="section-number-4">1.1.8.</span> Additional Conveniences</h4>
+<div class="outline-text-4" id="text-1-1-8">
+</div>
+<ol class="org-ol">
+<li><a id="org533b125"></a>Automatic Implicit Arguments<br />
+<div class="outline-text-5" id="text-1-1-8-1">
+<p>
+&ldquo;When writing polymorphic functions in Lean, it is typically not necessary to list all the implicit arguments.&rdquo;
+</p>
+
+<p>
+So, that definition:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">length</span> {&#945; : <span style="color: #A8CE93;">Type</span>} (xs : List &#945;) : Nat <span style="color: #7FC1CA;">:=</span>
+  <span style="color: #9A93E1;">match</span> xs <span style="color: #9A93E1;">with</span>
+  | []      <span style="color: #7FC1CA;">=&gt;</span> <span style="color: #7FC1CA; font-weight: bold;">0</span>
+  | y :: ys <span style="color: #7FC1CA;">=&gt;</span> Nat.succ (length ys)
+</pre>
+</div>
+
+<p>
+Can be written this way:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">length</span> (xs : List &#945;) : Nat <span style="color: #7FC1CA;">:=</span>
+  <span style="color: #9A93E1;">match</span> xs <span style="color: #9A93E1;">with</span>
+  | []      <span style="color: #7FC1CA;">=&gt;</span> <span style="color: #7FC1CA; font-weight: bold;">0</span>
+  | y :: ys <span style="color: #7FC1CA;">=&gt;</span> Nat.succ (length ys)
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org5df1ccd"></a>Pattern-Matching Definitions<br />
+<div class="outline-text-5" id="text-1-1-8-2">
+<p>
+&ldquo;When defining functions with def, it is quite common to name an argument and then immediately
+use it with pattern matching. For instance, in length, the argument xs is used only in match.
+In these situations, the cases of the match expression can be written directly, without naming the argument at all.&rdquo;
+</p>
+
+<p>
+Example:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">length</span> : List &#945; <span style="color: #7FC1CA;">&#8594;</span> Nat
+  | []      <span style="color: #7FC1CA;">=&gt;</span> <span style="color: #7FC1CA; font-weight: bold;">0</span>
+  | y :: ys <span style="color: #7FC1CA;">=&gt;</span> Nat.succ (length ys)
+</pre>
+</div>
+
+<p>
+&ldquo;This syntax can also be used to define functions that take more than one argument. In this case,
+their patterns are separated by commas.&rdquo;
+</p>
+
+<p>
+Example:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">drop</span> : Nat <span style="color: #7FC1CA;">&#8594;</span> List &#945; <span style="color: #7FC1CA;">&#8594;</span> List &#945;
+  | Nat.zero  , xs      <span style="color: #7FC1CA;">=&gt;</span> xs
+  | <span style="color: #A8CE93; font-weight: bold;">_</span>         , []      <span style="color: #7FC1CA;">=&gt;</span> []
+  | Nat.succ n, x :: xs <span style="color: #7FC1CA;">=&gt;</span> drop n xs
+</pre>
+</div>
+
+<p>
+&ldquo;Named arguments and patterns can also be used in the same definition.&rdquo;
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">fromOption</span> (default : &#945;) : Option &#945; <span style="color: #7FC1CA;">&#8594;</span> &#945;
+  | none   <span style="color: #7FC1CA;">=&gt;</span> default
+  | some x <span style="color: #7FC1CA;">=&gt;</span> x
+</pre>
+</div>
+
+<p>
+&ldquo;This function is called Option.getD in the standard library,
+  and can be called with dot notation&rdquo;, btw.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">#eval</span> (some <span style="color: #7FC1CA;">"salmonberry"</span>).getD <span style="color: #7FC1CA;">""</span> <span style="color: #899BA6;">--</span><span style="color: #899BA6;">&gt; "salmonberry"</span>
+<span style="color: #9A93E1;">#eval</span> none.getD <span style="color: #7FC1CA;">""</span>                 <span style="color: #899BA6;">--</span><span style="color: #899BA6;">&gt; ""</span>
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org68529fa"></a>Local Definitions<br />
+<div class="outline-text-5" id="text-1-1-8-3">
+<p>
+&ldquo;In Lean, the result of the recursive call can be named, and thus saved, using let. Local definitions with let resemble top-level definitions with def: it takes a name to be locally defined, arguments if desired, a type signature, and then a body following :=. After the local definition, the expression in which the local definition is available (called the body of the let-expression) must be on a new line, starting at a column in the file that is less than or equal to that of the let keyword. For instance, let can be used in unzip like this:&rdquo;
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">unzip</span> : List (&#945; <span style="color: #7FC1CA;">&#215;</span> &#946;) <span style="color: #7FC1CA;">&#8594;</span> List &#945; <span style="color: #7FC1CA;">&#215;</span> List &#946;
+  | []            <span style="color: #7FC1CA;">=&gt;</span> ([], [])
+  | (x, y) :: xys <span style="color: #7FC1CA;">=&gt;</span>
+    <span style="color: #9A93E1;">let</span> unzipped : List &#945; <span style="color: #7FC1CA;">&#215;</span> List &#946; <span style="color: #7FC1CA;">:=</span> unzip xys
+    (x :: unzipped.fst, y :: unzipped.snd)
+</pre>
+</div>
+
+<p>
+&ldquo;To use let on a single line, separate the local definition from the body with a semicolon.&rdquo;
+</p>
+
+<p>
+&ldquo;Local definitions with let may also use pattern matching when one pattern is enough to match all cases of a datatype. In the case of unzip, the result of the recursive call is a pair. Because pairs have only a single constructor, the name unzipped can be replaced with a pair pattern:&rdquo;
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">unzip</span> : List (&#945; <span style="color: #7FC1CA;">&#215;</span> &#946;) <span style="color: #7FC1CA;">&#8594;</span> List &#945; <span style="color: #7FC1CA;">&#215;</span> List &#946;
+  | [] <span style="color: #7FC1CA;">=&gt;</span> ([], [])
+  | (x, y) :: xys <span style="color: #7FC1CA;">=&gt;</span>
+    <span style="color: #9A93E1;">let</span> (xs, ys) : List &#945; <span style="color: #7FC1CA;">&#215;</span> List &#946; <span style="color: #7FC1CA;">:=</span> unzip xys
+    (x :: xs, y :: ys)
+</pre>
+</div>
+
+<p>
+NEW FEATURE:
+&ldquo;The biggest difference between let and def is that recursive let definitions must be explicitly indicated by writing let rec. For instance, one way to reverse a list involves a recursive helper function, as in this definition:&rdquo;
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">reverse</span> (xs : List &#945;) : List &#945; <span style="color: #7FC1CA;">:=</span>
+  <span style="color: #9A93E1;">let</span> <span style="color: #9A93E1;">rec</span> helper : List &#945; <span style="color: #7FC1CA;">&#8594;</span> List &#945; <span style="color: #7FC1CA;">&#8594;</span> List &#945;
+    | [], soFar <span style="color: #7FC1CA;">=&gt;</span> soFar
+    | y :: ys, soFar <span style="color: #7FC1CA;">=&gt;</span> helper ys (y :: soFar)
+  helper xs []
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org0220cdc"></a>Type Inference<br />
+<div class="outline-text-5" id="text-1-1-8-4">
+<p>
+&ldquo;In many situations, Lean can automatically determine an expression&rsquo;s type. In these cases, explicit types may be omitted from both top-level definitions (with def) and local definitions (with let). For instance, the recursive call to unzip does not need an annotation:&rdquo;
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">unzip</span> : List (&#945; <span style="color: #7FC1CA;">&#215;</span> &#946;) <span style="color: #7FC1CA;">&#8594;</span> List &#945; <span style="color: #7FC1CA;">&#215;</span> List &#946;
+  | []            <span style="color: #7FC1CA;">=&gt;</span> ([], [])
+  | (x, y) :: xys <span style="color: #7FC1CA;">=&gt;</span>
+    <span style="color: #9A93E1;">let</span> unzipped <span style="color: #7FC1CA;">:=</span> unzip xys
+    (x :: unzipped.fst, y :: unzipped.snd)
+</pre>
+</div>
+
+<p>
+In deed, it could even be like this:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">unnzip</span> : List (&#945; <span style="color: #7FC1CA;">&#215;</span> &#946;) <span style="color: #7FC1CA;">&#8594;</span> List &#945; <span style="color: #7FC1CA;">&#215;</span> List &#946;
+  | []            <span style="color: #7FC1CA;">=&gt;</span> ([], [])
+  | (x, y) :: xys <span style="color: #7FC1CA;">=&gt;</span>
+    <span style="color: #9A93E1;">let</span> (xs, ys) <span style="color: #7FC1CA;">:=</span> unzip xys
+    (x :: xs, y :: ys)
+</pre>
+</div>
+
+<p>
+&ldquo;Omitting the return type for unzip is possible when using an explicit match expression:&rdquo;
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">unzip</span> (pairs : List (&#945; <span style="color: #7FC1CA;">&#215;</span> &#946;)) <span style="color: #7FC1CA;">:=</span>
+  <span style="color: #9A93E1;">match</span> pairs <span style="color: #9A93E1;">with</span>
+  | [] <span style="color: #7FC1CA;">=&gt;</span> ([], [])
+  | (x, y) :: xys <span style="color: #7FC1CA;">=&gt;</span>
+    <span style="color: #9A93E1;">let</span> unzipped <span style="color: #7FC1CA;">:=</span> unzip xys
+    (x :: unzipped.fst, y :: unzipped.snd)
+</pre>
+</div>
+
+<p>
+&ldquo;Missing type annotations can give confusing error messages. Omitting all types from the definition of unzip:&rdquo;
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">unzip</span> pairs <span style="color: #7FC1CA;">:=</span>
+  <span style="color: #9A93E1;">match</span> pairs <span style="color: #9A93E1;">with</span>
+  | [] <span style="color: #7FC1CA;">=&gt;</span> ([], [])
+  | (x, y) :: xys <span style="color: #7FC1CA;">=&gt;</span>
+    <span style="color: #9A93E1;">let</span> unzipped <span style="color: #7FC1CA;">:=</span> unzip xys
+    (x :: unzipped.fst, y :: unzipped.snd)
+</pre>
+</div>
+
+<p>
+It generate this error message:
+</p>
+<div class="org-src-container">
+<pre class="src src-error">invalid match-expression, pattern contains metavariables
+  []
+</pre>
+</div>
+
+<p>
+&ldquo;This is because match needs to know the type of the value being inspected, but that type was not available.&rdquo;
+</p>
+
+<p>
+&ldquo;Even some very simple programs require type annotations. For instance, the identity function just returns whatever argument it is passed. With argument and type annotations, it looks like this:&rdquo;
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">id</span> (x : &#945;) : &#945; <span style="color: #7FC1CA;">:=</span> x
+</pre>
+</div>
+
+<p>
+&ldquo;Lean is capable of determining the return type on its own:&rdquo;
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">id</span> (x : &#945;) <span style="color: #7FC1CA;">:=</span> x
+</pre>
+</div>
+
+<p>
+&ldquo;Omitting the argument type, however, causes an error:&rdquo;
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">id</span> x <span style="color: #7FC1CA;">:=</span> x <span style="color: #899BA6;">--</span><span style="color: #899BA6;">&gt; (!) failed to infer binder type</span>
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org93e2fbb"></a>Simultaneous Matching<br />
+<div class="outline-text-5" id="text-1-1-8-5">
+<p>
+&ldquo;Pattern-matching expressions, just like pattern-matching definitions, can match on multiple values at once. &rdquo;
+</p>
+
+<p>
+Look at this:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">drop</span> (n : Nat) (xs : List &#945;) : List &#945; <span style="color: #7FC1CA;">:=</span>
+  <span style="color: #9A93E1;">match</span> n, xs <span style="color: #9A93E1;">with</span>
+  | Nat.zero   , ys      <span style="color: #7FC1CA;">=&gt;</span> ys
+  | <span style="color: #A8CE93; font-weight: bold;">_</span>          , []      <span style="color: #7FC1CA;">=&gt;</span> []
+  | Nat.succ n , y :: ys <span style="color: #7FC1CA;">=&gt;</span> drop n ys
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org023a253"></a>Natural Number Patterns<br />
+<div class="outline-text-5" id="text-1-1-8-6">
+<p>
+&ldquo;Just as there is special syntax to make list patterns more readable
+than using List.cons and List.nil directly, natural numbers can be
+matched using literal numbers and +. For instance, even can also be
+defined like this:&rdquo;
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">even</span> : Nat <span style="color: #7FC1CA;">&#8594;</span> Bool
+  | <span style="color: #7FC1CA; font-weight: bold;">0</span>     <span style="color: #7FC1CA;">=&gt;</span> true
+  | n <span style="color: #7FC1CA;">+</span> <span style="color: #7FC1CA; font-weight: bold;">1</span> <span style="color: #7FC1CA;">=&gt;</span> not (even n)
+</pre>
+</div>
+
+<p>
+The explicit patterns in halve, which divides a Nat by two and drops the remainder:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">halve</span> : Nat <span style="color: #7FC1CA;">&#8594;</span> Nat
+  | Nat.zero <span style="color: #7FC1CA;">=&gt;</span> <span style="color: #7FC1CA; font-weight: bold;">0</span>
+  | Nat.succ Nat.zero <span style="color: #7FC1CA;">=&gt;</span> <span style="color: #7FC1CA; font-weight: bold;">0</span>
+  | Nat.succ (Nat.succ n) <span style="color: #7FC1CA;">=&gt;</span> halve n <span style="color: #7FC1CA;">+</span> <span style="color: #7FC1CA; font-weight: bold;">1</span>
+</pre>
+</div>
+
+<p>
+can be replaced by numeric literals and +:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">halve</span> : Nat <span style="color: #7FC1CA;">&#8594;</span> Nat
+  | <span style="color: #7FC1CA; font-weight: bold;">0</span>     <span style="color: #7FC1CA;">=&gt;</span> <span style="color: #7FC1CA; font-weight: bold;">0</span>
+  | <span style="color: #7FC1CA; font-weight: bold;">1</span>     <span style="color: #7FC1CA;">=&gt;</span> <span style="color: #7FC1CA; font-weight: bold;">0</span>
+  | n <span style="color: #7FC1CA;">+</span> <span style="color: #7FC1CA; font-weight: bold;">2</span> <span style="color: #7FC1CA;">=&gt;</span> halve n <span style="color: #7FC1CA;">+</span> <span style="color: #7FC1CA; font-weight: bold;">1</span>
+</pre>
+</div>
+
+<p>
+&ldquo;When using this syntax, the second argument to + should always be a literal Nat. Even though addition is commutative.&rdquo;
+</p>
+</div>
+</li>
+<li><a id="org499dc2e"></a>Anonymous Functions<br />
+<div class="outline-text-5" id="text-1-1-8-7">
+<p>
+The both can be used:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">#check</span> <span style="color: #9A93E1;">fun</span>
+  | <span style="color: #7FC1CA; font-weight: bold;">0</span> <span style="color: #7FC1CA;">=&gt;</span> none
+  | n <span style="color: #7FC1CA;">+</span> <span style="color: #7FC1CA; font-weight: bold;">1</span> <span style="color: #7FC1CA;">=&gt;</span> some n
+<span style="color: #9A93E1;">#check</span> <span style="color: #7FC1CA;">&#955;</span>
+  | <span style="color: #7FC1CA; font-weight: bold;">0</span> <span style="color: #7FC1CA;">=&gt;</span> none
+  | n <span style="color: #7FC1CA;">+</span> <span style="color: #7FC1CA; font-weight: bold;">1</span> <span style="color: #7FC1CA;">=&gt;</span> some n
+</pre>
+</div>
+
+<p>
+So, basicaly: fun = λ.
+It&rsquo;s a bit more usual to use &ldquo;fun&rdquo; instead of &ldquo;λ&rdquo;, btw.
+</p>
+
+<p>
+Awelsome syntax gift:
+&ldquo;When an anonymous function is very simple, like fun x =&gt; x + 1, the syntax for creating the function can be fairly verbose. In that particular example, six non-whitespace characters are used to introduce the function, and its body consists of only three non-whitespace characters. For these simple cases, Lean provides a shorthand. In an expression surrounded by parentheses, a centered dot character · can stand for an argument, and the expression inside the parentheses becomes the function&rsquo;s body. That particular function can also be written (· + 1).&rdquo;
+</p>
+
+<p>
+&ldquo;The centered dot always creates a function out of the closest surrounding set of parentheses. For instance, (· + 5, 3) is a function that returns a pair of numbers, while ((· + 5), 3) is a pair of a function and a number. If multiple dots are used, then they become arguments from left to right:&rdquo;
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lean4">(&#183; , &#183;) <span style="color: #7FC1CA; font-weight: bold;">1</span> <span style="color: #7FC1CA; font-weight: bold;">2</span>
+<span style="color: #7FC1CA;">===&gt;</span>
+(<span style="color: #7FC1CA; font-weight: bold;">1</span>, &#183;) <span style="color: #7FC1CA; font-weight: bold;">2</span>
+<span style="color: #7FC1CA;">===&gt;</span>
+(<span style="color: #7FC1CA; font-weight: bold;">1</span>, <span style="color: #7FC1CA; font-weight: bold;">2</span>)
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org9dd745b"></a>Namespaces<br />
+<div class="outline-text-5" id="text-1-1-8-8">
+<p>
+Each name in Lean occurs in a namespace, which is a collection of names. Names are placed in namespaces using ., so List.map is the name map in the List namespace.
+</p>
+
+<p>
+Names can be directly defined within a namespace. For instance, the name double can be defined in the Nat namespace:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">Nat.double</span> (x : Nat) : Nat <span style="color: #7FC1CA;">:=</span> x <span style="color: #7FC1CA;">+</span> x
+</pre>
+</div>
+
+<p>
+Because Nat is also the name of a type, dot notation is available to call Nat.double on expressions with type Nat:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">#eval</span> (<span style="color: #7FC1CA; font-weight: bold;">4</span> : Nat).double
+</pre>
+</div>
+
+<p>
+In addition to defining names directly in a namespace, a sequence of declarations can be placed in a namespace using the namespace and end commands. For instance, this defines triple and quadruple in the namespace NewNamespace:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">namespace</span> NewNamespace
+<span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">triple</span>    (x : Nat) : Nat <span style="color: #7FC1CA;">:=</span> <span style="color: #7FC1CA; font-weight: bold;">3</span> <span style="color: #7FC1CA;">*</span> x
+<span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">quadruple</span> (x : Nat) : Nat <span style="color: #7FC1CA;">:=</span> <span style="color: #7FC1CA; font-weight: bold;">2</span> <span style="color: #7FC1CA;">*</span> x <span style="color: #7FC1CA;">+</span> <span style="color: #7FC1CA; font-weight: bold;">2</span> <span style="color: #7FC1CA;">*</span> x
+<span style="color: #9A93E1;">end</span> NewNamespace
+</pre>
+</div>
+
+<p>
+&ldquo;Namespaces may be opened, which allows the names in them to be used without explicit qualification. Writing open MyNamespace in before an expression causes the contents of MyNamespace to be available in the expression. For example, timesTwelve uses both quadruple and triple after opening NewNamespace:&rdquo;
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">timesTwelve</span> (x : Nat) <span style="color: #7FC1CA;">:=</span>
+  <span style="color: #9A93E1;">open</span> NewNamespace <span style="color: #9A93E1;">in</span>
+  quadruple (triple x)
+</pre>
+</div>
+
+<p>
+Namespaces can also be opened prior to a command. This allows all parts of the command to refer to the contents of the namespace, rather than just a single expression. To do this, place the open &#x2026; in prior to the command.
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">open</span> NewNamespace <span style="color: #9A93E1;">in</span>
+<span style="color: #9A93E1;">#check</span> quadruple
+</pre>
+</div>
+
+<p>
+Important:
+&ldquo;Function signatures show the name&rsquo;s full namespace. Namespaces may additionally be opened for all following commands for the rest of the file. To do this, simply omit the in from a top-level usage of open.&rdquo;
+</p>
+</div>
+</li>
+<li><a id="org8bd7e18"></a>if let<br />
+<div class="outline-text-5" id="text-1-1-8-9">
+<p>
+a function that recognizes string elements and extracts their contents can be written:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">Inline.string?</span> (inline : Inline) : Option String <span style="color: #7FC1CA;">:=</span>
+  <span style="color: #9A93E1;">match</span> inline <span style="color: #9A93E1;">with</span>
+  | Inline.string s <span style="color: #7FC1CA;">=&gt;</span> some s
+  | <span style="color: #A8CE93; font-weight: bold;">_</span>               <span style="color: #7FC1CA;">=&gt;</span> none
+</pre>
+</div>
+
+<p>
+An alternative way of writing this function&rsquo;s body uses if together with let:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">Inline.string?</span> (inline : Inline) : Option String <span style="color: #7FC1CA;">:=</span>
+  <span style="color: #9A93E1;">if</span> <span style="color: #9A93E1;">let</span> Inline.string s <span style="color: #7FC1CA;">:=</span> inline <span style="color: #9A93E1;">then</span>
+    some s
+  <span style="color: #9A93E1;">else</span> none
+</pre>
+</div>
+
+<p>
+It really look like some `instanceOf`&rsquo;s.. Ugly, yeah!
+</p>
+</div>
+</li>
+<li><a id="org88bed52"></a>Positional Structure Arguments<br />
+<div class="outline-text-5" id="text-1-1-8-10">
+<p>
+With some context, like definitions, because
+Structures are essencialy tupples, we can write
+it like this:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">#eval</span> (&#10216;<span style="color: #7FC1CA; font-weight: bold;">1</span>, <span style="color: #7FC1CA; font-weight: bold;">2</span>&#10217; : Point)
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org9ae2303"></a>String Interpolation<br />
+<div class="outline-text-5" id="text-1-1-8-11">
+<p>
+&ldquo;In Lean, prefixing a string with s! triggers interpolation, where expressions contained in curly braces inside the string are replaced with their values. This is similar to f-strings in Python and $-prefixed strings in C#. For instance,&rdquo;
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">#eval</span> s<span style="color: #7FC1CA;">!</span><span style="color: #7FC1CA;">"three fives is {NewNamespace.triple 5}"</span>
+ <span style="color: #899BA6;">--</span><span style="color: #899BA6;">&gt; "three fives is 15"</span>
+</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div id="outline-container-org89cea3a" class="outline-4">
+<h4 id="org89cea3a"><span class="section-number-4">1.1.9.</span> <span class="todo TODO">TODO</span> &ldquo;Summary&rdquo;</h4>
+</div>
+</div>
+<div id="outline-container-org7d1ccc3" class="outline-3">
+<h3 id="org7d1ccc3"><span class="section-number-3">1.2.</span> Hello, World!</h3>
+<div class="outline-text-3" id="text-1-2">
+</div>
+<div id="outline-container-orgf1eca79" class="outline-4">
+<h4 id="orgf1eca79"><span class="section-number-4">1.2.1.</span> Compiling</h4>
+<div class="outline-text-4" id="text-1-2-1">
+<p>
+So u use `lean &#x2013;rn file-name.lean` in order
+to compile things.
+</p>
+</div>
+</div>
+<div id="outline-container-org8d575f8" class="outline-4">
+<h4 id="org8d575f8"><span class="section-number-4">1.2.2.</span> The main</h4>
+<div class="outline-text-4" id="text-1-2-2">
+<p>
+The main should look similar to in Haskell as bellow:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">main</span> : IO Unit <span style="color: #7FC1CA;">:=</span> IO.println <span style="color: #7FC1CA;">"Hello, world!"</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org404e581" class="outline-4">
+<h4 id="org404e581"><span class="section-number-4">1.2.3.</span> The IO</h4>
+<div class="outline-text-4" id="text-1-2-3">
+<p>
+In a first look, the usage looks pretty similar to Haskells.
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">main</span> : IO Unit <span style="color: #7FC1CA;">:=</span> <span style="color: #9A93E1;">do</span>
+  <span style="color: #9A93E1;">let</span> stdin  &#8592; IO.getStdin
+  <span style="color: #9A93E1;">let</span> stdout &#8592; IO.getStdout
+
+  stdout.putStrLn <span style="color: #7FC1CA;">"How would you like to be addressed?"</span>
+  <span style="color: #9A93E1;">let</span> input &#8592; stdin.getLine
+  <span style="color: #9A93E1;">let</span> name <span style="color: #7FC1CA;">:=</span> input.dropRightWhile Char.isWhitespace
+
+  stdout.putStrLn s<span style="color: #7FC1CA;">!</span><span style="color: #7FC1CA;">"Hello, {name}!"</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org273d977" class="outline-4">
+<h4 id="org273d977"><span class="section-number-4">1.2.4.</span> Build Tool&rsquo;s (Lake)</h4>
+<div class="outline-text-4" id="text-1-2-4">
+</div>
+<ol class="org-ol">
+<li><a id="org3f3d03f"></a>Lake intro<br />
+<div class="outline-text-5" id="text-1-2-4-1">
+<p>
+The standard Lean build tool is called Lake (short for &ldquo;Lean Make&rdquo;).
+</p>
+
+<p>
+&ldquo;Just as Lean contains a special-purpose language for writing programs with effects (the do language), Lake contains a special-purpose language for configuring builds.&rdquo;
+</p>
+</div>
+</li>
+<li><a id="org81c5422"></a>Creating a project<br />
+<div class="outline-text-5" id="text-1-2-4-2">
+<p>
+Lake new create a new project in a new directory, to create a project in an already-existing directory,
+run lake init instead.
+</p>
+</div>
+</li>
+<li><a id="org0a38522"></a>Special &ldquo;&lt;&lt; name &gt;&gt;&rdquo;<br />
+<div class="outline-text-5" id="text-1-2-4-3">
+<p>
+Placing guillemets around a name, as in «Greeting», allow it to contain spaces or other characters that are normally not allowed in Lean names, and it allows reserved keywords such as if or def to be used as ordinary names by writing «if» or «def». This prevents issues when the package name provided to lake new contains such characters.
+</p>
+</div>
+</li>
+<li><a id="org797a213"></a>Running the project<br />
+<div class="outline-text-5" id="text-1-2-4-4">
+<p>
+To build the package, run the command lake build. After a number of build commands scroll by, the
+resulting binary has been placed in build/bin. Running `./build/bin/greeting` results in Hello, world!.
+</p>
+
+<p>
+To me it appeared in a file inside `.lake/build/bin/`
+</p>
+</div>
+</li>
+<li><a id="orgd793f87"></a>Lake documentation link<br />
+<div class="outline-text-5" id="text-1-2-4-5">
+<p>
+<a href="https://github.com/leanprover/lean4/blob/master/src/lake/README.md">https://github.com/leanprover/lean4/blob/master/src/lake/README.md</a>
+</p>
+</div>
+</li>
+<li><a id="org91aa208"></a>Lean4 as the Lider<br />
+<div class="outline-text-5" id="text-1-2-4-6">
+<p>
+&ldquo;Additionally, Lakefiles may contain external libraries, which are libraries not written in Lean to be
+statically linked with the resulting executable.&rdquo;
+</p>
+</div>
+</li>
+<li><a id="org44bda81"></a>Module vs Namespaces<br />
+<div class="outline-text-5" id="text-1-2-4-7">
+<p>
+&ldquo;Import is used to make the contents of a source file available, while open makes names from a namespace available in the current context without prefixes.&rdquo;
+</p>
+</div>
+</li>
+<li><a id="org90bbe31"></a>Selective Openning<br />
+<div class="outline-text-5" id="text-1-2-4-8">
+<p>
+Similar to Haskell, (but with the segragation of module vs namespace), you can write
+`open Nat (toFloat)` to get only open `toFloat` to usage.
+</p>
+</div>
+</li>
+<li><a id="orgf3cd2e9"></a>Main Types<br />
+<div class="outline-text-5" id="text-1-2-4-9">
+<p>
+In Lean, main can have one of three types:
+</p>
+
+<ul class="org-ul">
+<li>main : IO Unit corresponds to programs that cannot read their command-line arguments and always indicate success with an exit code of 0</li>
+
+<li>main : IO UInt32 corresponds to int main(void) in C, for programs without arguments that return exit codes, and</li>
+
+<li>main : List String → IO UInt32 corresponds to int main(int argc, char **argv) in C, for programs that take arguments and signal success or failure.</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div id="outline-container-orgf4ad8ed" class="outline-4">
+<h4 id="orgf4ad8ed"><span class="section-number-4">1.2.5.</span> <span class="todo TODO">TODO</span> Conveniences</h4>
+</div>
+<div id="outline-container-org85f7daa" class="outline-4">
+<h4 id="org85f7daa"><span class="section-number-4">1.2.6.</span> <span class="todo TODO">TODO</span> Summary</h4>
+</div>
+</div>
+<div id="outline-container-orgf012b7a" class="outline-3">
+<h3 id="orgf012b7a"><span class="section-number-3">1.3.</span> Overloading and Type Classes</h3>
+<div class="outline-text-3" id="text-1-3">
+</div>
+<div id="outline-container-orga94def2" class="outline-4">
+<h4 id="orga94def2"><span class="section-number-4">1.3.1.</span> Intro</h4>
+<div class="outline-text-4" id="text-1-3-1">
+</div>
+<ol class="org-ol">
+<li><a id="org34c38a4"></a>Intro<br />
+<div class="outline-text-5" id="text-1-3-1-1">
+<p>
+A type class consists of a name, some parameters, and a collection of methods.
+</p>
+
+<p>
+declaring a type class really results in the following:
+</p>
+
+<p>
+A structure type to contain the implementation of each overloaded operation
+A namespace with the same name as the class
+For each method, a function in the class&rsquo;s namespace that retrieves its implementation from an instance
+</p>
+</div>
+</li>
+<li><a id="org62a19c4"></a>Parameters<br />
+<div class="outline-text-5" id="text-1-3-1-2">
+<p>
+Describe the types for which overloadable operations are being defined
+</p>
+</div>
+</li>
+<li><a id="org1a82737"></a>Methods<br />
+<div class="outline-text-5" id="text-1-3-1-3">
+<p>
+Are the names and type signatures of the overloadable operations.
+</p>
+</div>
+</li>
+<li><a id="orgd36d082"></a>Short Example<br />
+<div class="outline-text-5" id="text-1-3-1-4">
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">class</span> <span style="color: #83AFE5;">Plus</span> (&#945; : <span style="color: #A8CE93;">Type</span>) <span style="color: #9A93E1;">where</span>
+  plus : &#945; <span style="color: #7FC1CA;">&#8594;</span> &#945; <span style="color: #7FC1CA;">&#8594;</span> &#945;
+
+<span style="color: #9A93E1;">instance</span> <span style="color: #83AFE5;">:</span> Plus Nat <span style="color: #9A93E1;">where</span>
+  plus <span style="color: #7FC1CA;">:=</span> Nat.add
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org679dafa"></a>HAdd and HMul<br />
+<div class="outline-text-5" id="text-1-3-1-5">
+<p>
+HAdd is short for heterogeneous addition.
+For example, an HAdd instance can be written to allow a Nat to be added to a Float, resulting in a new Float. When a programmer writes x + y, it is interpreted as meaning HAdd.hAdd x y.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">addNatPos</span> : Nat <span style="color: #7FC1CA;">&#8594;</span> Pos <span style="color: #7FC1CA;">&#8594;</span> Pos
+  | <span style="color: #7FC1CA; font-weight: bold;">0</span>    , p <span style="color: #7FC1CA;">=&gt;</span> p
+  | n <span style="color: #7FC1CA;">+</span> <span style="color: #7FC1CA; font-weight: bold;">1</span>, p <span style="color: #7FC1CA;">=&gt;</span> Pos.succ (addNatPos n p)
+
+<span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">addPosNat</span> : Pos <span style="color: #7FC1CA;">&#8594;</span> Nat <span style="color: #7FC1CA;">&#8594;</span> Pos
+  | p, <span style="color: #7FC1CA; font-weight: bold;">0</span>     <span style="color: #7FC1CA;">=&gt;</span> p
+  | p, n <span style="color: #7FC1CA;">+</span> <span style="color: #7FC1CA; font-weight: bold;">1</span> <span style="color: #7FC1CA;">=&gt;</span> Pos.succ (addPosNat p n)
+</pre>
+</div>
+
+<p>
+this type of of overloading is a lot more powerful than the &ldquo;Add&rdquo; and &ldquo;Mul&rdquo;, because here we can add things with 2 diferent types. From this example, let&rsquo;s see it working:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">instance</span> <span style="color: #83AFE5;">:</span> HAdd Nat Pos Pos <span style="color: #9A93E1;">where</span>
+  hAdd <span style="color: #7FC1CA;">:=</span> addNatPos
+
+<span style="color: #9A93E1;">instance</span> <span style="color: #83AFE5;">:</span> HAdd Pos Nat Pos <span style="color: #9A93E1;">where</span>
+  hAdd <span style="color: #7FC1CA;">:=</span> addPosNat
+
+<span style="color: #9A93E1;">#eval</span> (<span style="color: #7FC1CA; font-weight: bold;">3</span> : Pos) <span style="color: #7FC1CA;">+</span> (<span style="color: #7FC1CA; font-weight: bold;">5</span> : Nat) <span style="color: #899BA6;">--</span><span style="color: #899BA6;">&gt; 8</span>
+<span style="color: #9A93E1;">#eval</span> (<span style="color: #7FC1CA; font-weight: bold;">3</span> : Nat) <span style="color: #7FC1CA;">+</span> (<span style="color: #7FC1CA; font-weight: bold;">5</span> : Pos) <span style="color: #899BA6;">--</span><span style="color: #899BA6;">&gt; 8</span>
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org1f80d9c"></a>Very very useful thing i&rsquo;ve made<br />
+<div class="outline-text-5" id="text-1-3-1-6">
+<p>
+Since the Lean libraries are set up so that an instance of Add will be found when searching for an instance of HAdd in which both arguments have the same type, i did:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">instance</span> <span style="color: #83AFE5;">:</span> Add <span style="color: #A8CE93;">Type</span> <span style="color: #9A93E1;">where</span>
+  add <span style="color: #7FC1CA;">:=</span> Sum
+<span style="color: #899BA6;">-- </span><span style="color: #899BA6;">and now it's possible to write:</span>
+<span style="color: #9A93E1;">#check</span> Int <span style="color: #7FC1CA;">+</span> String <span style="color: #899BA6;">--</span><span style="color: #899BA6;">&gt; Type</span>
+</pre>
+</div>
+
+<p>
+Just as &ldquo;HAdd&rdquo;, there&rsquo;s a &ldquo;HMul&rdquo; and also there&rsquo;s a simplier &ldquo;Mul&rdquo;
+for the case when the two arguments have the same type.
+</p>
+</div>
+</li>
+<li><a id="orgd36a706"></a>Literals (&ldquo;OfNat&rdquo; class)<br />
+<div class="outline-text-5" id="text-1-3-1-7">
+<p>
+In Lean, natural number literals are interpreted using a type class called OfNat:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">class</span> <span style="color: #83AFE5;">OfNat</span> (&#945; : <span style="color: #A8CE93;">Type</span>) (<span style="color: #A8CE93; font-weight: bold;">_</span> : Nat) <span style="color: #9A93E1;">where</span>
+  ofNat : &#945;
+</pre>
+</div>
+</div>
+</li>
+<li><a id="orge3bb440"></a>Very weird thing!<br />
+<div class="outline-text-5" id="text-1-3-1-8">
+<p>
+#+begin<sub>src</sub> lean4
+class Foo (n : Nat) where
+  const : Nat
+open Foo
+</p>
+
+<p>
+instance : Foo 5 where
+  const := 42
+</p>
+
+<p>
+instance : Foo 4 where
+  const := 53
+</p>
+
+<p>
+#eval const 5 &#x2013;&gt; 42
+#eval const 4 &#x2013;&gt; 53
+#eval const 3 &#x2013;&gt; !ERROR &ldquo;failed to synthetize&rdquo;
+#end<sub>src</sub>
+</p>
+</div>
+</li>
+<li><a id="org752620c"></a><span class="todo TODO">TODO</span> A Short Example (HTTP)<br /></li>
+</ol>
+</div>
+<div id="outline-container-orgfb8fedc" class="outline-4">
+<h4 id="orgfb8fedc"><span class="section-number-4">1.3.2.</span> Polymorphism</h4>
+<div class="outline-text-4" id="text-1-3-2">
+</div>
+<ol class="org-ol">
+<li><a id="org315fdff"></a>About constraints<br />
+<div class="outline-text-5" id="text-1-3-2-1">
+<p>
+Here the &ldquo;IO.println&rdquo; need to receive a type that insatnciate the &ldquo;ToString&rdquo; class.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">#check</span> IO.println   <span style="color: #899BA6;">--</span><span style="color: #899BA6;">&gt; IO.prinln.{u_1} {&#945; : Type u_1} [ToString &#945;] (s : &#945;) : IO Unit</span>
+<span style="color: #9A93E1;">#check</span> (IO.println) <span style="color: #899BA6;">--</span><span style="color: #899BA6;">&gt; IO.println : ?m.10872 &#8594; IO Unit</span>
+<span style="color: #9A93E1;">#check</span> <span style="color: #7FC1CA;">@</span>IO.println  <span style="color: #899BA6;">--</span><span style="color: #899BA6;">&gt; @IO.println : {&#945; : Type u_1} &#8594; [inst : ToString &#945;] &#8594; &#945; &#8594; IO Unit</span>
+</pre>
+</div>
+
+<p>
+In Lean4, they call constraints as &ldquo;Instance Implicits&rdquo;
+</p>
+</div>
+</li>
+<li><a id="org7d8ef66"></a>Defining Polymorphic Functions with Instance Implicits<br />
+<div class="outline-text-5" id="text-1-3-2-2">
+<p>
+There is an example:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">List.sum</span> [Add &#945;] [OfNat &#945; <span style="color: #7FC1CA; font-weight: bold;">0</span>] : List &#945; <span style="color: #7FC1CA;">&#8594;</span> &#945;
+ | []      <span style="color: #7FC1CA;">=&gt;</span> <span style="color: #7FC1CA; font-weight: bold;">0</span>
+ | x :: xs <span style="color: #7FC1CA;">=&gt;</span> x <span style="color: #7FC1CA;">+</span> xs.sum
+
+<span style="color: #9A93E1;">instance</span> [Add &#945;] : Add (PPoint &#945;) <span style="color: #9A93E1;">where</span>
+  add p1 p2 <span style="color: #7FC1CA;">:=</span> { x <span style="color: #7FC1CA;">:=</span> p1.x <span style="color: #7FC1CA;">+</span> p2.x, y <span style="color: #7FC1CA;">:=</span> p1.y <span style="color: #7FC1CA;">+</span> p2.y }
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org85bc653"></a><span class="todo TODO">TODO</span> Even Number Literals<br />
+<div class="outline-text-5" id="text-1-3-2-3">
+<p>
+Write an instance of OfNat for the even number datatype from the previous section&rsquo;s (4.1) exercises that uses recursive instance search.
+For the base instance, it is necessary to write OfNat Even Nat.zero instead of OfNat Even 0.
+</p>
+</div>
+</li>
+</ol>
+</div>
+<div id="outline-container-org5df5358" class="outline-4">
+<h4 id="org5df5358"><span class="section-number-4">1.3.3.</span> <span class="todo WAIT">WAIT</span> Instance Search</h4>
+<div class="outline-text-4" id="text-1-3-3">
+</div>
+<ol class="org-ol">
+<li><a id="orga8a650a"></a>Intro<br />
+<div class="outline-text-5" id="text-1-3-3-1">
+<p>
+In the past we&rsquo;ve be seen the HAdd type class.
+</p>
+
+<p>
+The definition of the HAdd type class is very much like the following definition of HPlus
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">class</span> <span style="color: #83AFE5;">HPlus</span> (&#945; : <span style="color: #A8CE93;">Type</span>) (&#946; : <span style="color: #A8CE93;">Type</span>) (&#947; : <span style="color: #A8CE93;">Type</span>) <span style="color: #9A93E1;">where</span>
+  hPlus : &#945; <span style="color: #7FC1CA;">&#8594;</span> &#946; <span style="color: #7FC1CA;">&#8594;</span> &#947;
+
+<span style="color: #899BA6;">-- </span><span style="color: #899BA6;">but:</span>
+<span style="color: #9A93E1;">#eval</span> HPlus.hPlus (<span style="color: #7FC1CA; font-weight: bold;">3</span> : Pos) (<span style="color: #7FC1CA; font-weight: bold;">5</span> : Nat)         <span style="color: #899BA6;">--</span><span style="color: #899BA6;">&gt; !Error</span>
+<span style="color: #9A93E1;">#eval</span> (HPlus.hPlus (<span style="color: #7FC1CA; font-weight: bold;">3</span> : Pos) (<span style="color: #7FC1CA; font-weight: bold;">5</span> : Nat) : Pos) <span style="color: #899BA6;">--</span><span style="color: #899BA6;">&gt; 8</span>
+</pre>
+</div>
+</div>
+</li>
+<li><a id="orga5ca58a"></a>Default Instances<br />
+<div class="outline-text-5" id="text-1-3-3-2">
+<p>
+&ldquo;Default instances are instances that are available for instance search even when not all their inputs are known.&rdquo;
+</p>
+
+<p>
+One example of where default instances can be useful is an instance of HPlus that can be derived from an Add instance. In other words, ordinary addition is a special case of heterogeneous addition in which all three types happen to be the same. This can be implemented using the following instance:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">instance</span> [Add &#945;] : HPlus &#945; &#945; &#945; <span style="color: #9A93E1;">where</span>
+  hPlus <span style="color: #7FC1CA;">:=</span> Add.add
+
+<span style="color: #899BA6;">-- </span><span style="color: #899BA6;">But:</span>
+<span style="color: #9A93E1;">#check</span> HPlus.hPlus (<span style="color: #7FC1CA; font-weight: bold;">5</span> : Nat) <span style="color: #899BA6;">--</span><span style="color: #899BA6;">&gt; HPlus.hPlus 5 : ?m.7706 &#8594; ?m.7708</span>
+</pre>
+</div>
+
+<p>
+In the vast majority of cases, when someone supplies one argument to addition, the other argument will have the same type. To make this instance into a default instance, apply the default<sub>instance</sub> attribute:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #A8CE93; font-weight: bold;">@[default_instance]</span>
+<span style="color: #9A93E1;">instance</span> [Add &#945;] : HPlus &#945; &#945; &#945; <span style="color: #9A93E1;">where</span>
+  hPlus <span style="color: #7FC1CA;">:=</span> Add.add
+
+<span style="color: #899BA6;">-- </span><span style="color: #899BA6;">And now:</span>
+<span style="color: #9A93E1;">#check</span> HPlus.hPlus (<span style="color: #7FC1CA; font-weight: bold;">5</span> : Nat) <span style="color: #899BA6;">--</span><span style="color: #899BA6;">&gt; HPlus.hPlus 5 : Nat &#8594; Nat</span>
+</pre>
+</div>
+
+<p>
+For more details, consult the Lean4 manual!
+</p>
+</div>
+</li>
+</ol>
+</div>
+<div id="outline-container-org3a49991" class="outline-4">
+<h4 id="org3a49991"><span class="section-number-4">1.3.4.</span> Arrays</h4>
+<div class="outline-text-4" id="text-1-3-4">
+</div>
+<ol class="org-ol">
+<li><a id="org069482b"></a>Intro<br />
+<div class="outline-text-5" id="text-1-3-4-1">
+<p>
+For instance, Lean arrays are much more efficient than linked lists for most purposes. In Lean, the type Array α is a dynamically-sized array holding values of type α, much like a Java ArrayList, a C++ std::vector
+</p>
+</div>
+</li>
+<li><a id="org1311b30"></a>FunFact about compiler<br />
+<div class="outline-text-5" id="text-1-3-4-2">
+<p>
+In pure functional languages like Lean, it is not possible to mutate a given position in a data structure. Instead, a copy is made that has the desired modifications. When using an array, the Lean compiler and runtime contain an optimization that can allow modifications to be implemented as mutations behind the scenes when there is only a single unique reference to an array.
+</p>
+</div>
+</li>
+<li><a id="org5fc73f7"></a>Example<br />
+<div class="outline-text-5" id="text-1-3-4-3">
+<p>
+Arrays are written similarly to lists, but with a leading #:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">northernTrees</span> : Array String <span style="color: #7FC1CA;">:=</span>
+  <span style="color: #7FC1CA;">#</span>[<span style="color: #7FC1CA;">"sloe"</span>, <span style="color: #7FC1CA;">"birch"</span>, <span style="color: #7FC1CA;">"elm"</span>, <span style="color: #7FC1CA;">"oak"</span>]
+
+<span style="color: #9A93E1;">#eval</span> northernTrees.size <span style="color: #899BA6;">--</span><span style="color: #899BA6;">&gt; 4</span>
+</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div id="outline-container-org07dbb48" class="outline-4">
+<h4 id="org07dbb48"><span class="section-number-4">1.3.5.</span> Non-Empty Lists</h4>
+<div class="outline-text-4" id="text-1-3-5">
+<p>
+Default implementation:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">structure</span> <span style="color: #83AFE5;">NonEmptyList</span> (&#945; : <span style="color: #A8CE93;">Type</span>) : <span style="color: #A8CE93;">Type</span> <span style="color: #9A93E1;">where</span>
+  head : &#945;
+  tail : List &#945;
+</pre>
+</div>
+
+<p>
+Example of functions beein declared about this type:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">NonEmptyList.get?</span> : NonEmptyList &#945; <span style="color: #7FC1CA;">&#8594;</span> Nat <span style="color: #7FC1CA;">&#8594;</span> Option &#945;
+  | xs, <span style="color: #7FC1CA; font-weight: bold;">0</span> <span style="color: #7FC1CA;">=&gt;</span> some xs.head
+  | {head <span style="color: #7FC1CA;">:=</span> <span style="color: #A8CE93; font-weight: bold;">_</span>, tail <span style="color: #7FC1CA;">:=</span> []}, <span style="color: #A8CE93; font-weight: bold;">_</span> <span style="color: #7FC1CA;">+</span> <span style="color: #7FC1CA; font-weight: bold;">1</span> <span style="color: #7FC1CA;">=&gt;</span> none
+  | {head <span style="color: #7FC1CA;">:=</span> <span style="color: #A8CE93; font-weight: bold;">_</span>, tail <span style="color: #7FC1CA;">:=</span> h :: t}, n <span style="color: #7FC1CA;">+</span> <span style="color: #7FC1CA; font-weight: bold;">1</span> <span style="color: #7FC1CA;">=&gt;</span> get? {head <span style="color: #7FC1CA;">:=</span> h, tail <span style="color: #7FC1CA;">:=</span> t} n
+
+<span style="color: #899BA6;">-- </span><span style="color: #899BA6;">Another idea:</span>
+<span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">NonEmptyList.get?</span> : NonEmptyList &#945; <span style="color: #7FC1CA;">&#8594;</span> Nat <span style="color: #7FC1CA;">&#8594;</span> Option &#945;
+  | xs, <span style="color: #7FC1CA; font-weight: bold;">0</span> <span style="color: #7FC1CA;">=&gt;</span> some xs.head
+  | xs, n <span style="color: #7FC1CA;">+</span> <span style="color: #7FC1CA; font-weight: bold;">1</span> <span style="color: #7FC1CA;">=&gt;</span> xs.tail.get? n
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org6c3f69a" class="outline-4">
+<h4 id="org6c3f69a"><span class="section-number-4">1.3.6.</span> Overloading Indexing</h4>
+<div class="outline-text-4" id="text-1-3-6">
+</div>
+<ol class="org-ol">
+<li><a id="org66672aa"></a>Intro<br />
+<div class="outline-text-5" id="text-1-3-6-1">
+<p>
+Indexing notation for a collection type can be overloaded by defining an instance of the GetElem type class.
+Here are the paramters:
+</p>
+<ul class="org-ul">
+<li>The type of the collection,</li>
+<li>The type of the index,</li>
+<li>The type of elements that are extracted from the collection,</li>
+<li>A function that determines what counts as evidence that the index is in bounds;</li>
+</ul>
+
+<p>
+Here&rsquo;s the implementation:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">class</span> <span style="color: #83AFE5;">GetElem</span> (coll : <span style="color: #A8CE93;">Type</span>) (idx : <span style="color: #A8CE93;">Type</span>) (item : outParam <span style="color: #A8CE93;">Type</span>) (inBounds : outParam (coll <span style="color: #7FC1CA;">&#8594;</span> idx <span style="color: #7FC1CA;">&#8594;</span> <span style="color: #A8CE93;">Prop</span>)) <span style="color: #9A93E1;">where</span>
+  getElem : (c : coll) <span style="color: #7FC1CA;">&#8594;</span> (i : idx) <span style="color: #7FC1CA;">&#8594;</span> inBounds c i <span style="color: #7FC1CA;">&#8594;</span> item
+</pre>
+</div>
+
+<p>
+Here&rsquo;s some instancement&rsquo;s
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">instance</span> <span style="color: #83AFE5;">:</span> GetElem (NonEmptyList &#945;) Nat &#945; NonEmptyList.inBounds <span style="color: #9A93E1;">where</span>
+  getElem <span style="color: #7FC1CA;">:=</span>
+    <span style="color: #9A93E1;">fun</span> : (xs : NonEmptyList &#945;) (i : Nat) (ok : xs.inBounds i) : &#945; <span style="color: #7FC1CA;">:=</span>
+      <span style="color: #9A93E1;">match</span> i <span style="color: #9A93E1;">with</span>
+      | <span style="color: #7FC1CA; font-weight: bold;">0</span>     <span style="color: #7FC1CA;">=&gt;</span> xs.head
+      | n <span style="color: #7FC1CA;">+</span> <span style="color: #7FC1CA; font-weight: bold;">1</span> <span style="color: #7FC1CA;">=&gt;</span> xs.tail[n]
+
+<span style="color: #9A93E1;">instance</span> <span style="color: #83AFE5;">:</span> GetElem (PPoint &#945;) Bool &#945; (<span style="color: #9A93E1;">fun</span> <span style="color: #A8CE93; font-weight: bold;">_</span> <span style="color: #A8CE93; font-weight: bold;">_</span> <span style="color: #7FC1CA;">=&gt;</span> True) <span style="color: #9A93E1;">where</span>
+getElem (p : PPoint &#945;) (i : Bool) <span style="color: #A8CE93; font-weight: bold;">_</span> <span style="color: #7FC1CA;">:=</span>
+  <span style="color: #9A93E1;">if</span> not i <span style="color: #9A93E1;">then</span> p.x <span style="color: #9A93E1;">else</span> p.y
+</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div id="outline-container-orgd3c7db2" class="outline-4">
+<h4 id="orgd3c7db2"><span class="section-number-4">1.3.7.</span> Standard Classes</h4>
+<div class="outline-text-4" id="text-1-3-7">
+</div>
+<ol class="org-ol">
+<li><a id="orgc85d1cc"></a>Intro<br />
+<div class="outline-text-5" id="text-1-3-7-1">
+<p>
+Firstly i want to say that this text is just so good that i&rsquo;ll just C-w and C-y it here :).
+</p>
+
+<p>
+This section presents a variety of operators and functions that can be overloaded using type classes in Lean. Each operator or function corresponds to a method of a type class. Unlike C++, infix operators in Lean are defined as abbreviations for named functions; this means that overloading them for new types is not done using the operator itself, but rather using the underlying name (such as HAdd.hAdd).
+</p>
+</div>
+</li>
+<li><a id="org7103448"></a>Arithmetic<br />
+<div class="outline-text-5" id="text-1-3-7-2">
+<p>
+Most arithmetic operators are available in a heterogeneous form, where the arguments may have different type and an output parameter decides the type of the resulting expression. For each heterogeneous operator, there is a corresponding homogeneous version that can found by removing the letter h, so that HAdd.hAdd becomes Add.add. The following arithmetic operators are overloaded:
+</p>
+
+
+<div id="org238468b" class="figure">
+<p><img src="./contents/images/Screenshot From 2025-03-12 19-28-45.png" alt="Screenshot From 2025-03-12 19-28-45.png" />
+</p>
+</div>
+</div>
+</li>
+<li><a id="org8b751bd"></a>Bitwise Operators<br />
+<div class="outline-text-5" id="text-1-3-7-3">
+<p>
+Lean contains a number of standard bitwise operators that are overloaded using type classes. There are instances for fixed-width types such as UInt8, UInt16, UInt32, UInt64, and USize. The latter is the size of words on the current platform, typically 32 or 64 bits. The following bitwise operators are overloaded:
+</p>
+
+
+<div id="org66dbebd" class="figure">
+<p><img src="./contents/images/Screenshot From 2025-03-12 19-34-44.png" alt="Screenshot From 2025-03-12 19-34-44.png" />
+</p>
+</div>
+
+<p>
+Because the names And and Or are already taken as the names of logical connectives, the homogeneous versions of HAnd and HOr are called AndOp and OrOp rather than And and Or.
+</p>
+</div>
+</li>
+<li><a id="orga1674ae"></a>Equality and Ordering<br />
+<div class="outline-text-5" id="text-1-3-7-4">
+<p>
+It&rsquo;s just simple:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">#check</span> (&#183; <span style="color: #7FC1CA;">=</span> &#183;)  <span style="color: #899BA6;">--</span><span style="color: #899BA6;">&gt; fun x1 x2 =&gt; x1 = x2  : ?m.4509 &#8594; ?m.4509 &#8594; Prop</span>
+<span style="color: #9A93E1;">#check</span> (&#183; <span style="color: #7FC1CA;">==</span> &#183;) <span style="color: #899BA6;">--</span><span style="color: #899BA6;">&gt; fun x1 x2 =&gt; x1 == x2 : ?m.4523 &#8594; ?m.4523 &#8594; Bool</span>
+</pre>
+</div>
+
+<p>
+Some values, such as functions, cannot be checked for equality, btw.
+Also, some propositions are decidable, what makes possible to use then into
+a if statement, like that:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">#check</span> <span style="color: #7FC1CA; font-weight: bold;">2</span> <span style="color: #7FC1CA;">&lt;</span> <span style="color: #7FC1CA; font-weight: bold;">3</span>                 <span style="color: #899BA6;">--</span><span style="color: #899BA6;">&gt; 2 &lt; 3 : Prop</span>
+<span style="color: #9A93E1;">#eval</span> <span style="color: #9A93E1;">if</span> <span style="color: #7FC1CA; font-weight: bold;">2</span> <span style="color: #7FC1CA;">&lt;</span> <span style="color: #7FC1CA; font-weight: bold;">3</span> <span style="color: #9A93E1;">then</span> <span style="color: #7FC1CA; font-weight: bold;">1</span> <span style="color: #9A93E1;">else</span> <span style="color: #7FC1CA; font-weight: bold;">2</span> <span style="color: #899BA6;">--</span><span style="color: #899BA6;">&gt; 1</span>
+</pre>
+</div>
+
+<p>
+The following propositions, that are usually decidable, are overloaded with type classes:
+</p>
+
+
+<div id="org150935e" class="figure">
+<p><img src="./contents/images/Screenshot From 2025-03-13 09-59-33.png" alt="Screenshot From 2025-03-13 09-59-33.png" />
+</p>
+</div>
+
+<p>
+About ordering, just like in Coq, Lean4 has a &ldquo;Ordering&rdquo;:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">inductive</span> <span style="color: #83AFE5;">Ordering</span> <span style="color: #9A93E1;">where</span>
+| lt
+| eq
+| gt
+</pre>
+</div>
+
+<p>
+A good example that i&rsquo;ve made by myself:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">Nat.comp</span> : Nat <span style="color: #7FC1CA;">&#8594;</span> Nat <span style="color: #7FC1CA;">&#8594;</span> Ordering
+  | <span style="color: #7FC1CA; font-weight: bold;">0</span>, <span style="color: #7FC1CA; font-weight: bold;">0</span>         <span style="color: #7FC1CA;">=&gt;</span> Ordering.eq
+  | <span style="color: #A8CE93; font-weight: bold;">_</span>, <span style="color: #7FC1CA; font-weight: bold;">0</span>         <span style="color: #7FC1CA;">=&gt;</span> Ordering.gt
+  | <span style="color: #7FC1CA; font-weight: bold;">0</span>, <span style="color: #A8CE93; font-weight: bold;">_</span>         <span style="color: #7FC1CA;">=&gt;</span> Ordering.lt
+  | n <span style="color: #7FC1CA;">+</span> <span style="color: #7FC1CA; font-weight: bold;">1</span>, m <span style="color: #7FC1CA;">+</span> <span style="color: #7FC1CA; font-weight: bold;">1</span> <span style="color: #7FC1CA;">=&gt;</span> Nat.comp n m
+</pre>
+</div>
+</div>
+</li>
+<li><a id="orgf5d6ef3"></a>Hashing<br />
+<div class="outline-text-5" id="text-1-3-7-5">
+<p>
+Here&rsquo;s the Lean4 implemented especification:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">class</span> <span style="color: #83AFE5;">Hashable</span> (&#945; : <span style="color: #A8CE93;">Type</span>) <span style="color: #9A93E1;">where</span>
+  hash : &#945; <span style="color: #7FC1CA;">&#8594;</span> UInt64
+</pre>
+</div>
+
+<p>
+I think that some laws could be added
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">class</span> <span style="color: #83AFE5;">MyHashable</span> (&#945; : <span style="color: #A8CE93;">Type</span>) <span style="color: #9A93E1;">where</span>
+  hash : &#945; <span style="color: #7FC1CA;">&#8594;</span> UInt64
+  eqPreserv : <span style="color: #7FC1CA;">&#8704;</span>(a&#8321; a&#8322; : &#945;), a&#8321; <span style="color: #7FC1CA;">=</span> a&#8322; <span style="color: #7FC1CA;">&#8594;</span>
+                hash a&#8321; <span style="color: #7FC1CA;">=</span> hash a&#8322;
+</pre>
+</div>
+<p>
+Or even maybe a boolanized version of this.
+</p>
+
+<p>
+&ldquo;The standard library contains a function mixHash with type UInt64 → UInt64 → UInt64 that can be used to combine hashes for different fields for a constructor.&rdquo;
+</p>
+
+<p>
+With this, we can write:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">hashNat</span> : Nat <span style="color: #7FC1CA;">&#8594;</span> UInt64
+  | <span style="color: #7FC1CA; font-weight: bold;">0</span>     <span style="color: #7FC1CA;">=&gt;</span> <span style="color: #7FC1CA; font-weight: bold;">0</span>
+  | n <span style="color: #7FC1CA;">+</span> <span style="color: #7FC1CA; font-weight: bold;">1</span> <span style="color: #7FC1CA;">=&gt;</span> mixHash <span style="color: #7FC1CA; font-weight: bold;">1</span> (hashNat n)
+
+<span style="color: #9A93E1;">instance</span> <span style="color: #83AFE5;">:</span> Hashable Nat <span style="color: #9A93E1;">where</span>
+  hash <span style="color: #7FC1CA;">:=</span> hashNat
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org1d61fae"></a>Constraints<br />
+<div class="outline-text-5" id="text-1-3-7-6">
+<p>
+Just look at this:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">inductive</span> <span style="color: #83AFE5;">BinTree</span> (&#945; : <span style="color: #A8CE93;">Type</span>) <span style="color: #9A93E1;">where</span>
+  | leaf : BinTree &#945;
+  | branch : BinTree &#945; <span style="color: #7FC1CA;">&#8594;</span> &#945; <span style="color: #7FC1CA;">&#8594;</span> BinTree &#945; <span style="color: #7FC1CA;">&#8594;</span> BinTree &#945;
+
+<span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">eqBinTree</span> [BEq &#945;] : BinTree &#945; <span style="color: #7FC1CA;">&#8594;</span> BinTree &#945; <span style="color: #7FC1CA;">&#8594;</span> Bool
+  | BinTree.leaf, BinTree.leaf <span style="color: #7FC1CA;">=&gt;</span>
+    true
+  | BinTree.branch l x r, BinTree.branch l2 x2 r2 <span style="color: #7FC1CA;">=&gt;</span>
+    x <span style="color: #7FC1CA;">==</span> x2 <span style="color: #7FC1CA;">&amp;&amp;</span> eqBinTree l l2 <span style="color: #7FC1CA;">&amp;&amp;</span> eqBinTree r r2
+  | <span style="color: #A8CE93; font-weight: bold;">_</span>, <span style="color: #A8CE93; font-weight: bold;">_</span> <span style="color: #7FC1CA;">=&gt;</span>
+    false
+
+<span style="color: #9A93E1;">instance</span> [BEq &#945;] : BEq (BinTree &#945;) <span style="color: #9A93E1;">where</span>
+  beq <span style="color: #7FC1CA;">:=</span> eqBinTree
+
+<span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">hashBinTree</span> [Hashable &#945;] : BinTree &#945; <span style="color: #7FC1CA;">&#8594;</span> UInt64
+  | BinTree.leaf <span style="color: #7FC1CA;">=&gt;</span>
+    <span style="color: #7FC1CA; font-weight: bold;">0</span>
+  | BinTree.branch left x right <span style="color: #7FC1CA;">=&gt;</span>
+    mixHash <span style="color: #7FC1CA; font-weight: bold;">1</span> (mixHash (hashBinTree left) (mixHash (hash x) (hashBinTree right)))
+
+<span style="color: #9A93E1;">instance</span> [Hashable &#945;] : Hashable (BinTree &#945;) <span style="color: #9A93E1;">where</span>
+  hash <span style="color: #7FC1CA;">:=</span> hashBinTree
+</pre>
+</div>
+</div>
+</li>
+<li><a id="orga12ba37"></a>Deriving<br />
+<div class="outline-text-5" id="text-1-3-7-7">
+<p>
+&ldquo;Instances can be derived in two ways. The first can be used when defining a structure or inductive type. In this case, add deriving to the end of the type declaration followed by the names of the classes for which instances should be derived. For a type that is already defined, a standalone deriving command can be used. Write deriving instance C1, C2, &#x2026; for T to derive instances of C1, C2, &#x2026; for the type T after the fact.&rdquo;
+</p>
+
+<p>
+Example:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">deriving</span> <span style="color: #9A93E1;">instance</span> <span style="color: #83AFE5;">BEq,</span> Hashable <span style="color: #9A93E1;">for</span> Pos
+<span style="color: #9A93E1;">deriving</span> <span style="color: #9A93E1;">instance</span> <span style="color: #83AFE5;">BEq,</span> Hashable, Repr <span style="color: #9A93E1;">for</span> NonEmptyList
+</pre>
+</div>
+
+<p>
+Instances can be derived for at least the following classes:
+</p>
+<ul class="org-ul">
+<li>Inhabited</li>
+<li>BEq</li>
+<li>Repr</li>
+<li>Hashable</li>
+<li><p>
+Ord
+</p>
+
+<p>
+(There&rsquo;s no code generator was found for ToString, btw..)
+</p></li>
+</ul>
+</div>
+</li>
+<li><a id="org2005d15"></a>Appending<br />
+<div class="outline-text-5" id="text-1-3-7-8">
+<p>
+&ldquo;Instances can be derived in two ways. The first can be used when defining a structure or inductive type. In this case, add deriving to the end of the type declaration followed by the names of the classes for which instances should be derived. For a type that is already defined, a standalone deriving command can be used. Write deriving instance C1, C2, &#x2026; for T to derive instances of C1, C2, &#x2026; for the type T after the fact.&rdquo;
+</p>
+
+<p>
+Example:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">deriving</span> <span style="color: #9A93E1;">instance</span> <span style="color: #83AFE5;">BEq,</span> Hashable <span style="color: #9A93E1;">for</span> Pos
+<span style="color: #9A93E1;">deriving</span> <span style="color: #9A93E1;">instance</span> <span style="color: #83AFE5;">BEq,</span> Hashable, Repr <span style="color: #9A93E1;">for</span> NonEmptyList
+</pre>
+</div>
+
+<p>
+Instances can be derived for at least the following classes:
+</p>
+<ul class="org-ul">
+<li>Inhabited</li>
+<li>BEq</li>
+<li>Repr</li>
+<li>Hashable</li>
+<li>Ord</li>
+</ul>
+
+<p>
+There&rsquo;s the type class:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">class</span> <span style="color: #83AFE5;">HAppend</span> (&#945; : <span style="color: #A8CE93;">Type</span>) (&#946; : <span style="color: #A8CE93;">Type</span>) (&#947; : outParam <span style="color: #A8CE93;">Type</span>) <span style="color: #9A93E1;">where</span>
+  hAppend : &#945; <span style="color: #7FC1CA;">&#8594;</span> &#946; <span style="color: #7FC1CA;">&#8594;</span> &#947;
+</pre>
+</div>
+
+<p>
+There&rsquo;s a heterogeneous implementation above it:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">instance</span> <span style="color: #83AFE5;">:</span> HAppend (NonEmptyList &#945;) (List &#945;) (NonEmptyList &#945;) <span style="color: #9A93E1;">where</span>
+  hAppend xs ys <span style="color: #7FC1CA;">:=</span>
+    { head <span style="color: #7FC1CA;">:=</span> xs.head, tail <span style="color: #7FC1CA;">:=</span> xs.tail <span style="color: #7FC1CA;">++</span> ys }
+</pre>
+</div>
+</div>
+</li>
+<li><a id="orgace5324"></a>Functors<br />
+<div class="outline-text-5" id="text-1-3-7-9">
+<p>
+Like Haskell, we have the &ldquo;&lt;$&gt;&rdquo; operator, so u can do:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">#eval</span> (&#183; <span style="color: #7FC1CA;">+</span> <span style="color: #7FC1CA; font-weight: bold;">5</span>) <span style="color: #7FC1CA;">&lt;$&gt;</span> [<span style="color: #7FC1CA; font-weight: bold;">1</span>, <span style="color: #7FC1CA; font-weight: bold;">2</span>, <span style="color: #7FC1CA; font-weight: bold;">3</span>] <span style="color: #899BA6;">--</span><span style="color: #899BA6;">&gt; [6, 7, 8]</span>
+</pre>
+</div>
+
+<p>
+A instance for PPoint:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">instance</span> <span style="color: #83AFE5;">:</span> Functor PPoint <span style="color: #9A93E1;">where</span>
+  map f p <span style="color: #7FC1CA;">:=</span> { x <span style="color: #7FC1CA;">:=</span> f p.x, y <span style="color: #7FC1CA;">:=</span> f p.y }
+</pre>
+</div>
+
+<p>
+Just a default implementation used in a primite way to think in Functors:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">class</span> <span style="color: #83AFE5;">Functor</span> (f : <span style="color: #A8CE93;">Type</span> <span style="color: #7FC1CA;">&#8594;</span> <span style="color: #A8CE93;">Type</span>) <span style="color: #9A93E1;">where</span>
+  map : {&#945; &#946; : <span style="color: #A8CE93;">Type</span>} <span style="color: #7FC1CA;">&#8594;</span> (&#945; <span style="color: #7FC1CA;">&#8594;</span> &#946;) <span style="color: #7FC1CA;">&#8594;</span> f &#945; <span style="color: #7FC1CA;">&#8594;</span> f &#946;
+
+  mapConst {&#945; &#946; : <span style="color: #A8CE93;">Type</span>} (x : &#945;) (coll : f &#946;) : f &#945; <span style="color: #7FC1CA;">:=</span>
+    map (<span style="color: #9A93E1;">fun</span> <span style="color: #A8CE93; font-weight: bold;">_</span> <span style="color: #7FC1CA;">=&gt;</span> x) coll
+</pre>
+</div>
+
+<p>
+A maturier idea:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">class</span> <span style="color: #83AFE5;">Funktor</span> (F : <span style="color: #A8CE93;">Type</span> <span style="color: #7FC1CA;">&#8594;</span> <span style="color: #A8CE93;">Type</span>) <span style="color: #9A93E1;">where</span>
+  <span style="color: #899BA6;">-- </span><span style="color: #899BA6;">Operations:</span>
+  map : {&#945; &#946; : <span style="color: #A8CE93;">Type</span>} <span style="color: #7FC1CA;">&#8594;</span> (&#945; <span style="color: #7FC1CA;">&#8594;</span> &#946;) <span style="color: #7FC1CA;">&#8594;</span> F &#945; <span style="color: #7FC1CA;">&#8594;</span> F &#946;
+
+  mapConst {&#945; &#946; : <span style="color: #A8CE93;">Type</span>} (x : &#945;) (coll : F &#946;) : F &#945; <span style="color: #7FC1CA;">:=</span>
+    map (<span style="color: #9A93E1;">fun</span> <span style="color: #A8CE93; font-weight: bold;">_</span> <span style="color: #7FC1CA;">=&gt;</span> x) coll
+
+ <span style="color: #899BA6;">-- </span><span style="color: #899BA6;">Laws:</span>
+  id_law   : <span style="color: #7FC1CA;">&#8704;</span>(f_a : F &#945;), map id f_a <span style="color: #7FC1CA;">=</span> fa
+  comp_law : <span style="color: #7FC1CA;">&#8704;</span>(f : &#945; <span style="color: #7FC1CA;">&#8594;</span> &#946;), <span style="color: #7FC1CA;">&#8704;</span>(g : &#946; <span style="color: #7FC1CA;">&#8594;</span> &#947;), <span style="color: #7FC1CA;">&#8704;</span>(f_a : F &#945;),
+               map (g <span style="color: #7FC1CA;">&#8728;</span> f) f_a <span style="color: #7FC1CA;">=</span> map g (map f f_a)
+
+  <span style="color: #899BA6;">-- </span><span style="color: #899BA6;">Being associative was a theorem then?</span>
+</pre>
+</div>
+
+<p>
+Some implementation:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">instance</span> <span style="color: #83AFE5;">:</span> Funktor BinTree <span style="color: #9A93E1;">where</span>
+  map <span style="color: #7FC1CA;">:=</span> binTreeMap
+</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div id="outline-container-org6550b28" class="outline-4">
+<h4 id="org6550b28"><span class="section-number-4">1.3.8.</span> Coercions</h4>
+<div class="outline-text-4" id="text-1-3-8">
+</div>
+<ol class="org-ol">
+<li><a id="orgfb4830f"></a>Intro<br />
+<div class="outline-text-5" id="text-1-3-8-1">
+<p>
+&ldquo;In Lean, both purposes are served by a mechanism called coercions. When Lean encounters an expression of one type in a context that expects a different type, it will attempt to coerce the expression before reporting a type error. Unlike Java, C, and Kotlin, the coercions are extensible by defining instances of type classes.&rdquo;
+</p>
+</div>
+</li>
+<li><a id="orgb19788b"></a>The Coe typeclass<br />
+<div class="outline-text-5" id="text-1-3-8-2">
+<p>
+The type class Coe describes overloaded ways of coercing from one type to another:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">class</span> <span style="color: #83AFE5;">coe</span> (&#945; : type) (&#946; : type) <span style="color: #9A93E1;">where</span>
+  coe : &#945; <span style="color: #7FC1CA;">&#8594;</span> &#946;
+</pre>
+</div>
+
+<p>
+An instance of Coe Pos Nat is enough to allow the prior code to work:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">instance</span> <span style="color: #83AFE5;">:</span> Coe Pos Nat <span style="color: #9A93E1;">where</span>
+  coe x <span style="color: #7FC1CA;">:=</span> x.toNat
+
+<span style="color: #9A93E1;">#eval</span>  [<span style="color: #7FC1CA; font-weight: bold;">1</span>, <span style="color: #7FC1CA; font-weight: bold;">2</span>, <span style="color: #7FC1CA; font-weight: bold;">3</span>, <span style="color: #7FC1CA; font-weight: bold;">4</span>].drop (<span style="color: #7FC1CA; font-weight: bold;">2</span> : Pos) <span style="color: #899BA6;">--</span><span style="color: #899BA6;">&gt; [3, 4]</span>
+<span style="color: #9A93E1;">#check</span> [<span style="color: #7FC1CA; font-weight: bold;">1</span>, <span style="color: #7FC1CA; font-weight: bold;">2</span>, <span style="color: #7FC1CA; font-weight: bold;">3</span>, <span style="color: #7FC1CA; font-weight: bold;">4</span>].drop (<span style="color: #7FC1CA; font-weight: bold;">2</span> : Pos) <span style="color: #899BA6;">--</span><span style="color: #899BA6;">&gt; List.drop (Pos.toNat 2) [1, 2, 3, 4] : List Nat</span>
+</pre>
+</div>
+</div>
+</li>
+<li><a id="orgd98c286"></a>Coe Chains<br />
+<div class="outline-text-5" id="text-1-3-8-3">
+<p>
+When searching for coercions, Lean will attempt to assemble a coercion out of a chain of smaller coercions. For example, there is already a coercion from Nat to Int. Because of that instance, combined with the Coe Pos Nat instance, the following code is accepted:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">oneInt</span> : Int <span style="color: #7FC1CA;">:=</span> Pos.one
+</pre>
+</div>
+
+<p>
+This definition uses two coercions: from Pos to Nat, and then from Nat to Int.
+</p>
+
+<p>
+Btw, they don&rsquo;t get circular and also it has a standart coercion about &ldquo;Option&rdquo; so all of this compiles:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">#check</span> (<span style="color: #7FC1CA;">"oi"</span> : Option String)
+<span style="color: #9A93E1;">#check</span> Option <span style="color: #A8CE93;">Type</span>
+<span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">perhapsPerhapsPerhaps</span> : Option (Option (Option String)) <span style="color: #7FC1CA;">:=</span>
+  <span style="color: #7FC1CA;">"Please don't tell me"</span>
+<span style="color: #9A93E1;">def</span> <span style="color: #83AFE5;">perhapsPerhapsPerhapsNat</span> : Option (Option (Option Nat)) <span style="color: #7FC1CA;">:=</span>
+  &#8593;(<span style="color: #7FC1CA; font-weight: bold;">392</span> : Nat)
+</pre>
+</div>
+
+<p>
+That arrow, btw, is used to ensure that Lean finds the right
+instances. It can also make the programmer&rsquo;s intentions more clear.
+</p>
+</div>
+</li>
+<li><a id="org24e5858"></a>Dependent Coercions (The CoeDep typeclass)<br />
+<div class="outline-text-5" id="text-1-3-8-4">
+<p>
+There&rsquo;s the class:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">class</span> <span style="color: #83AFE5;">CoeDep</span> (&#945; : <span style="color: #A8CE93;">Type</span>) (x : &#945;) (&#946; : <span style="color: #A8CE93;">Type</span>) <span style="color: #9A93E1;">where</span>
+  coe : &#946;
+</pre>
+</div>
+
+<p>
+There&rsquo;s a use:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">instance</span> <span style="color: #83AFE5;">:</span> CoeDep (List &#945;) (x :: xs) (NonEmptyList &#945;) <span style="color: #9A93E1;">where</span>
+  coe <span style="color: #7FC1CA;">:=</span> { head <span style="color: #7FC1CA;">:=</span> x, tail <span style="color: #7FC1CA;">:=</span> xs }
+</pre>
+</div>
+</div>
+<ol class="org-ol">
+<li><a id="org65d44da"></a>Some more explanation<br />
+<div class="outline-text-6" id="text-1-3-8-4-1">
+<p>
+&ldquo;Dependent coercions can be used when the ability to coerce from one type to another depends on which particular value is being coerced. Just as the OfNat type class takes the particular Nat being overloaded as a parameter, dependent coercion takes the value being coerced as a parameter&rdquo;
+</p>
+
+<p>
+&ldquo;This is a chance to select only certain values, either by imposing further type class constraints on the value or by writing certain constructors directly.&rdquo;
+</p>
+</div>
+</li>
+</ol>
+</li>
+<li><a id="org20aa0f8"></a><span class="todo TODO">TODO</span> Coercing to Types (The CoeSort typeclass)<br />
+<div class="outline-text-5" id="text-1-3-8-5">
+<p>
+Just as Coe is checked when a type mismatch occurs, CoeSort is used when something other than a sort is provided in a context where a sort would be expected.
+</p>
+
+<p>
+Some examples of sort (Type or Prop)
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">instance</span> <span style="color: #83AFE5;">:</span> CoeSort Monoid <span style="color: #A8CE93;">Type</span> <span style="color: #9A93E1;">where</span>
+  coe m <span style="color: #7FC1CA;">:=</span> m.Carrier
+</pre>
+</div>
+
+<p>
+Another example:
+</p>
+<div class="org-src-container">
+<pre class="src src-lean4"><span style="color: #9A93E1;">instance</span> <span style="color: #83AFE5;">:</span> CoeSort Bool <span style="color: #A8CE93;">Prop</span> <span style="color: #9A93E1;">where</span>
+  coe b <span style="color: #7FC1CA;">:=</span> b <span style="color: #7FC1CA;">=</span> true
+
+<span style="color: #9A93E1;">#check</span> (<span style="color: #9A93E1;">if</span> &#183; <span style="color: #9A93E1;">then</span> &#183; <span style="color: #9A93E1;">else</span> &#183;) <span style="color: #899BA6;">--</span><span style="color: #899BA6;">&gt; !Error [...] &amp;</span>
+       <span style="color: #899BA6;">-- </span><span style="color: #899BA6;">(fun x1 x2 x3 =&gt; ?m.9836 : Prop &#8594; ?m.9869 &#8594; ?m.9869 &#8594; ?m.9869)</span>
+</pre>
+</div>
+
+<p>
+Rather than have two kinds of if expression, the Lean standard library defines a coercion from Bool to
+the proposition that the Bool in question is equal to true.
+</p>
+</div>
+</li>
+<li><a id="org68e15f3"></a><span class="todo TODO">TODO</span> Coercing to Funcions<br /></li>
+<li><a id="org37d653a"></a><span class="todo TODO">TODO</span> The &ldquo;With great power comes great responsibility&rdquo; talk<br />
+<div class="outline-text-5" id="text-1-3-8-7">
+<p>
+a
+</p>
+</div>
+</li>
+</ol>
+</div>
+<div id="outline-container-orgbfb7e66" class="outline-4">
+<h4 id="orgbfb7e66"><span class="section-number-4">1.3.9.</span> <span class="todo TODO">TODO</span> Additional Conveniences</h4>
+</div>
+<div id="outline-container-org2bd3838" class="outline-4">
+<h4 id="org2bd3838"><span class="section-number-4">1.3.10.</span> <span class="todo TODO">TODO</span> My Own Summary</h4>
+</div>
+</div>
+<div id="outline-container-org42c3ded" class="outline-3">
+<h3 id="org42c3ded"><span class="section-number-3">1.4.</span> <span class="todo TODO">TODO</span> Monads</h3>
+</div>
+<div id="outline-container-orgd34c1b3" class="outline-3">
+<h3 id="orgd34c1b3"><span class="section-number-3">1.5.</span> <span class="todo TODO">TODO</span> Functors, Applicative Functors, and Monads</h3>
+</div>
+<div id="outline-container-org7b2155e" class="outline-3">
+<h3 id="org7b2155e"><span class="section-number-3">1.6.</span> <span class="todo TODO">TODO</span> Monad Transformers</h3>
+</div>
+<div id="outline-container-orgd736394" class="outline-3">
+<h3 id="orgd736394"><span class="section-number-3">1.7.</span> <span class="todo TODO">TODO</span> Programming with Dependent Types</h3>
+</div>
+
+<div id="outline-container-org0da0971" class="outline-3">
+<h3 id="org0da0971"><span class="section-number-3">1.8.</span> <span class="todo TODO">TODO</span> What exacly is an output parameter???</h3>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: João Lucas de Moraes Pereira</p>
+<p class="date">Created: 2025-03-14 sex 21:06</p>
+</div>
+</body>
+</html>
