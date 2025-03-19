@@ -1368,7 +1368,16 @@ a
 *** TODO Additional Conveniences
 *** TODO My Own Summary
 ** TODO Monads
-*** TODO Intro
+*** Intro
+This whole chapter just uses so many different examples of monads that isnt helping me at all :P.
+I think that im finishing this book first and investigating the monads later.
+
+*** TODO Here the monad's that i'll want to investigate as functors and applicatives before monads:
+- Id
+- Except
+- State
+- Logging/WithLog
+
 *** Typeclass
 There's the implementation
 #+begin_src lean4
