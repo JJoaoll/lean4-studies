@@ -27,7 +27,6 @@ instance [ToString α] : ToString (BinTree α) where
 #eval branch (branch leaf 3 leaf) 8 (branch leaf 4 leaf)
 def t3 := branch (branch leaf 3 leaf) 8 (branch leaf 4 leaf)
 
-
 instance : Monad Option where
   pure x := some x
   bind opt next :=
@@ -154,3 +153,5 @@ def increment (howMuch : Int) : State Int Int :=
 
   #eval mapM increment [1, 2, 3, 4, 5] 0
 --> (15, [0, 1, 3, 6, 10])
+
+#eval (· + 1) 3
