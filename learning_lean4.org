@@ -1391,3 +1391,439 @@ class Monad (m : Type → Type) where
 ** TODO Programming with Dependent Types
 
 ** TODO What exacly is an output parameter???
+* Theorem Proving in Lean 4
+** Intro
+"The Lean Theorem Prover aims to bridge the gap between interactive and automated theorem proving, by situating automated tools and methods in a framework that supports user interaction and the construction of fully specified axiomatic proofs. The goal is to support both mathematical reasoning and reasoning about complex systems, and to verify claims in both domains."
+
+I'm basically following the book.
+** Dependent type theory in Lean4
+*** Intro
+"Dependent type theory is a powerful and expressive language, allowing you to express complex mathematical assertions, write complex hardware and software specifications, and reason about both of these in a natural and uniform way. Lean is based on a version of dependent type theory known as the Calculus of Constructions, with a countable hierarchy of non-cumulative universes and inductive types. By the end of this chapter, you will understand much of what this means.
+
+*** Simple Type Theory
+**** Intro
+Basically Types are firt class citisens and so u can do things
+like above and even more.
+#+begin_src lean4
+def α : Type := Nat
+def β : Type := Bool
+def F : Type → Type := List
+def G : Type → Type → Type := Prod
+#+end_src
+
+Here's one of the most subtle aspects of Lean's typing system. Lean's underlying foundation has an infinite hierarchy of types:
+#+begin_src lean4
+#check Type     -- Type 1
+#check Type 1   -- Type 2
+#check Type 2   -- Type 3
+#check Type 3   -- Type 4
+#check Type 4   -- Type 5
+#+end_src
+
+`Type` is an abbreviation to `Type 0`, btw.
+In order to define a polymorphic (over type universes)
+constant, u have basically two ways:
+#+begin_src lean4
+-- first
+universe u
+def F (α : Type u) : Type u := Prod α α
+#check F    -- Type u → Type u
+
+-- secound
+def F.{u} (α : Type u) : Type u := Prod α α
+#check F    -- Type u → Type u
+#+end_src
+
+Using `universe u in` or simple dosnt use anything there just
+works.. Don't blame me, blame the Lean4 bible.
+
+**** Alpha Equivalence
+"Formally, expressions that are the same up to a renaming of bound variables are called alpha equivalent, and are considered "the same." Lean recognizes this equivalence."
+
+examples:
+#+begin_src lean4
+#check fun f x => f x
+#check fun t s => t s
+#+end_src
+
+So, basically, they're the same.
+
+**** A Small talk about let vs fun
+So, the `let` expressions looks very similar to the lambda abstractions, but,
+to set up a lambda abstraction, the thing should make sense without arguments
+aplied yet. In the other hand, the `let` keyword has only a sintax meaning, it
+is: an abbreviation to a term in a expression. Here's the good example used in
+the book:
+#+begin_src lean4
+def foo := let a := Nat; fun x : a => x + 2  --> works
+def bar := (fun a => fun x : a => x + 2) Nat --> bugs because the `+` is'nt for everytype.
+#+end_src
+
+**** Variables and Sections
+While using this make the code looks clear and clean,
+it doesn't look required in these days:
+#+begin_src lean4
+variable (α β γ : Type)
+
+def compose (g : β → γ) (f : α → β) (x : α) : γ :=
+  g (f x)
+
+def doTwice (h : α → α) (x : α) : α :=
+  h (h x)
+
+def doThrice (h : α → α) (x : α) : α :=
+  h (h (h x))
+#+end_src
+
+U can do it with more complex variables like here:
+#+begin_src lean4
+variable (α β γ : Type)
+variable (g : β → γ) (f : α → β) (h : α → α)
+variable (x : α)
+
+def compose := g (f x)
+def doTwice := h (h x)
+def doThrice := h (h (h x))
+
+#print compose
+#print doTwice
+#print doThrice
+#+end_src
+, or even:
+#+begin_src lean4
+variable (x y : Nat)
+variable (n : true)
+
+-- [...]
+#+end_src
+
+When declared in this way, a variable stays in scope until the end of the file you are working on. Sometimes, however, it is useful to limit the scope of a variable. For that purpose, Lean provides the notion of a section:
+#+begin_src lean4
+section useful
+  variable (α β γ : Type)
+  variable (g : β → γ) (f : α → β) (h : α → α)
+  variable (x : α)
+
+  def compose := g (f x)
+  def doTwice := h (h x)
+  def doThrice := h (h (h x))
+end useful
+#+end_src
+
+"When the section is closed, the variables go out of scope, and cannot be referenced any more.
+
+You do not have to indent the lines within a section. Nor do you have to name a section, which is to say, you can use an anonymous section / end pair. If you do name a section, however, you have to close it using the same name. Sections can also be nested, which allows you to declare new variables incrementally."
+
+**** Namespaces
+It's easy and intuitive.
+#+begin_src lean4
+namespace Foo
+  def a : Nat := 5
+  def f (x : Nat) : Nat := x + 7
+
+  def fa : Nat := f a
+
+  namespace Bar
+    def ffa : Nat := f (f a)
+
+    #check fa
+    #check ffa
+  end Bar
+
+  #check fa
+  #check Bar.ffa
+end Foo
+
+#check Foo.fa
+#check Foo.Bar.ffa
+
+open Foo
+
+#check fa
+#check Bar.ffa
+#+end_src
+
+Btw, Namespaces that have been closed can later be reopened, even in another file:
+#+begin_src lean4
+namespace Foo
+  def a : Nat := 5
+  def f (x : Nat) : Nat := x + 7
+
+  def fa : Nat := f a
+end Foo
+
+#check Foo.a
+#check Foo.f
+
+namespace Foo
+  def ffa : Nat := f (f a)
+end Foo
+#+end_src
+
+Like sections, nested namespaces have to be closed in the order they are opened. Namespaces and sections serve different purposes: namespaces organize data and sections declare variables for insertion in definitions. Sections are also useful for delimiting the scope of commands such as set_option and open.
+
+In many respects, however, a namespace ... end block behaves the same as a section ... end block. In particular, if you use the variable command within a namespace, its scope is limited to the namespace. Similarly, if you use an open command within a namespace, its effects disappear when the namespace is closed.
+
+**** What type dependent means?
+A long example:
+Given α : Type and β : α → Type, think of β as a family of types over α, that is, a type β a for each a : α. In that case, the type (a : α) → β a denotes the type of functions f with the property that, for each a : α, f a is an element of β a. In other words, the type of the value returned by f depends on its input.
+
+Notice that (a : α) → β makes sense for any expression β : Type. When the value of β depends on a (as does, for example, the expression β a in the previous paragraph), (a : α) → β denotes a dependent function type. When β doesn't depend on a, (a : α) → β is no different from the type α → β. Indeed, in dependent type theory (and in Lean), α → β is just notation for (a : α) → β when β does not depend on a.
+
+Just as dependent function types (a : α) → β a generalize the notion of a function type α → β by allowing β to depend on α, dependent Cartesian product types (a : α) × β a generalize the Cartesian product α × β in the same way. Dependent products are also called sigma types, and you can also write them as Σ a : α, β a. You can use ⟨a, b⟩ or Sigma.mk a b to create a dependent pair. The ⟨ and ⟩ characters may be typed with \langle and \rangle or \< and \>, respectively.
+
+If i'm not crazy here, we're talking about things like The "List" it self.
+
+But everything there is pretty weird and then, hey showed us this example:
+#+begin_src lean4
+universe u v
+
+def f (α : Type u) (β : α → Type v) (a : α) (b : β a) : (a : α) × β a :=
+  ⟨a, b⟩
+
+def g (α : Type u) (β : α → Type v) (a : α) (b : β a) : Σ a : α, β a :=
+  Sigma.mk a b
+
+def h1 (x : Nat) : Nat :=
+  (f Type (fun α => α) Nat x).2
+
+#eval h1 5 -- 5
+
+def h2 (x : Nat) : Nat :=
+  (g Type (fun α => α) Nat x).2
+
+#eval h2 5 -- 5
+-- The functions f and g above denote the same function, btw
+#+end_src
+
+I've missed a more ilustrative example to show me why i would like that..
+So i'll try to create something useless just to show something kinda useless
+just to show something more than just "see? this generalize the thing that we already
+had". Ok, but what's new then?
+#+begin_src lean4
+def h0 (n : Nat) : List Nat :=
+  (f Type List Nat [n]).2
+
+def h02 (n : Nat) : Type :=
+  (f Type List Nat [n]).1
+
+#check h0
+#check h0 3
+#eval  h0 3
+
+def explain_that (α : Type u) (β : α → Type v) (a : α) := β a
+
+#check explain_that Type List Nat
+#check List
+#+end_src
+
+**** Implicit Arguments
+Look at this:
+#+begin_src lean4
+#check Lst.cons Nat 0 (Lst.nil Nat)
+
+def as : Lst Nat := Lst.nil Nat
+def bs : Lst Nat := Lst.cons Nat 5 (Lst.nil Nat)
+
+#check Lst.append Nat as bs
+#+end_src
+
+First of all, it make sense and it's very orthogonal but is also very ugly and verbous and
+could/should be inferred by the type system. So we can do this in these way:
+#+begin_src lean4
+#check Lst.cons _ 0 (Lst.nil _)
+
+def as : Lst Nat := Lst.nil _
+def bs : Lst Nat := Lst.cons _ 5 (Lst.nil _)
+
+#check Lst.append _ as bs
+#+end_src
+
+It is still tedious, however, to type all these underscores. When a function takes an argument that can generally be inferred from context, Lean allows you to specify that this argument should, by default, be left implicit. This is done by putting the arguments in curly braces, as follows:
+#+begin_src lean4
+universe u
+def Lst (α : Type u) : Type u := List α
+
+def Lst.cons {α : Type u} (a : α) (as : Lst α) : Lst α := List.cons a as
+def Lst.nil {α : Type u} : Lst α := List.nil
+def Lst.append {α : Type u} (as bs : Lst α) : Lst α := List.append as bs
+
+#check Lst.cons 0 Lst.nil
+
+def as : Lst Nat := Lst.nil
+def bs : Lst Nat := Lst.cons 5 Lst.nil
+
+#check Lst.append as bs
+#+end_src
+
+Variables can also be specified as implicit when they are declared with the variable command:
+#+begin_src lean4
+universe u
+
+section
+  variable {α : Type u}
+  variable (x : α)
+  def ident := x
+end
+
+#check ident
+#check ident 4
+#check ident "hello"
+#+end_src
+
+The presence of implicit arguments means that at times there may be insufficient information to fix the meaning of an expression precisely. An expression like id or List.nil is said to be polymorphic, because it can take on different meanings in different contexts.
+
+So it happens and that's how we'll solve it:
+#+begin_src lean4
+#check List.nil               -- List ?m
+#check id                     -- ?m → ?m
+
+#check (List.nil : List Nat)  -- List Nat
+#check (id : Nat → Nat)       -- Nat → Nat
+#+end_src
+
+Sometimes, however, we may find ourselves in a situation where we have declared an argument to a function to be implicit, but now want to provide the argument explicitly. If foo is such a function, the notation @foo denotes the same function with all the arguments made explicit.
+
+See my own example:
+#+begin_src lean4
+#check id 3      --> Nat
+#check @id Nat 3 --> Nat
+#check @id Int 3 --> Int
+#+end_src
+
+** Propositions and Proofs
+*** The implies example
+In summary, we don't need to build a Proof above Props because
+Props are types. So, in order to prove `p -> q`. So, if u
+have a `t : p`, with a `f : p -> q` function u will have e "evidence of `q`"
+which is `f t : q`.
+
+*** TODO Every proof is the same?
+"There are a few pragmatic differences between definitions and theorems, however. In normal circumstances, it is never necessary to unfold the "definition" of a theorem; by proof irrelevance, any two proofs of that theorem are definitionally equal. Once the proof of a theorem is complete, typically we only need to know that the proof exists;"
+
+I really wanna know now how it could be. In this point i really want this book to answer this and if it doesnt i will have to back here some day..
+
+*** The `show`
+Basically has a command called "show" that provides
+type anotations inside of theorems.
+#+begin_src lean4
+variable {p q : Prop}
+
+theorem t1 : p → q → p :=
+  fun hp : p =>
+  fun hq : q =>
+  show p from hp
+#+end_src
+
+I'm, personally,
+i'm reading that "`show p from hp`" as the old exact command
+because u're kinda 'showing' p and thats from hp indeed..
+
+But Lean seens to look at it as type anotation from hp which is p...
+What sounds to make sense with my another point because hp is nothing
+different than a evidence of p with p beeing a assertion beeing showed
+through hp.
+
+"Adding such extra information can improve the clarity of a proof and help detect errors when writing a proof. The show command does nothing more than annotate the type, and, internally, all the presentations of t1 that we have seen produce the same term."
+
+*** Option (Something about dependent theory)
+"Remember that this type can just as well be written ∀ (p q : Prop) (hp : p) (hq : q), p, since the arrow denotes nothing more than an arrow type in which the target does not depend on the bound variable."
+
+It talks very much with something previosly explored but it's very very good to notice that..
+
+
+*** Operators
+**** Intro
+Nothing's new, but maybe this table can be useful.
+[[file:./contents/images/connectives_table.png]]
+
+**** Conjunction
+In summary:
+#+begin_src lean4
+#check And.intro -- {a b : Prop} (left : a) (right : b) : a ∧ b
+#check And.left  -- {a b : Prop} (self : a ∧ b) : a
+#check And.right -- {a b : Prop} (self : a ∧ b) : b
+#+end_src
+
+**** Disjunction
+In Summary:
+#+begin_src lean4
+#check Or.intro_left  -- {a : Prop} (b : Prop) (h : a) : a ∨ b
+#check Or.intro_right -- {b : Prop} (a : Prop) (h : b) : a ∨ b
+#check Or.elim        -- {a b c : Prop} (h : a ∨ b) (left : a → c) (right : b → c) : c
+#+end_src
+
+We also have this shorthand:
+#+begin_src lean4
+#check Or.inl         -- {a b : Prop} (h : a) : a ∨ b
+#check Or.inr         -- {a b : Prop} (h : a) : a ∨ b
+#+end_src
+
+**** Negation and Falsity
+In Summary:
+#+begin_src lean4
+#check False.elim -- False.elim.{u} {C : sort u} (h : False) : C
+#check absurd     -- absurd.{v} {a : Prop} {b : Sort v} (h₁ : a) (h₂ : ¬a) : b
+#+end_src
+
+**** True
+In Summary
+"Incidentally, just as False has only an elimination rule, True has only an introduction rule, True.intro : true. In other words, True is simply true, and has a canonical proof, True.intro."
+
+**** Logical Equivalence
+In summary:
+#+begin_src lean4
+#check Iff.intro -- {a b : Prop} (mp : a → b) (mpr : b → a) : a ↔ b
+#check Iff.mp    -- {a b : Prop} (self : a ↔ b) : a → b
+#check Iff.mpr   -- {a b : Prop} (self : a ↔ b) : b → a
+#+end_src
+
+things like this are also possible:
+#+begin_src lean4
+def thing : p ↔ p := ⟨id , id⟩
+
+theorem and_swap : p ∧ q ↔ q ∧ p :=
+  let f {r s : Prop} (h : r ∧ s) : s ∧ r := ⟨h.2, h.1⟩
+  ⟨f, f⟩
+#+end_src
+
+**** Introducing Auxiliary Subgoals
+This will serve as example:
+#+begin_src lean4
+namespace subgoals
+variable (p q : Prop)
+
+example (h : p ∧ q) : q ∧ p :=
+  have hp : p := h.left
+  have hq : q := h.right
+  show q ∧ p from ⟨hq, hp⟩
+
+example (h : p ∧ q) : q ∧ p :=
+  let hp : p := h.left
+  let hq : q := h.right
+  show q ∧ p from ⟨hq, hp⟩
+
+variable (p q : Prop)
+
+example (h : p ∧ q) : q ∧ p :=
+  have hp : p := h.left
+  suffices hq : q from And.intro hq hp
+  show q from And.right h
+
+end subgoals
+#+end_src
+
+**** Classical Logic
+So we can `open Classical` and use the dirty math
+like em (excluded middle)
+#+begin_src lean4
+open Classical
+
+variable (p : Prop)
+#check em      -- Classical.em (p : Prop) : p ∨ ¬p
+#check byCases -- {p q : Prop} (hpq : p → q) (¬p → q) : q
+#check byContradiction -- {p : Prop} (h : ¬p → False) : p
+#+end_src
+
+** Quantifiers and Equality
+** Tactics
