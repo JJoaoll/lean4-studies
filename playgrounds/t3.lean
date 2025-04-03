@@ -406,3 +406,46 @@ theorem dne {p : Prop} (h : ¬¬p) : p :=
     (fun hnp : ¬p => absurd hnp h)
 
 end classical
+
+namespace hw
+  structure Point2D where
+    x : Float
+    y : Float
+  deriving Repr
+
+  def pred α := α → Prop
+
+  def ex_un.{u} {α : Type u} (p : pred α) : Prop :=
+    ∃ (a : α), p a ∧ ∀ (a' : α), p a' → a = a'
+
+  #print ex_un
+
+  def bin_prod_of.{u} (P α β : Type u) (p₁ : P → α) (p₂ : P → β) : Prop :=
+    ∀ (C : Type u), ∀ (f : C → α), ∀ (g : C → β),
+      ex_un (fun p : C → P => p₁∘ p = f ∧ p₂∘ p = g)
+
+
+  theorem prod_Point2D : bin_prod_of Point2D Float Float Point2D.x Point2D.y := by
+    rw [bin_prod_of]
+    intros C f g
+    rw [ex_un]
+    exists (fun c : C => ⟨(f c), (g c)⟩)
+    apply And.intro
+    · -- Exists
+      apply And.intro
+      · -- first equality
+        apply funext
+        intro c
+        simp
+      · -- secc equality
+        apply funext
+        intro c
+        simp
+    · -- Unicity
+      intro P'
+      intro h
+      rw [← h.left]
+      rw [← h.right]
+      simp
+
+end hw
