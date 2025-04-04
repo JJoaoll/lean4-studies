@@ -178,7 +178,27 @@ example : ¬(p → q) → p ∧ ¬q :=
           suffices hnq_np : ¬q → ¬p from f hnq_np
           show ¬q → ¬p from fun _ => hnp))
 
-example : (p → q) → (¬p ∨ q) := sorry
-example : (¬q → ¬p) → (p → q) := sorry
-example : p ∨ ¬p := sorry
-example : (((p → q) → p) → p) := sorry
+#check byCases
+example : (p → q) → (¬p ∨ q) :=
+  fun hp_q => byCases
+    (fun hp  :  p => Or.inr $ hp_q hp)
+    (fun hnp : ¬p => Or.inl hnp)
+
+#check byContradiction
+-- whats ur name, theorem? if i knewd would be awesome ;-;
+-- Loogle when?
+example : (¬q → ¬p) → (p → q) :=
+  fun hnq_np hp => byContradiction
+   (fun hnq =>
+     let hnp := hnq_np hnq
+     absurd hp hnp)
+
+example : p ∨ ¬p := em p
+example : (((p → q) → p) → p) :=
+  fun hpk => byCases
+    (fun hp  :  p => hp)
+    (fun hnp : ¬p =>
+      suffices hp_q : p → q from hpk hp_q
+      fun hp => absurd hp hnp)
+
+
