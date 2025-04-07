@@ -125,16 +125,111 @@ def uncurry : (α → β → γ) → (α × β → γ) := by
   apply h
   repeat assumption
 
+open Nat in
+def plus : Nat → Nat → Nat := by
+  intro n m
+  cases m
+  case zero    => exact n
+  case succ m' =>
+    have := plus n m'
+    exact this.succ
 
 
-
-
-
-
-
-
-
-
+#eval plus 3 4
 
 def kurry : (α × β → γ) → (α → β → γ) :=
   fun f a b => f ⟨a, b⟩
+
+example (p q r : Prop) : p ∧ (q ∨ r) → (p ∧ q) ∨ (p ∧ r) := by
+  intro h
+  exact
+    have hp : p := h.left
+    have hqr : q ∨ r := h.right
+    show (p ∧ q) ∨ (p ∧ r) by
+      cases hqr with
+      | inl hq => exact Or.inl ⟨hp, hq⟩
+      | inr hr => exact Or.inr ⟨hp, hr⟩
+
+example (p q r : Prop) : p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) := by
+  apply Iff.intro
+  . intro h
+    cases h.right with
+    | inl hq =>
+      show (p ∧ q) ∨ (p ∧ r)
+      exact Or.inl ⟨h.left, hq⟩
+    | inr hr =>
+      show (p ∧ q) ∨ (p ∧ r)
+      exact Or.inr ⟨h.left, hr⟩
+  . intro h
+    cases h with
+    | inl hpq =>
+      show p ∧ (q ∨ r)
+      exact ⟨hpq.left, Or.inl hpq.right⟩
+    | inr hpr =>
+      show p ∧ (q ∨ r)
+      exact ⟨hpr.left, Or.inr hpr.right⟩
+
+example (n : Nat) : n + 1 = Nat.succ n := by
+  show Nat.succ n = Nat.succ n
+  rfl
+
+#eval (3 ∣ 4)
+#print Nat.mul_add_div
+
+example (a b c : Nat) (h₁ : a ∣ b) (h₂ : b ∣ c) : a ∣ c := by
+  show ∃ k, c = a * k
+  have ⟨x, hab⟩ := h₁
+  have ⟨y, hbc⟩ := h₂
+  exists x * y; apply Eq.symm;
+  calc  a * (x * y) = (a * x) * y := by rw [←Nat.mul_assoc]
+                  _ = b * y       := by rw [hab]
+                  _ = c           := by rw [hbc]
+
+
+example (p q : Prop) (hp : p) : p ∨ q := by
+  first | apply Or.inl; assumption | apply Or.inr; assumption
+
+example (p q : Prop) (hq : q) : p ∨ q := by
+  first | apply Or.inl; assumption | apply Or.inr; assumption
+
+
+example (p q : Prop) : p ∨ q → q ∨ p := by
+  intro h
+  cases h
+  · rename_i hp
+    skip
+    exact Or.inr hp
+  · admit
+
+
+example (p q r : Prop) (hp : p) (hq : q) (hr : r) :
+    p ∧ ((p ∧ q) ∧ r) ∧ (q ∧ r ∧ p) := by
+ repeat (any_goals constructor)
+ all_goals assumption
+
+def Tuple (α : Type) (n : Nat) :=
+  { as : List α // as.length = n }
+
+example (n : Nat) (h : n = 0) (t : Tuple α n) : Tuple α 0 := by
+  rw [h] at t
+  exact t
+
+attribute [local simp] Nat.mul_comm Nat.mul_assoc Nat.mul_left_comm
+attribute [local simp] Nat.add_assoc Nat.add_comm Nat.add_left_comm
+example (w x y z : Nat) (p : Nat → Prop)
+        : x * y + z * w * x = x * w * z + y * x := by
+  simp
+
+example (w x y z : Nat) (p : Nat → Prop)
+        (h : p (x * y + z * w * x)) : p (x * w * z + y * x) := by
+  simp;
+  simp at h; assumption
+
+
+example (f : Nat → Nat) (k : Nat) (h₁ : f 0 = 0) (h₂ : k = 0) : f k = 0 := by
+  simp [*]
+
+
+example (u w x y z : Nat) (h₁ : x = y + z) (h₂ : w = u + x)
+        : w = z + y + u := by
+  simp [*, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm]
