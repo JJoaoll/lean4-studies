@@ -187,4 +187,5 @@ def complement C :=
 open List in
 def solution :=  String.mk ∘ reverse ∘ map complement ∘ String.toList
 
-#eval solution "AAAACCCGGT"
+-- #eval solution "AAAACCCGGT"
+
