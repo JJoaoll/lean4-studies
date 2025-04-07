@@ -178,12 +178,12 @@ example (n : Nat) : n + 1 = Nat.succ n := by
 
 example (a b c : Nat) (h₁ : a ∣ b) (h₂ : b ∣ c) : a ∣ c := by
   show ∃ k, c = a * k
-  have ⟨x, hab⟩ := h₁
-  have ⟨y, hbc⟩ := h₂
-  exists x * y; apply Eq.symm;
-  calc  a * (x * y) = (a * x) * y := by rw [←Nat.mul_assoc]
-                  _ = b * y       := by rw [hab]
-                  _ = c           := by rw [hbc]
+  have ⟨k, hab⟩ := h₁
+  have ⟨q, hbc⟩ := h₂
+  exists k * q; apply Eq.symm;
+  calc a * (k * q) = (a * k) * q := by rw [←Nat.mul_assoc]
+                 _ = b * q       := by rw [hab]
+                 _ = c ..        := by rw [hbc]
 
 
 example (p q : Prop) (hp : p) : p ∨ q := by
@@ -206,6 +206,9 @@ example (p q r : Prop) (hp : p) (hq : q) (hr : r) :
     p ∧ ((p ∧ q) ∧ r) ∧ (q ∧ r ∧ p) := by
  repeat (any_goals constructor)
  all_goals assumption
+
+example : p → p := by
+
 
 def Tuple (α : Type) (n : Nat) :=
   { as : List α // as.length = n }
@@ -233,3 +236,36 @@ example (f : Nat → Nat) (k : Nat) (h₁ : f 0 = 0) (h₂ : k = 0) : f k = 0 :=
 example (u w x y z : Nat) (h₁ : x = y + z) (h₂ : w = u + x)
         : w = z + y + u := by
   simp [*, Nat.add_assoc, Nat.add_comm, Nat.add_left_comm]
+
+
+def pluss : Nat → Nat → Nat := by
+  intro n m 
+  cases m 
+  case zero => exact n
+  case succ k => 
+    have := pluss n k
+    exact this.succ
+
+#eval pluss 9 4
+
+
+def takke : Nat → List α → List α := by
+  intro n l 
+  cases l
+  case nil => exact [] 
+  case cons k ks => 
+    cases n with  
+    | zero => exact []
+    | succ n' => 
+      have := takke n' ks
+      have := k :: this
+      exact this
+
+#eval takke 3 [1, 2, 3, 4, 5]
+
+  
+
+
+
+
+
