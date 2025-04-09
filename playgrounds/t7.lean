@@ -207,7 +207,7 @@ example (p q r : Prop) (hp : p) (hq : q) (hr : r) :
  repeat (any_goals constructor)
  all_goals assumption
 
-example : p → p := by
+-- example : p → p := by
 
 
 def Tuple (α : Type) (n : Nat) :=

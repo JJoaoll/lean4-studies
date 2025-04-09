@@ -2890,3 +2890,37 @@ example (xs ys : List Nat) (h : g xs ys = 0) : False := by
 #+end_src
 
 *** Extensible  (macro)
+You can provide different expansions, and the tactic interpreter will try all of them until one succeeds:
+(the text is all..)
+#+begin_src lean4
+-- Define a new tactic notation
+syntax "triv" : tactic
+
+macro_rules
+  | `(tactic| triv) => `(tactic| assumption)
+
+example (h : p) : p := by
+  triv
+
+-- You cannot prove the following theorem using `triv`
+-- example (x : α) : x = x := by
+--  triv
+
+-- Let's extend `triv`. The tactic interpreter
+-- tries all possible macro extensions for `triv` until one succeeds
+macro_rules
+  | `(tactic| triv) => `(tactic| rfl)
+
+example (x : α) : x = x := by
+  triv
+
+example (x : α) (h : p) : x = x ∧ p := by
+  apply And.intro <;> triv
+
+-- We now add a (recursive) extension
+macro_rules | `(tactic| triv) => `(tactic| apply And.intro <;> triv)
+
+example (x : α) (h : p) : x = x ∧ p := by
+  triv
+
+#+end_src
