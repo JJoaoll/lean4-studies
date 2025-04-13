@@ -229,6 +229,16 @@ example : (((p → q) → p) → p) := by
   apply h 
   intros ; contradiction
 
+
+
+notation:65 lhs:65 " + " rhs:66 => HAdd.hAdd lhs rhs
+notation:50 lhs:51 " = " rhs:51 => Eq lhs rhs
+notation:80 lhs:81 " ^ " rhs:80 => HPow.hPow lhs rhs
+notation:100 "-" arg:100 => Neg.neg arg
+set_option quotPrecheck false
+notation:1024 arg:1024 "⁻¹" => Inv.inv arg  -- `max` is a shorthand for precedence 1024
+
+
 -- (i : I) ⊢ A :(i)
 -- syntax "QED" : tactic
 
@@ -239,3 +249,23 @@ example : (((p → q) → p) → p) := by
 
 -- example (hp : p) : p := by
 --   QED;
+
+--  (λa.b) u = b[a := u]
+--  β
+-- Π
+
+-- def List.bar (_ : List Nat) : Nat := 4
+-- def my_list := [1, 2, 3, 4]
+
+-- #eval my_list.bar
+
+-- def multi_prod : List Type → Type
+--   | [] => Unit
+--   | t :: ts => t × multi_prod ts
+
+-- def test : Nat → Type := sorry
+
+-- #check Sigma
+-- #check @Sigma.mk (List Type) multi_prod [Nat, String] ⟨3, "oi", ()⟩
+-- #check @Sigma.mk (List Type) multi_prod [Nat, String] ⟨3, "oi", ()⟩
+-- #check @Sigma.mk (List Type) multi_prod

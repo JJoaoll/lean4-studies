@@ -1,3 +1,4 @@
+
 -- Monads
 
 -- pure : α → m α
@@ -12,6 +13,7 @@
 
 -- pure : α → m α
 -- bind : m α × (α → m β) → m β
+
 
 #print Option
 
@@ -85,3 +87,67 @@ def hello_monad : IO Nat := do {
 -- pure : α → m α
 -- bind : m α × (α → m β) → m β
 --
+
+-- TODOLIST:
+namespace Task
+
+inductive Status where
+| done
+| working
+| canceled
+deriving Repr, BEq
+
+#eval Status.done
+#eval Status.working
+open Status
+
+structure Task where
+  name   : String
+  status : Status
+  descr  : String
+deriving Repr
+
+def Task.pred_status (t : Task) (p : Status → Bool) : Bool :=
+  p t.status
+
+def tirarLixo := Task.mk "tirar o lixo"
+                Status.canceled
+                ""
+
+def limparCasa : Task := ⟨"limpar a casa", Status.working, "falta o banheiro e cozinha."⟩
+
+structure TodoList where
+  title : String
+  tasks : List Task
+deriving Repr
+
+def myList := TodoList.mk "casa" [tirarLixo, limparCasa]
+def TodoList.filter (p : Task → Bool) (t_list : TodoList) : TodoList :=
+  { t_list with tasks := t_list.tasks.filter p }
+
+def TodoList.avaiable_tasks (t : TodoList) : TodoList :=
+  match t with
+  | ⟨title, tasks⟩ =>
+    let avaiable_tasks := tasks.filter ((· == working) ∘ Task.status)
+    ⟨title, avaiable_tasks⟩
+
+
+#eval working == working
+#eval (· == working) working
+open Task in
+-- #check myList.filter (pred_status (· == canceled))
+#eval myList.avaiable_tasks
+#check tirarLixo
+#eval tirarLixo.pred_status (· == canceled)
+
+
+end Task
+
+example (p q r : Prop) (hp : p)
+        : (p ∨ q ∨ r) ∧ (q ∨ p ∨ r) ∧ (q ∨ r ∨ p) := by
+  admit
+
+def ff (x : Nat) ⦃y : Nat⦄ (z : Nat) := (x, y, z)
+
+#check ff 3 3
+#eval (λ x => ff 3 x 4) x

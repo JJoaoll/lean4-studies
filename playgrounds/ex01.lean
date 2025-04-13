@@ -1,5 +1,12 @@
 variable (p q r : Prop)
 
+
+
+#print And
+#check And.elim
+#check And
+
+
 -- commutativity of ∧ and ∨
 example : p ∧ q ↔ q ∧ p :=
   let swap {p q : Prop} (h : p ∧ q) : q ∧ p := ⟨h.2, h.1⟩
