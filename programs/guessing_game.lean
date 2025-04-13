@@ -32,4 +32,3 @@ def main : IO Unit := do
   game secret_number
 
   stdout.putStrLn "Fim de jogo!"
-  return ()
