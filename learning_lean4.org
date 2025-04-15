@@ -2924,3 +2924,47 @@ example (x : α) (h : p) : x = x ∧ p := by
   triv
 
 #+end_src
+
+** Some of next chapters
+*** Intro
+I really don't know if i'll create some of the next
+chapters here because they conflict with another subjects from
+the other books and they're write most for consulting so, i really
+think that i'm skimming them!
+
+*** Setting Options
+Here's the syntax:
+#+begin_src lean4
+set_option <name> <value>
+#+end_src
+
+Here's an example:
+#+begin_src lean4
+set_option pp.explicit false
+set_option pp.universes false
+set_option pp.notation true
+#+end_src
+
+*** Setting Options
+*** Some library links:
+https://github.com/leanprover/lean4/tree/master/src/Init
+https://github.com/leanprover/std4/tree/main/Std
+
+*** Named Arguments (Implicity)
+Maybe that's the most useful part:
+"You can use .. to provide missing explicit arguments as _. This feature combined with named arguments is useful for writing patterns. Here is an example:"
+#+begin_src lean4
+inductive Term where
+  | var    (name : String)
+  | num    (val : Nat)
+  | app    (fn : Term) (arg : Term)
+  | lambda (name : String) (type : Term) (body : Term)
+
+def getBinderName : Term → Option String
+  | Term.lambda (name := n) .. => some n
+  | _ => none
+
+def getBinderType : Term → Option Term
+  | Term.lambda (type := t) .. => some t
+  | _ => none
+#+end_src
