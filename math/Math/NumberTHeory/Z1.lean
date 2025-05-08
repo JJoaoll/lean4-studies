@@ -1,7 +1,7 @@
 
 universe u
 variable (α : Type u)
--- O foco inicial aqui não vai ser a escrita, mas ter a transcrição do material v1.
+-- O foco INICIAL aqui não vai ser a escrita (nomes, etc), mas ter a transcrição do material v1.
 -- notation:1000 a " < " f:10000 " > " b => f ⟨a, b⟩
 
 class Z1 (Int : Type u) where
@@ -25,11 +25,15 @@ class Z1 (Int : Type u) where
 -- open Z1
 -- TODO: melhorar notações pra implementar coisas e também pra definir as associatividades.
 -- O bom de não definir as ass é não precisar do pp.parens true.
--- instance : add (Z1 )where
---   add := fun x y => Z1.add (x, y)
+instance [Z1 α] : Add α where
+  add := fun x y => Z1.add (x, y)
 
-notation:50 a " + " b => Z1.add ⟨a, b⟩
-notation:70 "-"a      => Z1.minus a
+instance [Z1 α] : Neg α where
+  neg := Z1.minus
+
+
+-- notation:50 a " + " b => Z1.add ⟨a, b⟩
+-- notation:70 "-"a      => Z1.minus a
 notation:60 a " · " b => Z1.mul ⟨a, b⟩
 
 section whos_left
@@ -42,7 +46,7 @@ theorem ZA_IdL  [Z1 Int]: ∀ (a : Int), add (zero, a) = a := by
     _ = add (a, zero) := by rw [ZA_Com]
     _ = a             := by rw [ZA_IdR]
 
-theorem ZA_InvL [Z1 Int]: ∀ (a : Int), add (minus a, a) = zero := by
+theorem ZA_InvL [Z1 Z]: ∀ (a : Z), add (minus a, a) = zero := by
   intro a
   calc
     add (minus a, a)
@@ -50,7 +54,7 @@ theorem ZA_InvL [Z1 Int]: ∀ (a : Int), add (minus a, a) = zero := by
     _ = zero             := by apply ZA_InvR
 
 
-theorem ZM_IdL  [Z1 Int]: ∀ (a : Int), mul (one, a) = a := by
+theorem ZM_IdL [Z1 Int]: ∀ (a : Int), mul (one, a) = a := by
   intro a
   calc
     mul (one, a)
@@ -70,7 +74,7 @@ end whos_left
 section passar_pro_outro_lado
 open Z1
 
-theorem noname1 [Z1 Int]: ∀ (a b c : Int), add (a, b) = c ↔ a = add (c, minus b) := by
+theorem noname1 [Z1 Z]: ∀ (a b c : Z), add (a, b) = c ↔ a = add (c, minus b) := by
   intros a b c
   constructor <;> intro h -- better way?
   have :=
@@ -85,8 +89,8 @@ theorem noname1 [Z1 Int]: ∀ (a b c : Int), add (a, b) = c ↔ a = add (c, minu
     add (a, b)
     _ = add (add (c, minus b), b) := by rw [h]
     _ = add (c, add (minus b, b)) := by rw [ZA_Ass]
-    _ = add (c, zero)        := by rw [ZA_InvL]
-    _ = c                    := by rw [ZA_IdR]
+    _ = add (c, zero)             := by rw [ZA_InvL]
+    _ = c                         := by rw [ZA_IdR]
 
 theorem noname2 [Z1 Int]: ∀ (a b c : Int), add (a, b) = c ↔ a = add (b, minus a) := by sorry
 theorem noname3 [Z1 Int]: ∀ (a b : Int), a = b ↔  add (a, minus b) = zero := by sorry
