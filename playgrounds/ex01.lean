@@ -3,6 +3,7 @@ variable (p q r : Prop)
 
 
 #print And
+#print Iff
 #check And.elim
 #check And
 
@@ -12,7 +13,7 @@ example : p ∧ q ↔ q ∧ p :=
   let swap {p q : Prop} (h : p ∧ q) : q ∧ p := ⟨h.2, h.1⟩
   ⟨swap, swap⟩
 
-open Or in
+    open Or in
 example : p ∨ q ↔ q ∨ p :=
   let change {p q : Prop} (h : p ∨ q) : q ∨ p := elim h inr inl
   ⟨change, change⟩

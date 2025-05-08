@@ -26,7 +26,7 @@ partial def game (answer : Nat) : IO Unit := do {
 }
 
 
-def main : IO Unit := do
+def main : IO Unit := do 
   let stdout ← IO.getStdout
 
   let secret_number ← IO.rand 1 100
