@@ -1,0 +1,1865 @@
+* Functional Programming in Lean
+** Getting to know
+*** TODO Text resume
+Lean4 does have a repl integrated with the LSP enviroment.
+
+**** POO
+This text talks so much about POO that hurt's me. I can't get so much POO anymore.
+
+*** Evaluating
+U should use the `#eval` to evaluate, such as this example show us:
+#+begin_src lean4
+#eval 1 + 2
+#+end_src
+
+Also the function application works just like in Haskell.
+(🔍) ~ So, i've just figured out that lean4 is a strict language, not a strict one. What a shame!
+*** Types
+When necessary, u can use type coercions with ":"
+#+begin_src lean4
+#eval (1 + 2 : Nat)
+-- So look this:
+#eval  1 - 2        -->  0 : Nat
+#eval (1 - 2 : Int) --> -1 : Int
+#+end_src
+
+As u can check the values with  `#eval`
+u also can check the types with `#check`
+#+begin_src lean4
+#check (1 - 2 : Int)  --> 1 - 2 : Int (without performing the operation.)
+#+end_src
+
+*** Functions and Definitions
+to definitions, use `def`, like:
+#+begin_src lean4
+def hello := "Hello"
+#+end_src
+
+Note how great the `:=` fits for assignments instead of `=`.
+If u wanna pick the type too, u can do it like this:
+#+begin_src lean4
+def lean : String := "Lean"
+#+end_src
+
+When it comes to define a function, there are a variaty of ways to do that.
+The simpliest one (they say it):
+#+begin_src lean4
+def succ (n : Nat) : Nat := n + 1
+-- or:
+def pred (n : Nat) : Nat :=
+  n - 1
+#+end_src
+
+
+Look this another one with more arguments:
+#+begin_src lean4
+def maximum (n : Nat) (k : Nat) : Nat :=
+  if n < k then
+    k
+  else n
+#+end_src
+
+Lean4 does use currying as default.
+(my exercises are in somewhere but it's not my intent to share them :P)
+
+**** Defining Types:
+U use the same `def` keyword just like with the values (including functions)
+#+begin_src lean4
+def Str  : Type := String
+def aStr : Str  := "Look at me, i'm a real String!"
+#+end_src
+
+some explanation about "aStr" definition:
+"The reason this works is that types follow the same rules as the rest of Lean. Types are expressions,
+and in an expression, a defined name can be replaced with its definition. Because Str has been defined
+to mean String, the definition of aStr makes sense."
+
+Something very very weird about Lean4 is that, because they want to overload number literals,
+this code generates an error:
+#+begin_src lean4
+def NaturalNumber : Type := Nat
+def thirtyEight : NaturalNumber := 38
+ -- failed to synthesize instance
+-- OfNat NaturalNumber 38
+#+end_src
+
+But it works this way:
+#+begin_src lean4
+def thirtyEight : NaturalNumber := (38 : Nat)
+#+end_src
+
+why?
+"One way to work around this limitation is by providing the type Nat on the right-hand side of the definition, causing Nat's overloading rules to be used for 38:
+
+The definition is still type-correct because NaturalNumber is the same type as Nat—by definition!"
+
+But don't worry about it, we can see the light here:
+"Another solution is to define an overloading for NaturalNumber that works equivalently to the one for Nat. This requires more advanced features of Lean, however."
+
+Finally we have some "abbrev" like here:
+#+begin_src lean4
+abbrev N : Type := Nat
+def thirtyNine : N := 39
+-- works well
+#+end_src
+
+**** Question:
+whats a "foldable | unfoldable | folded | unfolded" definitions?
+
+*** Structures
+So they're basically product types..
+#+begin_src lean4
+structure Point where
+  x : Float
+  y : Float
+deriving Repr
+
+def origin : Point := { x := 0.0, y := 0.0 }
+#+end_src
+
+Note that the deriving works as the `Show` in haskell.
+When u call the "#eval", it call's the "repr". Look's like
+we're gonna discover TypeClasses again..
+
+About extracting things out of products we have:
+#+begin_src lean4
+#eval origin.x
+#eval origin.y
+
+def addPoints (p1 : Point) (p2 : Point) : Point :=
+    { x := p1.x + p2.x, y := p1.y + p2.y }
+
+structure Point3D where
+    x : Float
+    y : Float
+    z : Float
+deriving Repr
+
+def origin3D : Point3D :=
+    { x := 0.0, y := 0.0, z := 0.0 }
+#+end_src
+
+"To make programs more concise, Lean also allows the structure type annotation inside the curly braces."
+#+begin_src lean4
+    #check { x := 0.0, y := 0.0 : Point}
+#+end_src
+
+Another convenient syntax is:
+#+begin_src lean4
+-- default
+def zeroX (p : Point) : Point :=
+    { x := 0, y := p.y }
+-- with syntax
+def zeroX (p : Point) : Point :=
+    { p with x := 0 }
+#+end_src
+
+With this syntax, some issues about refactoring code, e.g., adding new
+new columns to a struct would not implie that u're refactoring every
+single function that does things like above.
+
+**** Structure constructor
+So.. In Lean4, ure forced to use the "mk" thing that
+u could avoid in Haskell after get some maturity..
+#+begin_src lean4
+#check Point.mk 1.5 2.8
+ --> { x := 1.5, y := 2.8 } : Point
+#+end_src
+It's just exacly how a constructor should be in a product type,
+but forcing u to use de `(_.mk)` syntax, and what's ok.
+
+- Fine, i was wrong. And the default.. Nice one, lean, nice one.
+look at that:
+#+begin_src lean4
+structure Point where
+  point ::
+  x : Float
+  y : Float
+deriving Repr
+#+end_src
+
+Some notes about 'behind-the-scenes':
+"In fact, just as the curly-braced structure construction syntax is converted to a call to the structure's constructor behind the scenes, the syntax p1.x in the prior definition of addPoints is converted into a call to the Point.x accessor. That is, #eval origin.x and #eval Point.x origin both yield"
+
+LOOK AT THIS!!:
+    Accessor dot notation is usable with more than just structure fields. It can also be used for functions that take any number of arguments. More generally, accessor notation has the form TARGET.f ARG1 ARG2 .... If TARGET has type T, the function named T.f is called. TARGET becomes its leftmost argument of type T, which is often but not always the first one, and ARG1 ARG2 ... are provided in order as the remaining arguments. For instance, String.append can be invoked from a string with accessor notation, even though String is not a structure with an append field.
+
+#+begin_src lean4
+#eval "one string".append " and another"
+#+end_src
+
+(question?) - how the parenthesis works with `#eval` and `#check`?
+
+*** Datatypes, Patterns and Recursion
+It's module starts presenting what's a sum and a product of types in a
+very simple and didactic way.
+
+Also, the concept "inductive data types" were explained in this short-text:
+"Datatypes that allow choices are called sum types and datatypes that can include instances of themselves are called recursive datatypes. Recursive sum types are called inductive datatypes, because mathematical induction may be used to prove statements about them. When programming, inductive datatypes are consumed through pattern matching and recursive functions."
+
+But also look this definition:
+#+begin_src lean4
+inductive Bool where
+  | false : Bool
+  | true  : Bool
+#+end_src
+
+About classical ones, we have:
+#+begin_src lean4
+inductive Nat where
+  | zero : Nat
+  | succ (n : Nat) : Nat
+#+end_src
+
+**** Pattern Matching
+Examples:
+#+begin_src lean4
+def isZero (n : Nat) : Bool :=
+    match n with
+    | Nat.zero   => true
+    | Nat.succ k => false
+
+def pred (n : Nat) : Nat :=
+    match n with
+    | Nat.zero   => Nat.zero
+    | Nat.succ k => k
+#+end_src
+
+U can match with products just like sums (...)
+#+begin_src lean4
+def depth (p : Point3D) : Float :=
+    match p with
+    | { x:= h, y := w, z := d } => d
+
+-- Better:
+def depth (p : Point3D) : Float :=
+    match p with
+    | Point3D.mk _ _ d => d
+#+end_src
+
+**** Recursive Functions
+Examples:
+#+begin_src lean4
+def even (n : Nat) : Bool :=
+    match n with
+    | Nat.zero   => true
+    | Nat.succ k => not (even k)
+#+end_src
+
+"Lean ensures by default that every recursive function will eventually reach a base case"
+#+begin_src lean4
+-- error:
+def evenLoops (n : Nat) : Bool :=
+    match n with
+    | Nat.zero   => true
+    | Nat.succ k => not (evenLoops n)
+#+end_src
+
+Mensagem do erro:
+"fail to show termination for
+  evenLoops
+with errors
+structural recursion cannot be used
+
+well-founded recursion cannot be used, 'evenLoops' does not take any (non-fixed) arguments
+"
+
+Another classical's:
+#+begin_src lean4
+def plus (n : Nat) (k : Nat) : Nat :=
+    match k with
+    | Nat.zero    => n
+    | Nat.succ k' => Nat.succ (plus n k')
+
+def times (n : Nat) (k : Nat) : Nat :=
+    match k with
+    | Nat.zero    => Nat.zero
+    | Nat.succ k' => plus n (times n k')
+
+def monus* (n : Nat) (k : Nat) : Nat :=
+    match k with
+    | Nat.zero    => n
+    | Nat.succ k' => pred (minus n k')
+#+end_src
+
+Algumas coisas sobre a terminação da quot foram tratadas,
+mas só serão `terminadas` no último capítulo, portanto, nada
+a mencionar por aqui.
+
+*** Polymorphism
+Look this amazing generalized point:
+#+begin_src lean4
+structure PPoint (α : Type) where
+  x : α
+  y : α
+deriving Repr
+#+end_src
+
+Usage example:
+#+begin_src lean4
+def natOrigin : PPoint Nat :=
+  { x := Nat.zero, y := Nat.zero }
+
+-- My own version
+def natOrigin : PPoint Nat :=
+  PPoint.mk Nat.zero Nat.zero
+#+end_src
+
+Receiving a Type as argument:
+#+begin_src lean4
+def replaceX (α : Type) (point : PPoint α) (newX : α) : PPoint α :=
+    { point with x := newX }
+#+end_src
+
+Look how cool is match inside the types <3:
+#+begin_src lean4
+inductive Sign where
+  | pos
+  | neg
+
+def posOrNegThree (s : Sign) : match s with | Sign.pos => Nat | Sign.neg => Int :=
+  match s with
+    | Sign.pos => (3 : Nat)
+    | Sign.neg => (-3 : Int)
+#+end_src
+
+[question?] --> How do i should even deal with this type of return? Because
+It's not even "Either".
+
+**** Linked Lists
+" Lists are written in square brackets. For instance, a list that contains the prime numbers less than 10 can be written:"
+#+begin_src lean4
+def primesUnder10 : List Nat := [2, 3, 5, 7]
+#+end_src
+
+Behind the scenes, List is an inductive datatype, defined like this:
+#+begin_src lean4
+inductive List (α : Type) where
+  | nil  : List α
+  | cons : α → List α → List α
+#+end_src
+
+Ok, this looks ugly:
+#+begin_src lean4
+def explicitPrimesUnder10 : List Nat :=
+  List.cons 2 (List.cons 3 (List.cons 5 (List.cons 7 List.nil)))
+#+end_src
+
+Soo.. look at this lenght:
+#+begin_src lean4
+def length (α : Type) (xs' : List α) : Nat :=
+  match xs' with
+  | List.nil       => Nat.zero
+  | List.cons x xs => Nat.succ (length α ys)
+#+end_src
+
+"To make it easier to read functions on lists, the bracket notation [] can be used to pattern-match against nil, and an infix :: can be used in place of cons:"
+#+begin_src lean4
+def length (α : Type) (xs : List α) : Nat :=
+  match xs with
+  | [] => 0
+  | y :: ys => Nat.succ (length α ys)
+#+end_src
+
+**** Implicit Arguments
+Using "{}" instead of "()" should make the argument implicit somehow.
+Look at this:
+#+begin_src lean4
+def length {α : Type} (xs : List α) : Nat :=
+  match xs with
+  | [] => 0
+  | y :: ys => Nat.succ (length ys)
+#+end_src
+
+And now we can do
+#+begin_src lean4
+#eval length [1, 2, 3]
+#+end_src
+
+,instead of
+#+begin_src lean4
+#eval length Nat [1, 2, 3]
+#+end_src
+
+We can also do this way, btw
+(by using the std lib):
+#+begin_src lean4
+#eval [1, 2, 3].length
+#+end_src
+
+**** More Built-In Datatypes
+"In addition to lists, Lean's standard library contains a number of other structures and inductive datatypes that can be used in a variety of contexts."
+
+***** Option
+It's basically the "Maybe" type from Haskell.
+#+begin_src lean4
+inductive Option (α : Type) : Type where
+  | none           : Option α
+  | some (val : α) : Option α
+#+end_src
+
+This text talk about having layers of optionality:
+"The Option type is very similar to nullable types in languages like C# and Kotlin, but it is not identical. In these languages, if a type (say, Boolean) always refers to actual values of the type (true and false), the type Boolean? or Nullable<Boolean> additionally admits the null value. Tracking this in the type system is very useful: the type checker and other tooling can help programmers remember to check for null, and APIs that explicitly describe nullability through type signatures are more informative than ones that don't. However, these nullable types differ from Lean's Option in one very important way, which is that they don't allow multiple layers of optionality. Option (Option Int) can be constructed with none, some none, or some (some 360). C#, on the other hand, forbids multiple layers of nullability by only allowing ? to be added to non-nullable types, while Kotlin treats T?? as being equivalent to T?. This subtle difference is rarely relevant in practice, but it can matter from time to time."
+
+U can use '?' in a function name, look at this:
+#+begin_src lean4
+def List.head? {α : Type} (xs : List α) : Option α :=
+  match xs with
+    | []     => none
+    | y :: _ => some y
+#+end_src
+
+"Using underscores instead of names is a way to clearly communicate to readers that part of the input is ignored." For more detail's:
+****** Informative:
+"The question mark is part of the name, and is not related to the use of question marks to indicate nullable types in C# or Kotlin. In the definition of List.head?, an underscore is used to represent the tail of the list. In patterns, underscores match anything at all, but do not introduce variables to refer to the matched data. Using underscores instead of names is a way to clearly communicate to readers that part of the input is ignored."
+
+***** Prod
+It's basically the "Pair", because we're inside the type cat.
+#+begin_src lean4
+structure Prod (α : Type) (β : Type) : Type where
+  fst : α
+  snd : β
+#+end_src
+
+About confort syntax:
+#+begin_src lean4
+-- Better
+def fives : String × Int := { fst := "five", snd := 5 }
+-- A way better:
+def fives : String × Int := ("five", 5)
+#+end_src
+
+****** About syntax associativity:
+"Both notations are right-associative. This means that the following definitions are equivalent:"
+
+#+begin_src lean4
+-- The
+def sevens : String × Int × Nat := ("VII", 7, 4 + 3)
+-- Is acctualy
+def sevens : String × (Int × Nat) := ("VII", (7, 4 + 3))
+#+end_src
+
+"In other words, all products of more than two types, and their corresponding constructors, are actually nested products and nested pairs behind the scenes."
+****** A good advice:
+"Many applications are best served by defining their own structures, even for simple cases like Point, because using domain terminology can make it easier to read the code. Additionally, defining structure types helps catch more errors by assigning different types to different domain concepts, preventing them from being mixed up."
+
+***** Sum
+"Values of type Sum α β are either the constructor inl applied to a value of type α or the constructor inr applied to a value of type β:"
+#+begin_src lean4
+inductive Sum (α : Type) (β : Type) : Type where
+  | inl : α → Sum α β
+  | inr : β → Sum α β
+#+end_src
+
+Another notation (wrost than the simplier "+")
+#+begin_src lean4
+def PetName : Type := String ⊕ String
+#+end_src
+
+Example:
+#+begin_src lean4
+def howManyDogs (pets : List PetName) : Nat :=
+  match pets with
+  | []                    => 0
+  | Sum.inl _ :: morePets => howManyDogs morePets + 1
+  | Sum.inr _ :: morePets => howManyDogs morePets
+#+end_src
+
+***** Unit
+Just like it should be:
+#+begin_src lean4
+inductive Unit : Type where
+  | unit : Unit
+#+end_src
+
+To the unique member of the "Unit" type, u can also call it by
+the classical "()".
+
+***** Empty
+This should be fine:
+#+begin_src lean4
+inductive Empty where
+
+#check Empty
+#+end_src
+
+"The Empty datatype has no constructors whatsoever. Thus, it indicates unreachable code, because no series of calls can ever terminate with a value at type Empty.
+
+Empty is not used nearly as often as Unit. However, it is useful in some specialized contexts. Many polymorphic datatypes do not use all of their type arguments in all of their constructors. For instance, Sum.inl and Sum.inr each use only one of Sum's type arguments. Using Empty as one of the type arguments to Sum can rule out one of the constructors at a particular point in a program. This can allow generic code to be used in contexts that have additional restrictions."
+*** Additional Conveniences
+**** Automatic Implicit Arguments
+"When writing polymorphic functions in Lean, it is typically not necessary to list all the implicit arguments."
+
+So, that definition:
+#+begin_src lean4
+def length {α : Type} (xs : List α) : Nat :=
+  match xs with
+  | []      => 0
+  | y :: ys => Nat.succ (length ys)
+#+end_src
+
+Can be written this way:
+#+begin_src lean4
+def length (xs : List α) : Nat :=
+  match xs with
+  | []      => 0
+  | y :: ys => Nat.succ (length ys)
+#+end_src
+
+**** Pattern-Matching Definitions
+"When defining functions with def, it is quite common to name an argument and then immediately
+use it with pattern matching. For instance, in length, the argument xs is used only in match.
+In these situations, the cases of the match expression can be written directly, without naming the argument at all."
+
+Example:
+#+begin_src lean4
+def length : List α → Nat
+  | []      => 0
+  | y :: ys => Nat.succ (length ys)
+#+end_src
+
+"This syntax can also be used to define functions that take more than one argument. In this case,
+their patterns are separated by commas."
+
+Example:
+#+begin_src lean4
+def drop : Nat → List α → List α
+  | Nat.zero  , xs      => xs
+  | _         , []      => []
+  | Nat.succ n, x :: xs => drop n xs
+#+end_src
+
+"Named arguments and patterns can also be used in the same definition."
+#+begin_src lean4
+def fromOption (default : α) : Option α → α
+  | none   => default
+  | some x => x
+#+end_src
+
+"This function is called Option.getD in the standard library,
+  and can be called with dot notation", btw.
+
+#+begin_src lean4
+#eval (some "salmonberry").getD "" --> "salmonberry"
+#eval none.getD ""                 --> ""
+#+end_src
+
+**** Local Definitions
+"In Lean, the result of the recursive call can be named, and thus saved, using let. Local definitions with let resemble top-level definitions with def: it takes a name to be locally defined, arguments if desired, a type signature, and then a body following :=. After the local definition, the expression in which the local definition is available (called the body of the let-expression) must be on a new line, starting at a column in the file that is less than or equal to that of the let keyword. For instance, let can be used in unzip like this:"
+#+begin_src lean4
+def unzip : List (α × β) → List α × List β
+  | []            => ([], [])
+  | (x, y) :: xys =>
+    let unzipped : List α × List β := unzip xys
+    (x :: unzipped.fst, y :: unzipped.snd)
+#+end_src
+
+"To use let on a single line, separate the local definition from the body with a semicolon."
+
+"Local definitions with let may also use pattern matching when one pattern is enough to match all cases of a datatype. In the case of unzip, the result of the recursive call is a pair. Because pairs have only a single constructor, the name unzipped can be replaced with a pair pattern:"
+#+begin_src lean4
+def unzip : List (α × β) → List α × List β
+  | [] => ([], [])
+  | (x, y) :: xys =>
+    let (xs, ys) : List α × List β := unzip xys
+    (x :: xs, y :: ys)
+#+end_src
+
+NEW FEATURE:
+"The biggest difference between let and def is that recursive let definitions must be explicitly indicated by writing let rec. For instance, one way to reverse a list involves a recursive helper function, as in this definition:"
+#+begin_src lean4
+def reverse (xs : List α) : List α :=
+  let rec helper : List α → List α → List α
+    | [], soFar => soFar
+    | y :: ys, soFar => helper ys (y :: soFar)
+  helper xs []
+#+end_src
+
+**** Type Inference
+"In many situations, Lean can automatically determine an expression's type. In these cases, explicit types may be omitted from both top-level definitions (with def) and local definitions (with let). For instance, the recursive call to unzip does not need an annotation:"
+#+begin_src lean4
+def unzip : List (α × β) → List α × List β
+  | []            => ([], [])
+  | (x, y) :: xys =>
+    let unzipped := unzip xys
+    (x :: unzipped.fst, y :: unzipped.snd)
+#+end_src
+
+In deed, it could even be like this:
+#+begin_src lean4
+def unnzip : List (α × β) → List α × List β
+  | []            => ([], [])
+  | (x, y) :: xys =>
+    let (xs, ys) := unzip xys
+    (x :: xs, y :: ys)
+#+end_src
+
+"Omitting the return type for unzip is possible when using an explicit match expression:"
+#+begin_src lean4
+def unzip (pairs : List (α × β)) :=
+  match pairs with
+  | [] => ([], [])
+  | (x, y) :: xys =>
+    let unzipped := unzip xys
+    (x :: unzipped.fst, y :: unzipped.snd)
+#+end_src
+
+"Missing type annotations can give confusing error messages. Omitting all types from the definition of unzip:"
+#+begin_src lean4
+def unzip pairs :=
+  match pairs with
+  | [] => ([], [])
+  | (x, y) :: xys =>
+    let unzipped := unzip xys
+    (x :: unzipped.fst, y :: unzipped.snd)
+#+end_src
+
+It generate this error message:
+#+begin_src error
+invalid match-expression, pattern contains metavariables
+  []
+#+end_src
+
+"This is because match needs to know the type of the value being inspected, but that type was not available."
+
+"Even some very simple programs require type annotations. For instance, the identity function just returns whatever argument it is passed. With argument and type annotations, it looks like this:"
+#+begin_src lean4
+def id (x : α) : α := x
+#+end_src
+
+"Lean is capable of determining the return type on its own:"
+#+begin_src lean4
+def id (x : α) := x
+#+end_src
+
+"Omitting the argument type, however, causes an error:"
+#+begin_src lean4
+def id x := x --> (!) failed to infer binder type
+#+end_src
+
+**** Simultaneous Matching
+"Pattern-matching expressions, just like pattern-matching definitions, can match on multiple values at once. "
+
+Look at this:
+#+begin_src lean4
+def drop (n : Nat) (xs : List α) : List α :=
+  match n, xs with
+  | Nat.zero   , ys      => ys
+  | _          , []      => []
+  | Nat.succ n , y :: ys => drop n ys
+#+end_src
+
+**** Natural Number Patterns
+"Just as there is special syntax to make list patterns more readable
+than using List.cons and List.nil directly, natural numbers can be
+matched using literal numbers and +. For instance, even can also be
+defined like this:"
+#+begin_src lean4
+def even : Nat → Bool
+  | 0     => true
+  | n + 1 => not (even n)
+#+end_src
+
+The explicit patterns in halve, which divides a Nat by two and drops the remainder:
+#+begin_src lean4
+def halve : Nat → Nat
+  | Nat.zero => 0
+  | Nat.succ Nat.zero => 0
+  | Nat.succ (Nat.succ n) => halve n + 1
+#+end_src
+
+can be replaced by numeric literals and +:
+#+begin_src lean4
+def halve : Nat → Nat
+  | 0     => 0
+  | 1     => 0
+  | n + 2 => halve n + 1
+#+end_src
+
+"When using this syntax, the second argument to + should always be a literal Nat. Even though addition is commutative."
+
+**** Anonymous Functions
+The both can be used:
+#+begin_src lean4
+#check fun
+  | 0 => none
+  | n + 1 => some n
+#check λ
+  | 0 => none
+  | n + 1 => some n
+#+end_src
+
+So, basicaly: fun = λ.
+It's a bit more usual to use "fun" instead of "λ", btw.
+
+Awelsome syntax gift:
+"When an anonymous function is very simple, like fun x => x + 1, the syntax for creating the function can be fairly verbose. In that particular example, six non-whitespace characters are used to introduce the function, and its body consists of only three non-whitespace characters. For these simple cases, Lean provides a shorthand. In an expression surrounded by parentheses, a centered dot character · can stand for an argument, and the expression inside the parentheses becomes the function's body. That particular function can also be written (· + 1)."
+
+"The centered dot always creates a function out of the closest surrounding set of parentheses. For instance, (· + 5, 3) is a function that returns a pair of numbers, while ((· + 5), 3) is a pair of a function and a number. If multiple dots are used, then they become arguments from left to right:"
+
+#+begin_src lean4
+(· , ·) 1 2
+===>
+(1, ·) 2
+===>
+(1, 2)
+#+end_src
+
+**** Namespaces
+Each name in Lean occurs in a namespace, which is a collection of names. Names are placed in namespaces using ., so List.map is the name map in the List namespace.
+
+Names can be directly defined within a namespace. For instance, the name double can be defined in the Nat namespace:
+#+begin_src lean4
+def Nat.double (x : Nat) : Nat := x + x
+#+end_src
+
+Because Nat is also the name of a type, dot notation is available to call Nat.double on expressions with type Nat:
+#+begin_src lean4
+#eval (4 : Nat).double
+#+end_src
+
+In addition to defining names directly in a namespace, a sequence of declarations can be placed in a namespace using the namespace and end commands. For instance, this defines triple and quadruple in the namespace NewNamespace:
+#+begin_src lean4
+namespace NewNamespace
+def triple    (x : Nat) : Nat := 3 * x
+def quadruple (x : Nat) : Nat := 2 * x + 2 * x
+end NewNamespace
+#+end_src
+
+"Namespaces may be opened, which allows the names in them to be used without explicit qualification. Writing open MyNamespace in before an expression causes the contents of MyNamespace to be available in the expression. For example, timesTwelve uses both quadruple and triple after opening NewNamespace:"
+#+begin_src lean4
+def timesTwelve (x : Nat) :=
+  open NewNamespace in
+  quadruple (triple x)
+#+end_src
+
+Namespaces can also be opened prior to a command. This allows all parts of the command to refer to the contents of the namespace, rather than just a single expression. To do this, place the open ... in prior to the command.
+#+begin_src lean4
+open NewNamespace in
+#check quadruple
+#+end_src
+
+Important:
+"Function signatures show the name's full namespace. Namespaces may additionally be opened for all following commands for the rest of the file. To do this, simply omit the in from a top-level usage of open."
+
+**** if let
+a function that recognizes string elements and extracts their contents can be written:
+#+begin_src lean4
+def Inline.string? (inline : Inline) : Option String :=
+  match inline with
+  | Inline.string s => some s
+  | _               => none
+#+end_src
+
+An alternative way of writing this function's body uses if together with let:
+#+begin_src lean4
+def Inline.string? (inline : Inline) : Option String :=
+  if let Inline.string s := inline then
+    some s
+  else none
+#+end_src
+
+It really look like some `instanceOf`'s.. Ugly, yeah!
+
+**** Positional Structure Arguments
+With some context, like definitions, because
+Structures are essencialy tupples, we can write
+it like this:
+#+begin_src lean4
+#eval (⟨1, 2⟩ : Point)
+#+end_src
+**** String Interpolation
+"In Lean, prefixing a string with s! triggers interpolation, where expressions contained in curly braces inside the string are replaced with their values. This is similar to f-strings in Python and $-prefixed strings in C#. For instance,"
+#+begin_src lean4
+#eval s!"three fives is {NewNamespace.triple 5}"
+ --> "three fives is 15"
+#+end_src
+
+*** TODO "Summary"
+** Hello, World!
+*** Compiling
+So u use `lean --rn file-name.lean` in order
+to compile things.
+
+*** The main
+The main should look similar to in Haskell as bellow:
+#+begin_src lean4
+def main : IO Unit := IO.println "Hello, world!"
+#+end_src
+
+*** The IO
+In a first look, the usage looks pretty similar to Haskells.
+#+begin_src lean4
+def main : IO Unit := do
+  let stdin  ← IO.getStdin
+  let stdout ← IO.getStdout
+
+  stdout.putStrLn "How would you like to be addressed?"
+  let input ← stdin.getLine
+  let name := input.dropRightWhile Char.isWhitespace
+
+  stdout.putStrLn s!"Hello, {name}!"
+#+end_src
+
+*** Build Tool's (Lake)
+**** Lake intro
+The standard Lean build tool is called Lake (short for "Lean Make").
+
+"Just as Lean contains a special-purpose language for writing programs with effects (the do language), Lake contains a special-purpose language for configuring builds."
+
+**** Creating a project
+Lake new create a new project in a new directory, to create a project in an already-existing directory,
+run lake init instead.
+
+**** Special "<< name >>"
+Placing guillemets around a name, as in «Greeting», allow it to contain spaces or other characters that are normally not allowed in Lean names, and it allows reserved keywords such as if or def to be used as ordinary names by writing «if» or «def». This prevents issues when the package name provided to lake new contains such characters.
+
+**** Running the project
+To build the package, run the command lake build. After a number of build commands scroll by, the
+resulting binary has been placed in build/bin. Running `./build/bin/greeting` results in Hello, world!.
+
+To me it appeared in a file inside `.lake/build/bin/`
+
+**** Lake documentation link
+https://github.com/leanprover/lean4/blob/master/src/lake/README.md
+
+**** Lean4 as the Lider
+"Additionally, Lakefiles may contain external libraries, which are libraries not written in Lean to be
+statically linked with the resulting executable."
+
+**** Module vs Namespaces
+"Import is used to make the contents of a source file available, while open makes names from a namespace available in the current context without prefixes."
+
+**** Selective Openning
+Similar to Haskell, (but with the segragation of module vs namespace), you can write
+`open Nat (toFloat)` to get only open `toFloat` to usage.
+
+**** Main Types
+ In Lean, main can have one of three types:
+
+- main : IO Unit corresponds to programs that cannot read their command-line arguments and always indicate success with an exit code of 0
+
+- main : IO UInt32 corresponds to int main(void) in C, for programs without arguments that return exit codes, and
+
+- main : List String → IO UInt32 corresponds to int main(int argc, char **argv) in C, for programs that take arguments and signal success or failure.
+*** TODO Conveniences
+*** TODO Summary
+** Overloading and Type Classes
+*** Intro
+**** Intro
+A type class consists of a name, some parameters, and a collection of methods.
+
+declaring a type class really results in the following:
+
+A structure type to contain the implementation of each overloaded operation
+A namespace with the same name as the class
+For each method, a function in the class's namespace that retrieves its implementation from an instance
+
+**** Parameters
+Describe the types for which overloadable operations are being defined
+**** Methods
+Are the names and type signatures of the overloadable operations.
+**** Short Example
+#+begin_src lean4
+class Plus (α : Type) where
+  plus : α → α → α
+
+instance : Plus Nat where
+  plus := Nat.add
+#+end_src
+**** HAdd and HMul
+HAdd is short for heterogeneous addition.
+For example, an HAdd instance can be written to allow a Nat to be added to a Float, resulting in a new Float. When a programmer writes x + y, it is interpreted as meaning HAdd.hAdd x y.
+
+#+begin_src lean4
+def addNatPos : Nat → Pos → Pos
+  | 0    , p => p
+  | n + 1, p => Pos.succ (addNatPos n p)
+
+def addPosNat : Pos → Nat → Pos
+  | p, 0     => p
+  | p, n + 1 => Pos.succ (addPosNat p n)
+#+end_src
+
+this type of of overloading is a lot more powerful than the "Add" and "Mul", because here we can add things with 2 diferent types. From this example, let's see it working:
+
+#+begin_src lean4
+instance : HAdd Nat Pos Pos where
+  hAdd := addNatPos
+
+instance : HAdd Pos Nat Pos where
+  hAdd := addPosNat
+
+#eval (3 : Pos) + (5 : Nat) --> 8
+#eval (3 : Nat) + (5 : Pos) --> 8
+#+end_src
+
+
+**** Very very useful thing i've made
+Since the Lean libraries are set up so that an instance of Add will be found when searching for an instance of HAdd in which both arguments have the same type, i did:
+#+begin_src lean4
+instance : Add Type where
+  add := Sum
+-- and now it's possible to write:
+#check Int + String --> Type
+#+end_src
+
+Just as "HAdd", there's a "HMul" and also there's a simplier "Mul"
+for the case when the two arguments have the same type.
+
+**** Literals ("OfNat" class)
+In Lean, natural number literals are interpreted using a type class called OfNat:
+#+begin_src lean4
+class OfNat (α : Type) (_ : Nat) where
+  ofNat : α
+#+end_src
+
+**** Very weird thing!
+#+begin_src lean4
+class Foo (n : Nat) where
+  const : Nat
+open Foo
+
+instance : Foo 5 where
+  const := 42
+
+instance : Foo 4 where
+  const := 53
+
+#eval const 5 --> 42
+#eval const 4 --> 53
+#eval const 3 --> !ERROR "failed to synthetize"
+#end_src
+**** TODO A Short Example (HTTP)
+*** Polymorphism
+**** About constraints
+Here the "IO.println" need to receive a type that insatnciate the "ToString" class.
+
+#+begin_src lean4
+#check IO.println   --> IO.prinln.{u_1} {α : Type u_1} [ToString α] (s : α) : IO Unit
+#check (IO.println) --> IO.println : ?m.10872 → IO Unit
+#check @IO.println  --> @IO.println : {α : Type u_1} → [inst : ToString α] → α → IO Unit
+#+end_src
+
+In Lean4, they call constraints as "Instance Implicits"
+**** Defining Polymorphic Functions with Instance Implicits
+There is an example:
+#+begin_src lean4
+def List.sum [Add α] [OfNat α 0] : List α → α
+ | []      => 0
+ | x :: xs => x + xs.sum
+
+instance [Add α] : Add (PPoint α) where
+  add p1 p2 := { x := p1.x + p2.x, y := p1.y + p2.y }
+#+end_src
+
+**** TODO Even Number Literals
+Write an instance of OfNat for the even number datatype from the previous section's (4.1) exercises that uses recursive instance search.
+For the base instance, it is necessary to write OfNat Even Nat.zero instead of OfNat Even 0.
+*** WAIT Instance Search
+**** Intro
+In the past we've be seen the HAdd type class.
+
+The definition of the HAdd type class is very much like the following definition of HPlus
+#+begin_src lean4
+class HPlus (α : Type) (β : Type) (γ : Type) where
+  hPlus : α → β → γ
+
+-- but:
+#eval HPlus.hPlus (3 : Pos) (5 : Nat)         --> !Error
+#eval (HPlus.hPlus (3 : Pos) (5 : Nat) : Pos) --> 8
+#+end_src
+
+**** Default Instances
+"Default instances are instances that are available for instance search even when not all their inputs are known."
+
+One example of where default instances can be useful is an instance of HPlus that can be derived from an Add instance. In other words, ordinary addition is a special case of heterogeneous addition in which all three types happen to be the same. This can be implemented using the following instance:
+#+begin_src lean4
+instance [Add α] : HPlus α α α where
+  hPlus := Add.add
+
+-- But:
+#check HPlus.hPlus (5 : Nat) --> HPlus.hPlus 5 : ?m.7706 → ?m.7708
+#+end_src
+
+In the vast majority of cases, when someone supplies one argument to addition, the other argument will have the same type. To make this instance into a default instance, apply the default_instance attribute:
+#+begin_src lean4
+@[default_instance]
+instance [Add α] : HPlus α α α where
+  hPlus := Add.add
+
+-- And now:
+#check HPlus.hPlus (5 : Nat) --> HPlus.hPlus 5 : Nat → Nat
+#+end_src
+
+For more details, consult the Lean4 manual!
+
+*** Arrays
+**** Intro
+For instance, Lean arrays are much more efficient than linked lists for most purposes. In Lean, the type Array α is a dynamically-sized array holding values of type α, much like a Java ArrayList, a C++ std::vector
+
+**** FunFact about compiler
+In pure functional languages like Lean, it is not possible to mutate a given position in a data structure. Instead, a copy is made that has the desired modifications. When using an array, the Lean compiler and runtime contain an optimization that can allow modifications to be implemented as mutations behind the scenes when there is only a single unique reference to an array.
+
+**** Example
+Arrays are written similarly to lists, but with a leading #:
+#+begin_src lean4
+def northernTrees : Array String :=
+  #["sloe", "birch", "elm", "oak"]
+
+#eval northernTrees.size --> 4
+#+end_src
+
+*** Non-Empty Lists
+Default implementation:
+#+begin_src lean4
+structure NonEmptyList (α : Type) : Type where
+  head : α
+  tail : List α
+#+end_src
+
+Example of functions beein declared about this type:
+#+begin_src lean4
+def NonEmptyList.get? : NonEmptyList α → Nat → Option α
+  | xs, 0 => some xs.head
+  | {head := _, tail := []}, _ + 1 => none
+  | {head := _, tail := h :: t}, n + 1 => get? {head := h, tail := t} n
+
+-- Another idea:
+def NonEmptyList.get? : NonEmptyList α → Nat → Option α
+  | xs, 0 => some xs.head
+  | xs, n + 1 => xs.tail.get? n
+#+end_src
+
+*** Overloading Indexing
+**** Intro
+Indexing notation for a collection type can be overloaded by defining an instance of the GetElem type class.
+Here are the paramters:
+- The type of the collection,
+- The type of the index,
+- The type of elements that are extracted from the collection,
+- A function that determines what counts as evidence that the index is in bounds;
+
+Here's the implementation:
+#+begin_src lean4
+class GetElem (coll : Type) (idx : Type) (item : outParam Type) (inBounds : outParam (coll → idx → Prop)) where
+  getElem : (c : coll) → (i : idx) → inBounds c i → item
+#+end_src
+
+Here's some instancement's
+#+begin_src lean4
+instance : GetElem (NonEmptyList α) Nat α NonEmptyList.inBounds where
+  getElem :=
+    fun : (xs : NonEmptyList α) (i : Nat) (ok : xs.inBounds i) : α :=
+      match i with
+      | 0     => xs.head
+      | n + 1 => xs.tail[n]
+
+instance : GetElem (PPoint α) Bool α (fun _ _ => True) where
+getElem (p : PPoint α) (i : Bool) _ :=
+  if not i then p.x else p.y
+#+end_src
+
+*** Standard Classes
+**** Intro
+Firstly i want to say that this text is just so good that i'll just C-w and C-y it here :).
+
+This section presents a variety of operators and functions that can be overloaded using type classes in Lean. Each operator or function corresponds to a method of a type class. Unlike C++, infix operators in Lean are defined as abbreviations for named functions; this means that overloading them for new types is not done using the operator itself, but rather using the underlying name (such as HAdd.hAdd).
+
+**** Arithmetic
+Most arithmetic operators are available in a heterogeneous form, where the arguments may have different type and an output parameter decides the type of the resulting expression. For each heterogeneous operator, there is a corresponding homogeneous version that can found by removing the letter h, so that HAdd.hAdd becomes Add.add. The following arithmetic operators are overloaded:
+
+[[file:./contents/images/Screenshot From 2025-03-12 19-28-45.png]]
+
+**** Bitwise Operators
+Lean contains a number of standard bitwise operators that are overloaded using type classes. There are instances for fixed-width types such as UInt8, UInt16, UInt32, UInt64, and USize. The latter is the size of words on the current platform, typically 32 or 64 bits. The following bitwise operators are overloaded:
+
+[[file:./contents/images/Screenshot From 2025-03-12 19-34-44.png]]
+
+Because the names And and Or are already taken as the names of logical connectives, the homogeneous versions of HAnd and HOr are called AndOp and OrOp rather than And and Or.
+
+**** Equality and Ordering
+It's just simple:
+#+begin_src lean4
+#check (· = ·)  --> fun x1 x2 => x1 = x2  : ?m.4509 → ?m.4509 → Prop
+#check (· == ·) --> fun x1 x2 => x1 == x2 : ?m.4523 → ?m.4523 → Bool
+#+end_src
+
+Some values, such as functions, cannot be checked for equality, btw.
+Also, some propositions are decidable, what makes possible to use then into
+a if statement, like that:
+#+begin_src lean4
+#check 2 < 3                 --> 2 < 3 : Prop
+#eval if 2 < 3 then 1 else 2 --> 1
+#+end_src
+
+The following propositions, that are usually decidable, are overloaded with type classes:
+
+[[file:./contents/images/Screenshot From 2025-03-13 09-59-33.png]]
+
+About ordering, just like in Coq, Lean4 has a "Ordering":
+#+begin_src lean4
+inductive Ordering where
+| lt
+| eq
+| gt
+#+end_src
+
+A good example that i've made by myself:
+#+begin_src lean4
+def Nat.comp : Nat → Nat → Ordering
+  | 0, 0         => Ordering.eq
+  | _, 0         => Ordering.gt
+  | 0, _         => Ordering.lt
+  | n + 1, m + 1 => Nat.comp n m
+#+end_src
+
+**** Hashing
+Here's the Lean4 implemented especification:
+#+begin_src lean4
+class Hashable (α : Type) where
+  hash : α → UInt64
+#+end_src
+
+I think that some laws could be added
+#+begin_src lean4
+class MyHashable (α : Type) where
+  hash : α → UInt64
+  eqPreserv : ∀(a₁ a₂ : α), a₁ = a₂ →
+                hash a₁ = hash a₂
+#+end_src
+Or even maybe a boolanized version of this.
+
+"The standard library contains a function mixHash with type UInt64 → UInt64 → UInt64 that can be used to combine hashes for different fields for a constructor."
+
+With this, we can write:
+#+begin_src lean4
+def hashNat : Nat → UInt64
+  | 0     => 0
+  | n + 1 => mixHash 1 (hashNat n)
+
+instance : Hashable Nat where
+  hash := hashNat
+#+end_src
+
+**** Constraints
+Just look at this:
+#+begin_src lean4
+inductive BinTree (α : Type) where
+  | leaf : BinTree α
+  | branch : BinTree α → α → BinTree α → BinTree α
+
+def eqBinTree [BEq α] : BinTree α → BinTree α → Bool
+  | BinTree.leaf, BinTree.leaf =>
+    true
+  | BinTree.branch l x r, BinTree.branch l2 x2 r2 =>
+    x == x2 && eqBinTree l l2 && eqBinTree r r2
+  | _, _ =>
+    false
+
+instance [BEq α] : BEq (BinTree α) where
+  beq := eqBinTree
+
+def hashBinTree [Hashable α] : BinTree α → UInt64
+  | BinTree.leaf =>
+    0
+  | BinTree.branch left x right =>
+    mixHash 1 (mixHash (hashBinTree left) (mixHash (hash x) (hashBinTree right)))
+
+instance [Hashable α] : Hashable (BinTree α) where
+  hash := hashBinTree
+#+end_src
+
+**** Deriving
+"Instances can be derived in two ways. The first can be used when defining a structure or inductive type. In this case, add deriving to the end of the type declaration followed by the names of the classes for which instances should be derived. For a type that is already defined, a standalone deriving command can be used. Write deriving instance C1, C2, ... for T to derive instances of C1, C2, ... for the type T after the fact."
+
+Example:
+#+begin_src lean4
+deriving instance BEq, Hashable for Pos
+deriving instance BEq, Hashable, Repr for NonEmptyList
+#+end_src
+
+Instances can be derived for at least the following classes:
+- Inhabited
+- BEq
+- Repr
+- Hashable
+- Ord
+
+  (There's no code generator was found for ToString, btw..)
+
+**** Appending
+"Instances can be derived in two ways. The first can be used when defining a structure or inductive type. In this case, add deriving to the end of the type declaration followed by the names of the classes for which instances should be derived. For a type that is already defined, a standalone deriving command can be used. Write deriving instance C1, C2, ... for T to derive instances of C1, C2, ... for the type T after the fact."
+
+Example:
+#+begin_src lean4
+deriving instance BEq, Hashable for Pos
+deriving instance BEq, Hashable, Repr for NonEmptyList
+#+end_src
+
+Instances can be derived for at least the following classes:
+- Inhabited
+- BEq
+- Repr
+- Hashable
+- Ord
+
+There's the type class:
+#+begin_src lean4
+class HAppend (α : Type) (β : Type) (γ : outParam Type) where
+  hAppend : α → β → γ
+#+end_src
+
+There's a heterogeneous implementation above it:
+#+begin_src lean4
+instance : HAppend (NonEmptyList α) (List α) (NonEmptyList α) where
+  hAppend xs ys :=
+    { head := xs.head, tail := xs.tail ++ ys }
+#+end_src
+
+
+**** Functors
+Like Haskell, we have the "<$>" operator, so u can do:
+#+begin_src lean4
+#eval (· + 5) <$> [1, 2, 3] --> [6, 7, 8]
+#+end_src
+
+A instance for PPoint:
+#+begin_src lean4
+instance : Functor PPoint where
+  map f p := { x := f p.x, y := f p.y }
+#+end_src
+
+Just a default implementation used in a primite way to think in Functors:
+#+begin_src lean4
+class Functor (f : Type → Type) where
+  map : {α β : Type} → (α → β) → f α → f β
+
+  mapConst {α β : Type} (x : α) (coll : f β) : f α :=
+    map (fun _ => x) coll
+#+end_src
+
+A maturier idea:
+#+begin_src lean4
+class Funktor (F : Type → Type) where
+  -- Operations:
+  map : {α β : Type} → (α → β) → F α → F β
+
+  mapConst {α β : Type} (x : α) (coll : F β) : F α :=
+    map (fun _ => x) coll
+
+ -- Laws:
+  id_law   : ∀(f_a : F α), map id f_a = fa
+  comp_law : ∀(f : α → β), ∀(g : β → γ), ∀(f_a : F α),
+               map (g ∘ f) f_a = map g (map f f_a)
+
+  -- Being associative was a theorem then?
+#+end_src
+
+Some implementation:
+#+begin_src lean4
+instance : Funktor BinTree where
+  map := binTreeMap
+#+end_src
+
+*** TODO Coercions
+**** Intro
+"In Lean, both purposes are served by a mechanism called coercions. When Lean encounters an expression of one type in a context that expects a different type, it will attempt to coerce the expression before reporting a type error. Unlike Java, C, and Kotlin, the coercions are extensible by defining instances of type classes."
+
+**** The Coe typeclass
+The type class Coe describes overloaded ways of coercing from one type to another:
+#+begin_src lean4
+class coe (α : type) (β : type) where
+  coe : α → β
+#+end_src
+
+An instance of Coe Pos Nat is enough to allow the prior code to work:
+#+begin_src lean4
+instance : Coe Pos Nat where
+  coe x := x.toNat
+
+#eval  [1, 2, 3, 4].drop (2 : Pos) --> [3, 4]
+#check [1, 2, 3, 4].drop (2 : Pos) --> List.drop (Pos.toNat 2) [1, 2, 3, 4] : List Nat
+#+end_src
+
+**** Coe Chains
+When searching for coercions, Lean will attempt to assemble a coercion out of a chain of smaller coercions. For example, there is already a coercion from Nat to Int. Because of that instance, combined with the Coe Pos Nat instance, the following code is accepted:
+#+begin_src lean4
+def oneInt : Int := Pos.one
+#+end_src
+
+This definition uses two coercions: from Pos to Nat, and then from Nat to Int.
+
+Btw, they don't get circular and also it has a standart coercion about "Option" so all of this compiles:
+#+begin_src lean4
+#check ("oi" : Option String)
+#check Option Type
+def perhapsPerhapsPerhaps : Option (Option (Option String)) :=
+  "Please don't tell me"
+def perhapsPerhapsPerhapsNat : Option (Option (Option Nat)) :=
+  ↑(392 : Nat)
+#+end_src
+
+That arrow, btw, is used to ensure that Lean finds the right
+instances. It can also make the programmer's intentions more clear.
+
+**** Dependent Coercions (The CoeDep typeclass)
+There's the class:
+#+begin_src lean4
+class CoeDep (α : Type) (x : α) (β : Type) where
+  coe : β
+#+end_src
+
+There's a use:
+#+begin_src lean4
+instance : CoeDep (List α) (x :: xs) (NonEmptyList α) where
+  coe := { head := x, tail := xs }
+#+end_src
+
+***** Some more explanation
+"Dependent coercions can be used when the ability to coerce from one type to another depends on which particular value is being coerced. Just as the OfNat type class takes the particular Nat being overloaded as a parameter, dependent coercion takes the value being coerced as a parameter"
+
+"This is a chance to select only certain values, either by imposing further type class constraints on the value or by writing certain constructors directly."
+
+**** TODO Coercing to Types (The CoeSort typeclass)
+ Just as Coe is checked when a type mismatch occurs, CoeSort is used when something other than a sort is provided in a context where a sort would be expected.
+
+ Some examples of sort (Type or Prop)
+ #+begin_src lean4
+instance : CoeSort Monoid Type where
+  coe m := m.Carrier
+ #+end_src
+
+Another example:
+#+begin_src lean4
+instance : CoeSort Bool Prop where
+  coe b := b = true
+
+#check (if · then · else ·) --> !Error [...] &
+       -- (fun x1 x2 x3 => ?m.9836 : Prop → ?m.9869 → ?m.9869 → ?m.9869)
+#+end_src
+
+Rather than have two kinds of if expression, the Lean standard library defines a coercion from Bool to
+the proposition that the Bool in question is equal to true.
+
+**** TODO Coercing to Funcions
+That's is weird..
+Here's the implementation:
+#+begin_src lean4
+class CoeFun (α : Type) (makeFunctionType : outParam (α → Type)) where
+  coe : (x : α) → makeFunctionType x
+#+end_src
+
+And here's the weird example:
+#+begin_src lean4
+structure Adder where
+  howMuch : Nat
+
+def add5 : Adder := ⟨5⟩
+instance : CoeFun Adder (fun _ => Nat → Nat) where
+  coe a := (· + a.howMuch)
+
+#eval add5 3 --> 8
+#+end_src
+
+**** TODO The "With great power comes great responsibility" talk
+a
+
+*** TODO Additional Conveniences
+*** TODO My Own Summary
+** TODO Monads
+*** Intro
+This whole chapter just uses so many different examples of monads that isnt helping me at all :P.
+I think that im finishing this book first and investigating the monads later.
+
+*** TODO Here the monad's that i'll want to investigate as functors and applicatives before monads:
+- Id
+- Except
+- State
+- Logging/WithLog
+
+*** Typeclass
+There's the implementation
+#+begin_src lean4
+class Monad (m : Type → Type) where
+  pure : α → m α
+  bind : m α → (α → m β) → m β
+#+end_src
+
+** TODO Functors, Applicative Functors, and Monads
+** TODO Monad Transformers
+** TODO Programming with Dependent Types
+
+** TODO What exacly is an output parameter???
+* Theorem Proving in Lean 4
+** Intro
+"The Lean Theorem Prover aims to bridge the gap between interactive and automated theorem proving, by situating automated tools and methods in a framework that supports user interaction and the construction of fully specified axiomatic proofs. The goal is to support both mathematical reasoning and reasoning about complex systems, and to verify claims in both domains."
+
+I'm basically following the book.
+** Dependent type theory in Lean4
+*** Intro
+"Dependent type theory is a powerful and expressive language, allowing you to express complex mathematical assertions, write complex hardware and software specifications, and reason about both of these in a natural and uniform way. Lean is based on a version of dependent type theory known as the Calculus of Constructions, with a countable hierarchy of non-cumulative universes and inductive types. By the end of this chapter, you will understand much of what this means.
+
+*** Simple Type Theory
+**** Intro
+Basically Types are firt class citisens and so u can do things
+like above and even more.
+#+begin_src lean4
+def α : Type := Nat
+def β : Type := Bool
+def F : Type → Type := List
+def G : Type → Type → Type := Prod
+#+end_src
+
+Here's one of the most subtle aspects of Lean's typing system. Lean's underlying foundation has an infinite hierarchy of types:
+#+begin_src lean4
+#check Type     -- Type 1
+#check Type 1   -- Type 2
+#check Type 2   -- Type 3
+#check Type 3   -- Type 4
+#check Type 4   -- Type 5
+#+end_src
+
+`Type` is an abbreviation to `Type 0`, btw.
+In order to define a polymorphic (over type universes)
+constant, u have basically two ways:
+#+begin_src lean4
+-- first
+universe u
+def F (α : Type u) : Type u := Prod α α
+#check F    -- Type u → Type u
+
+-- secound
+def F.{u} (α : Type u) : Type u := Prod α α
+#check F    -- Type u → Type u
+#+end_src
+
+Using `universe u in` or simple dosnt use anything there just
+works.. Don't blame me, blame the Lean4 bible.
+
+**** Alpha Equivalence
+"Formally, expressions that are the same up to a renaming of bound variables are called alpha equivalent, and are considered "the same." Lean recognizes this equivalence."
+
+examples:
+#+begin_src lean4
+#check fun f x => f x
+#check fun t s => t s
+#+end_src
+
+So, basically, they're the same.
+
+**** A Small talk about let vs fun
+So, the `let` expressions looks very similar to the lambda abstractions, but,
+to set up a lambda abstraction, the thing should make sense without arguments
+aplied yet. In the other hand, the `let` keyword has only a sintax meaning, it
+is: an abbreviation to a term in a expression. Here's the good example used in
+the book:
+#+begin_src lean4
+def foo := let a := Nat; fun x : a => x + 2  --> works
+def bar := (fun a => fun x : a => x + 2) Nat --> bugs because the `+` is'nt for everytype.
+#+end_src
+
+**** Variables and Sections
+While using this make the code looks clear and clean,
+it doesn't look required in these days:
+#+begin_src lean4
+variable (α β γ : Type)
+
+def compose (g : β → γ) (f : α → β) (x : α) : γ :=
+  g (f x)
+
+def doTwice (h : α → α) (x : α) : α :=
+  h (h x)
+
+def doThrice (h : α → α) (x : α) : α :=
+  h (h (h x))
+#+end_src
+
+U can do it with more complex variables like here:
+#+begin_src lean4
+variable (α β γ : Type)
+variable (g : β → γ) (f : α → β) (h : α → α)
+variable (x : α)
+
+def compose := g (f x)
+def doTwice := h (h x)
+def doThrice := h (h (h x))
+
+#print compose
+#print doTwice
+#print doThrice
+#+end_src
+, or even:
+#+begin_src lean4
+variable (x y : Nat)
+variable (n : true)
+
+-- [...]
+#+end_src
+
+When declared in this way, a variable stays in scope until the end of the file you are working on. Sometimes, however, it is useful to limit the scope of a variable. For that purpose, Lean provides the notion of a section:
+#+begin_src lean4
+section useful
+  variable (α β γ : Type)
+  variable (g : β → γ) (f : α → β) (h : α → α)
+  variable (x : α)
+
+  def compose := g (f x)
+  def doTwice := h (h x)
+  def doThrice := h (h (h x))
+end useful
+#+end_src
+
+"When the section is closed, the variables go out of scope, and cannot be referenced any more.
+
+You do not have to indent the lines within a section. Nor do you have to name a section, which is to say, you can use an anonymous section / end pair. If you do name a section, however, you have to close it using the same name. Sections can also be nested, which allows you to declare new variables incrementally."
+
+**** Namespaces
+It's easy and intuitive.
+#+begin_src lean4
+namespace Foo
+  def a : Nat := 5
+  def f (x : Nat) : Nat := x + 7
+
+  def fa : Nat := f a
+
+  namespace Bar
+    def ffa : Nat := f (f a)
+
+    #check fa
+    #check ffa
+  end Bar
+
+  #check fa
+  #check Bar.ffa
+end Foo
+
+#check Foo.fa
+#check Foo.Bar.ffa
+
+open Foo
+
+#check fa
+#check Bar.ffa
+#+end_src
+
+Btw, Namespaces that have been closed can later be reopened, even in another file:
+#+begin_src lean4
+namespace Foo
+  def a : Nat := 5
+  def f (x : Nat) : Nat := x + 7
+
+  def fa : Nat := f a
+end Foo
+
+#check Foo.a
+#check Foo.f
+
+namespace Foo
+  def ffa : Nat := f (f a)
+end Foo
+#+end_src
+
+Like sections, nested namespaces have to be closed in the order they are opened. Namespaces and sections serve different purposes: namespaces organize data and sections declare variables for insertion in definitions. Sections are also useful for delimiting the scope of commands such as set_option and open.
+
+In many respects, however, a namespace ... end block behaves the same as a section ... end block. In particular, if you use the variable command within a namespace, its scope is limited to the namespace. Similarly, if you use an open command within a namespace, its effects disappear when the namespace is closed.
+
+**** What type dependent means?
+A long example:
+Given α : Type and β : α → Type, think of β as a family of types over α, that is, a type β a for each a : α. In that case, the type (a : α) → β a denotes the type of functions f with the property that, for each a : α, f a is an element of β a. In other words, the type of the value returned by f depends on its input.
+
+Notice that (a : α) → β makes sense for any expression β : Type. When the value of β depends on a (as does, for example, the expression β a in the previous paragraph), (a : α) → β denotes a dependent function type. When β doesn't depend on a, (a : α) → β is no different from the type α → β. Indeed, in dependent type theory (and in Lean), α → β is just notation for (a : α) → β when β does not depend on a.
+
+Just as dependent function types (a : α) → β a generalize the notion of a function type α → β by allowing β to depend on α, dependent Cartesian product types (a : α) × β a generalize the Cartesian product α × β in the same way. Dependent products are also called sigma types, and you can also write them as Σ a : α, β a. You can use ⟨a, b⟩ or Sigma.mk a b to create a dependent pair. The ⟨ and ⟩ characters may be typed with \langle and \rangle or \< and \>, respectively.
+
+If i'm not crazy here, we're talking about things like The "List" it self.
+
+But everything there is pretty weird and then, hey showed us this example:
+#+begin_src lean4
+universe u v
+
+def f (α : Type u) (β : α → Type v) (a : α) (b : β a) : (a : α) × β a :=
+  ⟨a, b⟩
+
+def g (α : Type u) (β : α → Type v) (a : α) (b : β a) : Σ a : α, β a :=
+  Sigma.mk a b
+
+def h1 (x : Nat) : Nat :=
+  (f Type (fun α => α) Nat x).2
+
+#eval h1 5 -- 5
+
+def h2 (x : Nat) : Nat :=
+  (g Type (fun α => α) Nat x).2
+
+#eval h2 5 -- 5
+-- The functions f and g above denote the same function, btw
+#+end_src
+
+I've missed a more ilustrative example to show me why i would like that..
+So i'll try to create something useless just to show something kinda useless
+just to show something more than just "see? this generalize the thing that we already
+had". Ok, but what's new then?
+#+begin_src lean4
+def h0 (n : Nat) : List Nat :=
+  (f Type List Nat [n]).2
+
+def h02 (n : Nat) : Type :=
+  (f Type List Nat [n]).1
+
+#check h0
+#check h0 3
+#eval  h0 3
+
+def explain_that (α : Type u) (β : α → Type v) (a : α) := β a
+
+#check explain_that Type List Nat
+#check List
+#+end_src
+
+**** Implicit Arguments
+Look at this:
+#+begin_src lean4
+#check Lst.cons Nat 0 (Lst.nil Nat)
+
+def as : Lst Nat := Lst.nil Nat
+def bs : Lst Nat := Lst.cons Nat 5 (Lst.nil Nat)
+
+#check Lst.append Nat as bs
+#+end_src
+
+First of all, it make sense and it's very orthogonal but is also very ugly and verbous and
+could/should be inferred by the type system. So we can do this in these way:
+#+begin_src lean4
+#check Lst.cons _ 0 (Lst.nil _)
+
+def as : Lst Nat := Lst.nil _
+def bs : Lst Nat := Lst.cons _ 5 (Lst.nil _)
+
+#check Lst.append _ as bs
+#+end_src
+
+It is still tedious, however, to type all these underscores. When a function takes an argument that can generally be inferred from context, Lean allows you to specify that this argument should, by default, be left implicit. This is done by putting the arguments in curly braces, as follows:
+#+begin_src lean4
+universe u
+def Lst (α : Type u) : Type u := List α
+
+def Lst.cons {α : Type u} (a : α) (as : Lst α) : Lst α := List.cons a as
+def Lst.nil {α : Type u} : Lst α := List.nil
+def Lst.append {α : Type u} (as bs : Lst α) : Lst α := List.append as bs
+
+#check Lst.cons 0 Lst.nil
+
+def as : Lst Nat := Lst.nil
+def bs : Lst Nat := Lst.cons 5 Lst.nil
+
+#check Lst.append as bs
+#+end_src
+
+Variables can also be specified as implicit when they are declared with the variable command:
+#+begin_src lean4
+universe u
+
+section
+  variable {α : Type u}
+  variable (x : α)
+  def ident := x
+end
+
+#check ident
+#check ident 4
+#check ident "hello"
+#+end_src
+
+The presence of implicit arguments means that at times there may be insufficient information to fix the meaning of an expression precisely. An expression like id or List.nil is said to be polymorphic, because it can take on different meanings in different contexts.
+
+So it happens and that's how we'll solve it:
+#+begin_src lean4
+#check List.nil               -- List ?m
+#check id                     -- ?m → ?m
+
+#check (List.nil : List Nat)  -- List Nat
+#check (id : Nat → Nat)       -- Nat → Nat
+#+end_src
+
+Sometimes, however, we may find ourselves in a situation where we have declared an argument to a function to be implicit, but now want to provide the argument explicitly. If foo is such a function, the notation @foo denotes the same function with all the arguments made explicit.
+
+See my own example:
+#+begin_src lean4
+#check id 3      --> Nat
+#check @id Nat 3 --> Nat
+#check @id Int 3 --> Int
+#+end_src
+
+** Propositions and Proofs
+*** The implies example
+In summary, we don't need to build a Proof above Props because
+Props are types. So, in order to prove `p -> q`. So, if u
+have a `t : p`, with a `f : p -> q` function u will have e "evidence of `q`"
+which is `f t : q`.
+
+*** TODO Every proof is the same?
+"There are a few pragmatic differences between definitions and theorems, however. In normal circumstances, it is never necessary to unfold the "definition" of a theorem; by proof irrelevance, any two proofs of that theorem are definitionally equal. Once the proof of a theorem is complete, typically we only need to know that the proof exists;"
+
+I really wanna know now how it could be. In this point i really want this book to answer this and if it doesnt i will have to back here some day..
+
+*** The `show`
+Basically has a command called "show" that provides
+type anotations inside of theorems.
+#+begin_src lean4
+variable {p q : Prop}
+
+theorem t1 : p → q → p :=
+  fun hp : p =>
+  fun hq : q =>
+  show p from hp
+#+end_src
+
+I'm, personally,
+i'm reading that "`show p from hp`" as the old exact command
+because u're kinda 'showing' p and thats from hp indeed..
+
+But Lean seens to look at it as type anotation from hp which is p...
+What sounds to make sense with my another point because hp is nothing
+different than a evidence of p with p beeing a assertion beeing showed
+through hp.
+
+"Adding such extra information can improve the clarity of a proof and help detect errors when writing a proof. The show command does nothing more than annotate the type, and, internally, all the presentations of t1 that we have seen produce the same term."
+
+*** Option (Something about dependent theory)
+"Remember that this type can just as well be written ∀ (p q : Prop) (hp : p) (hq : q), p, since the arrow denotes nothing more than an arrow type in which the target does not depend on the bound variable."
+
+It talks very much with something previosly explored but it's very very good to notice that..
+
+
+*** Operators
+**** Intro
+Nothing's new, but maybe this table can be useful.
+[[file:./contents/images/connectives_table.png]]
+
+**** Conjunction
+In summary:
+#+begin_src lean4
+#check And.intro -- {a b : Prop} (left : a) (right : b) : a ∧ b
+#check And.left  -- {a b : Prop} (self : a ∧ b) : a
+#check And.right -- {a b : Prop} (self : a ∧ b) : b
+#+end_src
+
+**** Disjunction
+In Summary:
+#+begin_src lean4
+#check Or.intro_left  -- {a : Prop} (b : Prop) (h : a) : a ∨ b
+#check Or.intro_right -- {b : Prop} (a : Prop) (h : b) : a ∨ b
+#check Or.elim        -- {a b c : Prop} (h : a ∨ b) (left : a → c) (right : b → c) : c
+#+end_src
+
+We also have this shorthand:
+#+begin_src lean4
+#check Or.inl         -- {a b : Prop} (h : a) : a ∨ b
+#check Or.inr         -- {a b : Prop} (h : a) : a ∨ b
+#+end_src
+
+**** Negation and Falsity
+In Summary:
+#+begin_src lean4
+#check False.elim -- False.elim.{u} {C : sort u} (h : False) : C
+#check absurd     -- absurd.{v} {a : Prop} {b : Sort v} (h₁ : a) (h₂ : ¬a) : b
+#+end_src
+
+**** True
+In Summary
+"Incidentally, just as False has only an elimination rule, True has only an introduction rule, True.intro : true. In other words, True is simply true, and has a canonical proof, True.intro."
+
+**** Logical Equivalence
+In summary:
+#+begin_src lean4
+#check Iff.intro -- {a b : Prop} (mp : a → b) (mpr : b → a) : a ↔ b
+#check Iff.mp    -- {a b : Prop} (self : a ↔ b) : a → b
+#check Iff.mpr   -- {a b : Prop} (self : a ↔ b) : b → a
+#+end_src
+
+things like this are also possible:
+#+begin_src lean4
+def thing : p ↔ p := ⟨id , id⟩
+
+theorem and_swap : p ∧ q ↔ q ∧ p :=
+  let f {r s : Prop} (h : r ∧ s) : s ∧ r := ⟨h.2, h.1⟩
+  ⟨f, f⟩
+#+end_src
+
+**** Introducing Auxiliary Subgoals
+This will serve as example:
+#+begin_src lean4
+namespace subgoals
+variable (p q : Prop)
+
+example (h : p ∧ q) : q ∧ p :=
+  have hp : p := h.left
+  have hq : q := h.right
+  show q ∧ p from ⟨hq, hp⟩
+
+example (h : p ∧ q) : q ∧ p :=
+  let hp : p := h.left
+  let hq : q := h.right
+  show q ∧ p from ⟨hq, hp⟩
+
+variable (p q : Prop)
+
+example (h : p ∧ q) : q ∧ p :=
+  have hp : p := h.left
+  suffices hq : q from And.intro hq hp
+  show q from And.right h
+
+end subgoals
+#+end_src
+
+**** Classical Logic
+So we can `open Classical` and use the dirty math
+like em (excluded middle)
+#+begin_src lean4
+open Classical
+
+variable (p : Prop)
+#check em      -- Classical.em (p : Prop) : p ∨ ¬p
+#check byCases -- {p q : Prop} (hpq : p → q) (¬p → q) : q
+#check byContradiction -- {p : Prop} (h : ¬p → False) : p
+#+end_src
+
+** Quantifiers and Equality
+*** The Universal Quantifier
+It's just a sugar to dependent arrow types:
+"Given a term t of type β x, in a context where x : α is arbitrary,
+we have (fun x : α => t) : (x : α) → β x."
+
+It was the introduction, the elimination states to:
+"Given a term s : (x : α) → β x and any term t : α, we have s t : β t."
+
+Simply:
+"In the case where p x has type Prop, if we replace (x : α) → β x with ∀ x : α, p x, we can read these as the correct rules for building proofs involving the universal quantifier.
+
+The Calculus of Constructions therefore identifies dependent arrow types with forall-expressions in this way. If p is any expression, ∀ x : α, p is nothing more than alternative notation for (x : α) → p, with the idea that the former is more natural than the latter in cases where p is a proposition. Typically, the expression p will depend on x : α. Recall that, in the case of ordinary function spaces, we could interpret α → β as the special case of (x : α) → β in which β does not depend on x. Similarly, we can think of an implication p → q between propositions as the special case of ∀ x : p, q in which the expression q does not depend on x."
+*** Equality
+In summary
+#+begin_src lean4
+#check Eq.refl    -- Eq.refl.{u_1} {α : Sort u_1} (a : α) : a = a
+#check Eq.symm    -- Eq.symm.{u} {α : Sort u} {a b : α} (h : a = b) : b = a
+#check Eq.trans   -- Eq.trans.{u} {α : Sort u} {a b c : α} (h₁ : a = b) (h₂ : b = c) : a = c
+#+end_src
+
+*** Calculational Proofs
+In summary:
+#+begin_src lean4
+example (x y : Nat) : (x + y) * (x + y) = x * x + y * x + x * y + y * y :=
+  calc (x + y) * (x + y)
+    _ = (x + y) * x + (x + y) * y       := by rw [Nat.mul_add]
+    _ = x * x + y * x + (x + y) * y     := by rw [Nat.add_mul]
+    _ = x * x + y * x + (x * y + y * y) := by rw [Nat.add_mul]
+    _ = x * x + y * x + x * y + y * y   := by rw [←Nat.add_assoc]
+#+end_src
+
+but a question:
+  what the '...', '..' does?
+
+*** The Existential Quantifier
+
+** Tactics

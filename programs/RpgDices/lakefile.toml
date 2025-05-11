@@ -1,0 +1,15 @@
+name = "RpgDices"
+version = "0.1.0"
+defaultTargets = ["rpgdices"]
+
+[[require]]
+name = "Cli"
+scope = "leanprover"
+# version = "v4.18.0"
+
+[[lean_lib]]
+name = "RpgDices"
+
+[[lean_exe]]
+name = "rpgdices"
+root = "Main"

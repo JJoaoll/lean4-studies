@@ -1,0 +1,15 @@
+name = "Flashcards"
+version = "0.1.0"
+defaultTargets = ["flashcards"]
+
+[[require]]
+name = "Cli"
+scope = "leanprover"
+# version = "v4.18.0"
+
+[[lean_lib]]
+name = "Flashcards"
+
+[[lean_exe]]
+name = "flashcards"
+root = "Main"
