@@ -54,3 +54,13 @@ theorem uni_void_func : ∀(f g : Empty → Empty), f = g  := by
 
 def applyEmpty [Monad m] (op : Empty) (_ : Int) (_ : Int) : m Int :=
   nomatch op
+
+-- #eval (List.pure 3 : List Nat)
+#check List.bind
+
+def concat (xs ys : List α) List α := do {
+
+  return [];
+
+
+}
