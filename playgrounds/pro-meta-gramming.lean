@@ -2,8 +2,8 @@ import Lean
 
 open Lean
 
-set_option pp.universes true in
-set_option pp.explicit true in
+-- set_option pp.universes true in
+-- set_option pp.explicit true in
 notation "pure" => pure -- pure azul, por favor? so falta arrumar a prioridade
 
 #check pure
@@ -88,6 +88,60 @@ elab "Ex6" : term => pure Ex6
 #eval Ex6 "world!"
 
 --     Create expression ∀ x : Prop, x ∧ x.
+#check Expr.forallE
+#check Prop
+#check Expr.const ``Nat []
+#check Expr.sort 0
+def tst1 : Expr := .sort 0
+elab "tst1" : term => pure tst1
+
+#check tst1
+#check Expr.forallE
+#print Expr
+
+#check (x : Nat) → Nat
+#check ∀ x : Prop, x ∧ x
+#check ((x : Prop) → x ∧ x) = true
+#check "Oi"
+
+def tst2 : Expr :=
+  .forallE `x (.const ``Nat []) (mkAppN (.const ``Nat.add []) #[.bvar 0, mkNatLit 2])
+    BinderInfo.default
+elab "tst2" : term => pure tst2
+
+def Ex7 : Expr :=
+  .forallE `x (.sort 0) (mkAppN (.const ``And []) #[.bvar 0, .bvar 0])
+    BinderInfo.default
+elab "Ex7" : term => pure Ex7
+#check Ex7
+variable (p : Prop)
+#check Ex7 = true
+#check Ex7 = true
+#check And
+#check And.intro
+
 --     Create expression Nat → String.
+#print Expr
+open Expr in
+def Ex8 : Expr :=
+  forallE `x (const ``Nat []) (const ``String [])
+    BinderInfo.default
+elab "Ex8" : term => pure Ex8
+#check Ex8
+
 --     Create expression fun (p : Prop) => (λ hP : p => hP).
+#check Expr.lam
+open Expr in
+def Ex9 : Expr :=
+  lam `p (sort 0) (lam `hP (bvar 0) (bvar 1) BinderInfo.default)
+    BinderInfo.default
+
+elab "Ex9" : term => pure Ex9
+#check Ex9
+
 --     [Universe levels] Create expression Type 6.
+def Ex10 : Expr :=
+  .sort 7
+elab "Ex10" : term => pure Ex10
+
+#check Ex10
