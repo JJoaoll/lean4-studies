@@ -131,9 +131,21 @@ elab "Ex8" : term => pure Ex8
 
 --     Create expression fun (p : Prop) => (λ hP : p => hP).
 #check Expr.lam
+
+open Expr in
+def tst_lam : Expr :=
+  lam `x (const ``Nat [])
+    (lam `y (const ``String [])
+      (bvar 1)
+    BinderInfo.default)
+  BinderInfo.default
+
+elab "tst_lam" : term => pure tst_lam
+#check tst_lam
+
 open Expr in
 def Ex9 : Expr :=
-  lam `p (sort 0) (lam `hP (bvar 0) (bvar 1) BinderInfo.default)
+  lam `p (sort 0) (lam `hP (bvar 0) (bvar 0) BinderInfo.default)
     BinderInfo.default
 
 elab "Ex9" : term => pure Ex9
